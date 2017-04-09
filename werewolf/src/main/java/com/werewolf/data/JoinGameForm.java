@@ -2,6 +2,7 @@ package com.werewolf.data;
 
 public class JoinGameForm {
 
+	// TODO: Change this class to a proper game form!
 	private String nickname;
 	
 	private String gameId;

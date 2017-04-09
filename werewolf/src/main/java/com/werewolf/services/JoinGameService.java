@@ -1,21 +1,21 @@
 package com.werewolf.services;
 
 import com.werewolf.data.JoinGameForm;
-import com.werewolf.entities.LobbyEntity;
+import com.werewolf.entities.GameEntity;
 
 public interface JoinGameService {
 
     void create(JoinGameForm joinGameForm);
 
-    LobbyEntity findByGameId(String gameId);
-    LobbyEntity findById(long id);
+    GameEntity findByGameId(String gameId);
+    GameEntity findById(long id);
 
-    //void update(LobbyEntity lobbyEntity, JoinGameForm joinGameForm);
+    //void update(GameEntity gameEntity, JoinGameForm joinGameForm);
 
     /**
      * Get an edit form DTO for the given user
-     * @param lobbyEntity the GameEntity to generate edit form from
+     * @param gameEntity the GameEntity to generate edit form from
      * @return editform for the given user
      */
-    JoinGameForm getEditForm(LobbyEntity lobbyEntity);
+    JoinGameForm getEditForm(GameEntity gameEntity);
 }

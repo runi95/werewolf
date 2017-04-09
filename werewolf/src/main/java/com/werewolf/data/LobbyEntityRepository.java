@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Transactional
 public interface LobbyEntityRepository extends JpaRepository<LobbyEntity, Long> {
-    Optional<LobbyEntity> findByGameId(String gameId);
+    Optional<LobbyEntity> findByGameid(String gameid);
 }

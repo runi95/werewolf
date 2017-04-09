@@ -2,6 +2,7 @@ package com.werewolf.components;
 
 import com.werewolf.entities.GameEntity;
 import com.werewolf.entities.LobbyEntity;
+import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.services.JoinGameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,20 @@ public class JoinGameFormValidator implements Validator {
 		// If the game with given gameID does not exist then check if there's a lobby
 		// with the given gameID, if there is then join the lobby.
 		// If there is no game nor lobby with given gameID then create a new lobby!
+
+		GameEntity gameEntity = null;
+		try {
+			gameEntity = joinGameService.findByGameId(joinGameForm.getGameId());
+			//LobbyPlayer lobbyPlayer = new LobbyPlayer();
+			//lobbyPlayer.setUser();
+			//lobbyEntity.getPlayers().add(lobbyPlayer);
+		} catch (IllegalArgumentException e) {
+
+		}
+
+		if(gameEntity == null) {
+			gameEntity = new GameEntity();
+		}
 
 	}
 	
