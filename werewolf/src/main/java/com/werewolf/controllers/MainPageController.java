@@ -68,7 +68,7 @@ public class MainPageController {
     }
     
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public ModelAndView getRegisterPage() {
+    public ModelAndView getRegister() {
         return new ModelAndView("register", "accountRegisterForm", new AccountRegisterForm());
     }
 
