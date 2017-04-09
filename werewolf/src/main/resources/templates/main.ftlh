@@ -5,7 +5,7 @@
     		<div class="cover-container">
     			<div class="inner cover">
     				<div class="form-group">
-    					<form class="form-horizontal" id="joinGameForm" name="joinGameForm" method="post">
+    					<form class="form-horizontal" id="joinLobbyForm" name="joinLobbyForm" method="post">
       						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
       						<fieldset>
       							<div class="input-group">
