@@ -13,6 +13,14 @@ public class LobbyPlayer {
     @JoinTable(name = "lobbyplayer_user", joinColumns = @JoinColumn(name = "lobbyplayer_nickname"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public String getNickname() {
         return nickname;
     }
