@@ -17,7 +17,7 @@ import com.werewolf.entities.User;
 public class AccountServiceImpl implements AccountService {
 	
 	@Autowired
-	AccountRepository accountRepositoryTwo;
+	AccountRepository accountRepository;
 	
 	@Autowired
     UserRightRepository userRightRepository;
@@ -28,18 +28,18 @@ public class AccountServiceImpl implements AccountService {
         user.setUsername(accountRegisterForm.getUsername());
         user.setPasswordHash(new BCryptPasswordEncoder().encode(accountRegisterForm.getPassword()));
         user.setRights(new HashSet<>(userRightRepository.findAll()));
-        accountRepositoryTwo.save(user);
+        accountRepository.save(user);
     }
 	
 	@Override
 	public User findByUsername(String username) {
-		return accountRepositoryTwo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("A user with that username does not exist"));
+		return accountRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("A user with that username does not exist"));
 	}
 	
 	@Override
     @Transactional
     public User findById(long id) {
-        User user = accountRepositoryTwo.findOne(id);
+        User user = accountRepository.findOne(id);
         if(user != null)
             return user;
         else {
@@ -50,7 +50,7 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void update(User user, UserEditForm userEditForm) {
 		user.setUsername(userEditForm.getUsername());
-		accountRepositoryTwo.save(user);
+		accountRepository.save(user);
 	}
 	
 	@Override
