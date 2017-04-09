@@ -12,12 +12,14 @@
       								<span class="input-group-addon"><i></i></span>
       								<input id="nickname" name="nickname" type="text" placeholder="Nickname" class="form-control">
       							</div>	
-      					
+
+                                <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
+
       							<div class="input-group">
       								<span class="input-group-addon"><i></i></span>
-      								<input id="gameid" name="gameid" type="text" placeholder="Game ID" class="form-control" required="">
+   								    <input id="gameid" name="gameid" type="text" placeholder="Game ID" class="form-control">
       							</div>
-      					
+
       							<div class="form-group">
             						<label class="control-label" for="joinbutton"></label>
                 					<button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
