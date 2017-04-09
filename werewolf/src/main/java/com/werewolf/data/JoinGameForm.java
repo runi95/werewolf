@@ -1,10 +1,7 @@
 package com.werewolf.data;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 public class JoinGameForm {
 
-	@NotEmpty
 	private String nickname;
 	
 	private String gameId;
