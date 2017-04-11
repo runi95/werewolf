@@ -5,9 +5,9 @@
     		<div class="cover-container">
     			<div class="inner cover">
     				<div class="form-group">
-    					<form class="form-horizontal" id="joinLobbyForm" name="joinLobbyForm" method="post">
-      						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-      						<fieldset>
+    				    <form class="form-horizontal" action="/lobby" id="joinLobbyForm" name="joinLobbyForm" method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                            <fieldset>
       							<div class="input-group">
       								<span class="input-group-addon"><i></i></span>
       								<input id="nickname" name="nickname" type="text" placeholder="Nickname" class="form-control">
