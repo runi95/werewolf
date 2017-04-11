@@ -40,7 +40,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     @Override
     public JoinLobbyForm getEditForm(LobbyEntity lobbyEntity) {
         JoinLobbyForm joinLobbyForm = new JoinLobbyForm();
-        joinLobbyForm.setGameId(lobbyEntity.getGameId());
+        joinLobbyForm.setGameid(lobbyEntity.getGameId());
         return joinLobbyForm;
     }
 }

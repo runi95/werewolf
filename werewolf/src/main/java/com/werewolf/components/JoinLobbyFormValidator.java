@@ -35,7 +35,7 @@ public class JoinLobbyFormValidator implements Validator{
 
         LobbyEntity lobbyEntity = null;
         try {
-            lobbyEntity = joinLobbyService.findByGameId(joinLobbyForm.getGameId());
+            lobbyEntity = joinLobbyService.findByGameId(joinLobbyForm.getGameid());
             //LobbyPlayer lobbyPlayer = new LobbyPlayer();
             //lobbyPlayer.setUser();
             //lobbyEntity.getPlayers().add(lobbyPlayer);
