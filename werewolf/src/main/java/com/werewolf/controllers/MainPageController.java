@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.werewolf.components.AccountRegisterFormValidation;
@@ -64,9 +62,25 @@ public class MainPageController {
     		System.out.println(bindingResult.getAllErrors());
     		return "main";
     	}
-    	return "main";
+    	return "lobby";
     }
-    
+
+    @RequestMapping(value = "/lobby", method = RequestMethod.GET)
+    @PreAuthorize("isAuthenticated()")
+    public String getLobby() {
+	    return "redirect:/home";
+    }
+
+    @RequestMapping(value = "/lobby", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public String postLobby(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
+        String name = auth.getName(); //get logged in username
+        model.addAttribute("gamecode",joinLobbyForm.getGameid());
+	    return "lobby";
+    }
+
     @GetMapping(value = "/login")
     public ModelAndView getLoginPage(@RequestParam Optional<String> error) {
     	return new ModelAndView("login", "error", error);
