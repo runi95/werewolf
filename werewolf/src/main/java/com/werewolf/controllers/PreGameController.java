@@ -4,6 +4,7 @@ import com.werewolf.components.JoinGameFormValidator;
 import com.werewolf.components.JoinLobbyFormValidator;
 import com.werewolf.data.JoinGameForm;
 import com.werewolf.data.JoinLobbyForm;
+import com.werewolf.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -29,6 +30,9 @@ public class PreGameController {
     @Autowired
     JoinLobbyFormValidator joinLobbyFormValidation;
 
+    @Autowired
+    AccountService accountService;
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getMainPage(Authentication auth) {
         if(!(auth instanceof AnonymousAuthenticationToken) && auth != null) {
@@ -44,6 +48,9 @@ public class PreGameController {
 
     @RequestMapping(value = "/home", method = RequestMethod.POST)
     public String postHomePage(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult) {
+        // TODO: Make sure this process is failsafe!
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        joinLobbyForm.setUserid(accountService.findByUsername(auth.getName()).getId());
         joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
 
         if(bindingResult.hasErrors()) {
