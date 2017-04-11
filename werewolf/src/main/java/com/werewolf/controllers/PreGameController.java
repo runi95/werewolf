@@ -46,20 +46,6 @@ public class PreGameController {
         return new ModelAndView("main", "joinGameForm", new JoinGameForm());
     }
 
-    @RequestMapping(value = "/home", method = RequestMethod.POST)
-    public String postHomePage(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult) {
-        // TODO: Make sure this process is failsafe!
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        joinLobbyForm.setUserid(accountService.findByUsername(auth.getName()).getId());
-        joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
-
-        if(bindingResult.hasErrors()) {
-            System.out.println(bindingResult.getAllErrors());
-            return "main";
-        }
-        return "lobby";
-    }
-
     @RequestMapping(value = "/lobby", method = RequestMethod.GET)
     public String getLobby() {
         return "redirect:/home";
@@ -67,9 +53,11 @@ public class PreGameController {
 
     @RequestMapping(value = "/lobby", method = RequestMethod.POST)
     public String postLobby(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult, Model model) {
+        // TODO: Make sure this process is failsafe!
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
         String name = auth.getName(); //get logged in username
+        joinLobbyForm.setUserid(accountService.findByUsername(name).getId());
+        joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
         model.addAttribute("gamecode", joinLobbyForm.getGameid());
         return "lobby";
     }
