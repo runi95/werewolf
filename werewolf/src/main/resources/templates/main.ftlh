@@ -10,14 +10,14 @@
                             <fieldset>
       							<div class="input-group">
       								<span class="input-group-addon"><i></i></span>
-      								<input id="nickname" name="nickname" type="text" placeholder="Nickname" class="form-control">
+      								<input id="nickname" name="nickname" type="text" placeholder="Nickname" class="form-control" maxlength="16" autocomplete="on" autofocus>
       							</div>	
 
                                 <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
 
       							<div class="input-group">
       								<span class="input-group-addon"><i></i></span>
-   								    <input id="gameid" name="gameid" type="text" placeholder="Game ID" class="form-control">
+   								    <input id="gameid" name="gameid" type="text" placeholder="Game ID" class="form-control" autocomplete="off" pattern="[A-Z0-9]{5}">
       							</div>
 
       							<div class="form-group">
