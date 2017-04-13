@@ -9,6 +9,9 @@ public class LobbyPlayer {
     @Column(name = "nickname", nullable = false, updatable = true)
     private String nickname;
 
+    @ManyToOne
+    LobbyEntity lobby;
+
     @OneToOne
     @JoinTable(name = "lobbyplayer_user", joinColumns = @JoinColumn(name = "lobbyplayer_nickname"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;

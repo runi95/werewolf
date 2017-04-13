@@ -1,7 +1,11 @@
 package com.werewolf.components;
 
 import com.werewolf.data.JoinLobbyForm;
+import com.werewolf.entities.GameEntity;
 import com.werewolf.entities.LobbyEntity;
+import com.werewolf.entities.LobbyPlayer;
+import com.werewolf.services.AccountService;
+import com.werewolf.services.JoinGameService;
 import com.werewolf.services.JoinLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +18,9 @@ public class JoinLobbyFormValidator implements Validator{
     @Autowired
     JoinLobbyService joinLobbyService;
 
+    @Autowired
+    JoinGameService joinGameService;
+
     @Override
     public boolean supports(Class<?> aClass) {
         return JoinLobbyForm.class.equals(aClass);
@@ -24,28 +31,18 @@ public class JoinLobbyFormValidator implements Validator{
         // Should in theory never be null... in theory!
         JoinLobbyForm joinLobbyForm = (JoinLobbyForm) o;
 
-        // TODO:
-        // If a GameEntity with this gameID exists
-        // then they should only be able to join
-        // if they were already in the game and accidentally quit / left
-        // If not then they should be given an error "Game with that ID already exists!"
-        // If the game with given gameID does not exist then check if there's a lobby
-        // with the given gameID, if there is then join the lobby.
-        // If there is no game nor lobby with given gameID then create a new lobby!
+            // Check if there's an existing started game with the given ID
+            if (joinGameService.gameidIsPresent(joinLobbyForm.getGameid())) {
+                // Check if the player was already in the existing game,
+                // he could've crashed / accidentally left
+                // TODO: if(joinGameService.findByGameId(joinLobbyForm.getGameid()).getAlivePlayers().contains())
+            } else {
+                // No game with given ID exists, check lobby
 
-        LobbyEntity lobbyEntity = null;
-        try {
-            lobbyEntity = joinLobbyService.findByGameId(joinLobbyForm.getGameid());
-            //LobbyPlayer lobbyPlayer = new LobbyPlayer();
-            //lobbyPlayer.setUser();
-            //lobbyEntity.getPlayers().add(lobbyPlayer);
-        } catch (IllegalArgumentException e) {
-
+                if (!joinLobbyService.gameidIsPresent(joinLobbyForm.getGameid())) {
+                    // No game nor lobby with given ID exists, error!
+                    errors.rejectValue("gameid", "JoinLobbyForm.gameid.doesnotexist");
+                }
+            }
         }
-
-        if(lobbyEntity == null) {
-            lobbyEntity = new LobbyEntity();
-        }
-
-    }
 }

@@ -10,6 +10,8 @@ public interface JoinGameService {
     GameEntity findByGameId(String gameId);
     GameEntity findById(long id);
 
+    boolean gameidIsPresent(String gameid);
+
     //void update(GameEntity gameEntity, JoinGameForm joinGameForm);
 
     /**

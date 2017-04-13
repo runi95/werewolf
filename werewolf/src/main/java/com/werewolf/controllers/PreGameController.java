@@ -1,10 +1,13 @@
 package com.werewolf.controllers;
 
-import com.werewolf.components.JoinGameFormValidator;
 import com.werewolf.components.JoinLobbyFormValidator;
 import com.werewolf.data.JoinGameForm;
 import com.werewolf.data.JoinLobbyForm;
+import com.werewolf.entities.LobbyEntity;
+import com.werewolf.entities.LobbyPlayer;
+import com.werewolf.entities.User;
 import com.werewolf.services.AccountService;
+import com.werewolf.services.JoinLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -25,13 +28,13 @@ import javax.validation.Valid;
 public class PreGameController {
 
     @Autowired
-    JoinGameFormValidator joinGameFormValidation;
-
-    @Autowired
     JoinLobbyFormValidator joinLobbyFormValidation;
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    JoinLobbyService joinLobbyService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getMainPage(Authentication auth) {
@@ -55,10 +58,25 @@ public class PreGameController {
     public String postLobby(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult, Model model) {
         // TODO: Make sure this process is failsafe!
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName(); //get logged in username
-        joinLobbyForm.setUserid(accountService.findByUsername(name).getId());
-        joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
-        model.addAttribute("gamecode", joinLobbyForm.getGameid());
+        String name = auth.getName(); // Get logged in username
+        User user = accountService.findByUsername(name); // Get logged in User
+        joinLobbyForm.setUser(user);
+        joinLobbyForm.setUserid(user.getId()); // Might be deprecated, but has been kept
+
+        LobbyEntity lobbyEntity = null;
+
+        if(joinLobbyForm.getGameid().equals(""))
+            lobbyEntity = joinLobbyService.create(joinLobbyForm); // No game id means nothing to validate
+        else {
+            joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
+            lobbyEntity = joinLobbyService.findByGameId(joinLobbyForm.getGameid());
+            LobbyPlayer lobbyPlayer = new LobbyPlayer();
+            lobbyPlayer.setNickname(joinLobbyForm.getNickname());
+            lobbyPlayer.setUser(user);
+            lobbyEntity.addPlayer(lobbyPlayer);
+        }
+
+        model.addAttribute("gamecode", lobbyEntity.getGameId());
         return "lobby";
     }
 }

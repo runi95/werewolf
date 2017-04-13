@@ -5,10 +5,12 @@ import com.werewolf.entities.LobbyEntity;
 
 public interface JoinLobbyService {
 
-    void create(JoinLobbyForm joinLobbyForm);
+    LobbyEntity create(JoinLobbyForm joinLobbyForm);
 
     LobbyEntity findByGameId(String gameId);
     LobbyEntity findById(long id);
+
+    boolean gameidIsPresent(String gameid);
 
     //void update(GameEntity gameEntity, JoinGameForm joinGameForm);
 

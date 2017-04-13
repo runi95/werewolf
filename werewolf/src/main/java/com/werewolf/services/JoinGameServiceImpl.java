@@ -25,7 +25,7 @@ public class JoinGameServiceImpl implements JoinGameService {
 
     @Override
     public GameEntity findByGameId(String gameId) {
-        return gameEntityRepository.findByGameid(gameId).orElseThrow(() -> new IllegalArgumentException("A game with that gameId does not exist"));
+        return gameEntityRepository.findByGameid(gameId).orElseThrow(() -> new IllegalArgumentException("A game with gameid: " + gameId + " does not exist"));
     }
 
     @Override
@@ -44,5 +44,10 @@ public class JoinGameServiceImpl implements JoinGameService {
         JoinGameForm joinGameForm = new JoinGameForm();
         joinGameForm.setGameId(gameEntity.getGame_id());
         return joinGameForm;
+    }
+
+    @Override
+    public boolean gameidIsPresent(String gameid) {
+        return gameEntityRepository.findByGameid(gameid).isPresent();
     }
 }
