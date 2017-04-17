@@ -7,36 +7,31 @@ import java.util.*;
 public class LobbyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = true)
-    private long id;
+    @Column(name = "lobbyentityid", nullable = false, updatable = true)
+    @Basic(optional = false)
+    private long lobbyentityid;
 
     @Column(name = "gameid")
     private String gameid;
 
-    @OneToMany(mappedBy = "lobby")
-    List<LobbyPlayer> lobbyplayers = new ArrayList<>();
+    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL)
+    @Column(name = "lobbyplayers")
+    Set<LobbyPlayer> lobbyplayers;
 
-    public long getId() {
-        return id;
+    public long getlobbyentityid() {
+        return lobbyentityid;
     }
 
     public String getGameId() {
         return gameid;
     }
 
-    public List<LobbyPlayer> getPlayers() {
+    public Set<LobbyPlayer> getPlayers() {
         return lobbyplayers;
     }
 
     public void setGameid(String gameid) {
         this.gameid = gameid;
-    }
-
-    public void addPlayer(LobbyPlayer player) {
-        if(lobbyplayers.contains(player))
-            return;
-
-        lobbyplayers.add(player);
     }
 
     public void removePlayer(LobbyPlayer player) {
@@ -46,7 +41,11 @@ public class LobbyEntity {
         lobbyplayers.remove(player);
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setPlayers(Set<LobbyPlayer> lobbyplayers) {
+        this.lobbyplayers = lobbyplayers;
+    }
+
+    public void setlobbyentityid(long lobbyentityid) {
+        this.lobbyentityid = lobbyentityid;
     }
 }

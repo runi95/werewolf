@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class JoinLobbyServiceImpl implements JoinLobbyService {
@@ -21,17 +23,19 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     @Override
     public LobbyEntity create(JoinLobbyForm joinLobbyForm) {
         LobbyEntity lobbyEntity = new LobbyEntity();
+        Set players = new HashSet<LobbyPlayer>();
         LobbyPlayer lobbyPlayer = new LobbyPlayer();
 
         lobbyPlayer.setNickname(joinLobbyForm.getNickname());
         lobbyPlayer.setUser(joinLobbyForm.getUser());
+        lobbyPlayer.setLobby(lobbyEntity);
+        players.add(lobbyPlayer);
+
+        lobbyEntity.setPlayers(players);
 
         String gameid = generateNewGameid();
         lobbyEntity.setGameid(gameid);
-        lobbyEntity.getPlayers().add(lobbyPlayer);
 
-//        System.out.println("Lobby id: " + lobbyEntity.getId());
-//        System.out.println("Game id: " + lobbyEntity.getGameId());
         lobbyEntityRepository.saveAndFlush(lobbyEntity);
         return lobbyEntity;
     }
