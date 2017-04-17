@@ -1,5 +1,6 @@
 package com.werewolf.controllers;
 
+import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.components.JoinLobbyFormValidator;
 import com.werewolf.data.JoinGameForm;
 import com.werewolf.data.JoinLobbyForm;
@@ -9,6 +10,8 @@ import com.werewolf.entities.User;
 import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -73,10 +76,11 @@ public class PreGameController {
             LobbyPlayer lobbyPlayer = new LobbyPlayer();
             lobbyPlayer.setNickname(joinLobbyForm.getNickname());
             lobbyPlayer.setUser(user);
-            lobbyEntity.addPlayer(lobbyPlayer);
+            lobbyEntity.getPlayers().add(lobbyPlayer);
         }
 
         model.addAttribute("gamecode", lobbyEntity.getGameId());
         return "lobby";
     }
+
 }
