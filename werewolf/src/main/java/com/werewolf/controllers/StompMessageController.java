@@ -44,10 +44,15 @@ public class StompMessageController {
     @MessageMapping("/lobbymessages")
     @SendTo("/action/lobbymessages")
     public String send(JoinLobbyMessage message, Principal principal) {
-        List<LobbyMessage> lml = new ArrayList<>();
         String username = principal.getName();
         User loggedinuser = accountService.findByUsername(username);
         LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
+
+        if(message.getAction() != null && message.getAction().equals("leave")) {
+            lobbyPlayer.getLobby().getPlayers().remove(lobbyPlayer);
+        }
+
+        List<LobbyMessage> lml = new ArrayList<>();
 
         lml.add(new LobbyMessage(Long.toString(loggedinuser.getId()), lobbyPlayer.getNickname(), message.getAction()));
 
