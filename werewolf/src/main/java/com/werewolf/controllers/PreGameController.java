@@ -76,6 +76,7 @@ public class PreGameController {
             LobbyPlayer lobbyPlayer = new LobbyPlayer();
             lobbyPlayer.setNickname(joinLobbyForm.getNickname());
             lobbyPlayer.setUser(user);
+            lobbyPlayer.setLobby(lobbyEntity);
             lobbyEntity.getPlayers().add(lobbyPlayer);
         }
 
