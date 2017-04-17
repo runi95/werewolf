@@ -49,7 +49,7 @@ public class StompMessageController {
         LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
 
         if(message.getAction() != null && message.getAction().equals("leave")) {
-            lobbyPlayer.getLobby().getPlayers().remove(lobbyPlayer);
+            joinLobbyService.leave(lobbyPlayer);
         }
 
         List<LobbyMessage> lml = new ArrayList<>();
