@@ -41,6 +41,24 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     }
 
     @Override
+    public void join(JoinLobbyForm joinLobbyForm) {
+        LobbyEntity lobbyEntity = lobbyEntityRepository.findByGameid(joinLobbyForm.getGameid()).orElseThrow(() -> new IllegalArgumentException("A lobby with that gameId does not exist"));
+
+        LobbyPlayer lobbyPlayer = new LobbyPlayer();
+        lobbyPlayer.setLobby(lobbyEntity);
+        lobbyPlayer.setNickname(joinLobbyForm.getNickname());
+        lobbyPlayer.setUser(joinLobbyForm.getUser());
+
+        lobbyEntity.getPlayers().add(lobbyPlayer);
+    }
+
+    @Override
+    public void leave(LobbyPlayer lobbyPlayer) {
+        LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
+        lobbyEntity.getPlayers().remove(lobbyPlayer);
+    }
+
+    @Override
     public LobbyEntity findByGameId(String gameId) {
         return lobbyEntityRepository.findByGameid(gameId).orElseThrow(() -> new IllegalArgumentException("A lobby with that gameId does not exist"));
     }

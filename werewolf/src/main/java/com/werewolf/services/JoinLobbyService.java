@@ -2,10 +2,13 @@ package com.werewolf.services;
 
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.entities.LobbyEntity;
+import com.werewolf.entities.LobbyPlayer;
 
 public interface JoinLobbyService {
 
     LobbyEntity create(JoinLobbyForm joinLobbyForm);
+    void join(JoinLobbyForm joinLobbyForm);
+    void leave(LobbyPlayer lobbyPlayer);
 
     LobbyEntity findByGameId(String gameId);
     LobbyEntity findById(long id);
