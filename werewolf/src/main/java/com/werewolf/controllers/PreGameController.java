@@ -72,12 +72,7 @@ public class PreGameController {
             lobbyEntity = joinLobbyService.create(joinLobbyForm); // No game id means nothing to validate
         else {
             joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
-            lobbyEntity = joinLobbyService.findByGameId(joinLobbyForm.getGameid());
-            LobbyPlayer lobbyPlayer = new LobbyPlayer();
-            lobbyPlayer.setNickname(joinLobbyForm.getNickname());
-            lobbyPlayer.setUser(user);
-            lobbyPlayer.setLobby(lobbyEntity);
-            lobbyEntity.getPlayers().add(lobbyPlayer);
+            joinLobbyService.join(joinLobbyForm);
         }
 
         model.addAttribute("gamecode", lobbyEntity.getGameId());
