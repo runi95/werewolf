@@ -3,6 +3,7 @@ package com.werewolf.services;
 
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.data.LobbyEntityRepository;
+import com.werewolf.data.LobbyPlayerRepository;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
     @Autowired
     LobbyEntityRepository lobbyEntityRepository;
+
+    @Autowired
+    LobbyPlayerRepository lobbyPlayerRepository;
 
     // Assumes that there are no games with given id
     @Override
@@ -42,6 +46,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
     @Override
     public void join(JoinLobbyForm joinLobbyForm) {
+        if(lobbyPlayerRepository.findByUser(joinLobbyForm.getUser()).isPresent())
+            leave(lobbyPlayerRepository.findByUser(joinLobbyForm.getUser()).get());
+
         LobbyEntity lobbyEntity = lobbyEntityRepository.findByGameid(joinLobbyForm.getGameid()).orElseThrow(() -> new IllegalArgumentException("A lobby with that gameId does not exist"));
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer();
