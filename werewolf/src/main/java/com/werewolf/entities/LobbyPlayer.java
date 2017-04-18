@@ -12,7 +12,7 @@ public class LobbyPlayer {
     @Column(name = "nickname", nullable = false, updatable = true)
     private String nickname;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "lobby_lobbyplayers")
     LobbyEntity lobby;
 
