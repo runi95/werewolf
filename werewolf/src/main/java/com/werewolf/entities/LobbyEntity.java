@@ -56,5 +56,10 @@ public class LobbyEntity {
     public void setlobbyentityid(long lobbyentityid) {
         this.lobbyentityid = lobbyentityid;
     }
+
+	@Override
+	public String toString() {
+		return "LobbyEntity [lobbyentityid=" + lobbyentityid + ", gameid=" + gameid	+ "]";
+	}
     
 }
