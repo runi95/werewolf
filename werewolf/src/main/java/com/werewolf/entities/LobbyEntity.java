@@ -14,7 +14,7 @@ public class LobbyEntity {
     @Column(name = "gameid")
     private String gameid;
 
-    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "lobbyplayers")
     Set<LobbyPlayer> lobbyplayers;
 
