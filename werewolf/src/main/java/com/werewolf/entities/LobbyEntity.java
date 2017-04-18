@@ -44,8 +44,17 @@ public class LobbyEntity {
     public void setPlayers(Set<LobbyPlayer> lobbyplayers) {
         this.lobbyplayers = lobbyplayers;
     }
+    
+    public void addPlayer(LobbyPlayer lobbyPlayer) {
+    	if(lobbyplayers == null)
+    		lobbyplayers = new HashSet<LobbyPlayer>();
+    	
+    	lobbyPlayer.setLobby(this);
+    	lobbyplayers.add(lobbyPlayer);
+    }
 
     public void setlobbyentityid(long lobbyentityid) {
         this.lobbyentityid = lobbyentityid;
     }
+    
 }
