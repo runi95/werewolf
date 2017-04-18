@@ -41,4 +41,10 @@ public class LobbyPlayer {
     public User getUser() {
         return user;
     }
+
+	@Override
+	public String toString() {
+		return "LobbyPlayer [id=" + id + ", nickname=" + nickname + ", lobby=" + lobby + ", user=" + user + "]";
+	}
+    
 }
