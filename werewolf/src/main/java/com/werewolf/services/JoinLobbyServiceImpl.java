@@ -7,16 +7,14 @@ import com.werewolf.data.LobbyPlayerRepository;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.util.HashSet;
-import java.util.Set;
 
-@Service
+@Repository
 public class JoinLobbyServiceImpl implements JoinLobbyService {
-
+	
     @Autowired
     LobbyEntityRepository lobbyEntityRepository;
 
@@ -27,20 +25,15 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     @Override
     public LobbyEntity create(JoinLobbyForm joinLobbyForm) {
         LobbyEntity lobbyEntity = new LobbyEntity();
-        Set players = new HashSet<LobbyPlayer>();
-        LobbyPlayer lobbyPlayer = new LobbyPlayer();
-
-        lobbyPlayer.setNickname(joinLobbyForm.getNickname());
-        lobbyPlayer.setUser(joinLobbyForm.getUser());
-        lobbyPlayer.setLobby(lobbyEntity);
-        players.add(lobbyPlayer);
-
-        lobbyEntity.setPlayers(players);
 
         String gameid = generateNewGameid();
         lobbyEntity.setGameid(gameid);
-
-        lobbyEntityRepository.saveAndFlush(lobbyEntity);
+        
+        lobbyEntityRepository.save(lobbyEntity);
+        
+        joinLobbyForm.setGameid(gameid);
+        join(joinLobbyForm);
+        
         return lobbyEntity;
     }
 
@@ -52,13 +45,13 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
         LobbyEntity lobbyEntity = lobbyEntityRepository.findByGameid(joinLobbyForm.getGameid()).orElseThrow(() -> new IllegalArgumentException("A lobby with that gameId does not exist"));
 
         LobbyPlayer lobbyPlayer = new LobbyPlayer();
-        lobbyPlayer.setLobby(lobbyEntity);
         lobbyPlayer.setNickname(joinLobbyForm.getNickname());
         lobbyPlayer.setUser(joinLobbyForm.getUser());
 
-        lobbyEntity.getPlayers().add(lobbyPlayer);
+        lobbyEntity.addPlayer(lobbyPlayer);
+        
+        lobbyEntityRepository.save(lobbyEntity);
     }
-
     @Override
     public void leave(LobbyPlayer lobbyPlayer) {
         LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
