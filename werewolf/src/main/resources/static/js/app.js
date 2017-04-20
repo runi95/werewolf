@@ -1,5 +1,6 @@
 var stompClient = null;
-var gamecode = undefined;
+var playerlist = {}; // Initialize an empty object that will contain players
+var gamecode = null;
 
 function setConnected(connected) {
     if(connected) {
@@ -15,14 +16,14 @@ function connect() {
     var socket = new SockJS('/werewolf-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/action/lobbymessages/' + gamecode, function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
-        stompClient.subscribe('/action/joinlobby/' + gamecode, function (messageOutput) {
+        stompClient.subscribe('/user/action/joinlobby', function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
+        setConnected(true);
     });
 }
 
@@ -49,19 +50,33 @@ function receiveMessage(message) {
 
             switch(action) {
                 case "leave":
-                    document.getElementById(message[i].nickname).remove();
+                	removePlayer(message[i].playerid, message[i].nickname);
                     break;
                 case "join":
-                    var player = document.createElement("p");
-                    var text = document.createTextNode(message[i].nickname);
-                    player.appendChild(text);
-                    player.setAttribute("id", message[i].nickname);
-                    document.getElementById("plist").appendChild(player);
+                    addPlayer(message[i].playerid, message[i].nickname);
                     break;
                 default:
                     break;
             }
     }
+}
+
+function addPlayer(playerid, nickname) {
+	if (!playerlist.hasOwnProperty(playerid)) {
+		playerlist[playerid] = nickname;
+		var player = document.createElement("p");
+    	var text = document.createTextNode(nickname);
+    	player.appendChild(text);
+    	player.setAttribute("id", playerid);
+    	document.getElementById("plist").appendChild(player);
+	}
+}
+
+function removePlayer(playerid, nickname) {
+	if(playerlist.hasOwnProperty(playerid)) {
+		delete playerlist[playerid];
+		document.getElementById(playerid).remove();
+	}
 }
 
 // This function runs on initialization

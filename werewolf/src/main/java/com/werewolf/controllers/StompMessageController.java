@@ -14,6 +14,7 @@ import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinLobbyService;
 import com.werewolf.services.LobbyPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.core.MessageSendingOperations;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -26,7 +27,7 @@ import java.util.List;
 
 @Controller
 public class StompMessageController {
-
+	
     @Autowired
     AccountService accountService;
 
@@ -71,7 +72,7 @@ public class StompMessageController {
     }
 
     @MessageMapping("/joinlobby//{gameid}")
-    @SendToUser("/action/joinlobby/{gameid}")
+    @SendToUser("/action/joinlobby")
     public String reply(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
         List<LobbyMessage> lml = new ArrayList<>();
         String username = principal.getName();
