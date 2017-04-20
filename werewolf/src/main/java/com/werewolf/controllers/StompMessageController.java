@@ -45,7 +45,6 @@ public class StompMessageController {
     @MessageMapping("/lobbymessages/{gameid}")
     @SendTo("/action/lobbymessages/{gameid}")
     public String send(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
-    	System.out.println("action/lobbymessages/" + gameid);
         String username = principal.getName();
         User loggedinuser = accountService.findByUsername(username);
         LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
@@ -74,7 +73,6 @@ public class StompMessageController {
     @MessageMapping("/joinlobby//{gameid}")
     @SendToUser("/action/joinlobby/{gameid}")
     public String reply(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
-    	System.out.println("action/joinlobby/" + gameid);
         List<LobbyMessage> lml = new ArrayList<>();
         String username = principal.getName();
         User loggedinuser = accountService.findByUsername(username);
