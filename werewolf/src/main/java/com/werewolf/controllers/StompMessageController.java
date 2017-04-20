@@ -46,9 +46,7 @@ public class StompMessageController {
     @MessageMapping("/lobbymessages/{gameid}")
     @SendTo("/action/lobbymessages/{gameid}")
     public String send(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
-        String username = principal.getName();
-        User loggedinuser = accountService.findByUsername(username);
-        LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
+        LobbyPlayer lobbyPlayer = getPlayerFromPrincipal(principal);
 
         if(message.getAction() != null && message.getAction().equals("leave")) {
             joinLobbyService.leave(lobbyPlayer);
@@ -56,44 +54,44 @@ public class StompMessageController {
 
         List<LobbyMessage> lml = new ArrayList<>();
 
-        lml.add(new LobbyMessage(Long.toString(loggedinuser.getId()), lobbyPlayer.getNickname(), message.getAction()));
+        lml.add(new LobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname(), message.getAction()));
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-        String arrayToJson = null;
-        try {
-            arrayToJson = objectMapper.writeValueAsString(lml);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return arrayToJson;
+        return convertArrayToJson(lml);
     }
 
     @MessageMapping("/joinlobby//{gameid}")
     @SendToUser("/action/joinlobby")
     public String reply(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
         List<LobbyMessage> lml = new ArrayList<>();
-        String username = principal.getName();
-        User loggedinuser = accountService.findByUsername(username);
-        LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
+        LobbyPlayer lobbyPlayer = getPlayerFromPrincipal(principal);
         LobbyEntity lobby = lobbyPlayer.getLobby();
 
         for(LobbyPlayer lp : lobby.getPlayers()) {
             lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()),lp.getNickname(), "join"));
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        return convertArrayToJson(lml);
+    }
+    
+    private LobbyPlayer getPlayerFromPrincipal(Principal principal) {
+    	String username = principal.getName();
+        User loggedinuser = accountService.findByUsername(username);
+        LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
+        
+        return lobbyPlayer;
+    }
+    
+    public static String convertArrayToJson(List<LobbyMessage> messageArray) {
+    	ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-        String arrayToJson = null;
+    	
+    	String arrayToJson = null;
         try {
-            arrayToJson = objectMapper.writeValueAsString(lml);
+            arrayToJson = objectMapper.writeValueAsString(messageArray);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
+        
         return arrayToJson;
     }
 }
