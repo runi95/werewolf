@@ -23,7 +23,7 @@ function connect() {
         stompClient.subscribe('/action/joinlobby/' + gamecode, function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
-        sendPrivateMessage();
+        sendPrivateMessage({"action":"getallplayers"});
     });
 }
 
@@ -37,11 +37,11 @@ function disconnect() {
 }
 
 function broadcastMessage(message) {
-    stompClient.send('/app/lobbymessages/', {}, JSON.stringify(message))
+    stompClient.send('/app/lobbymessages/' + gamecode, {}, JSON.stringify(message))
 }
 // This is the message that will be sent to the server
 function sendPrivateMessage(message) {
-    stompClient.send('/app/joinlobby/', {}, JSON.stringify(message));
+    stompClient.send('/app/joinlobby/' + gamecode, {}, JSON.stringify(message));
 }
 
 function receiveMessage(message) {
@@ -70,5 +70,8 @@ $.ajax({
     url: '/lobby/gamecoderequest',
     type: 'GET',
     datatype: 'json',
-    success: function(data) { gamecode = data; connect();}
+    success: function(data) { 
+    	gamecode = data;
+    	connect();
+    }
 });

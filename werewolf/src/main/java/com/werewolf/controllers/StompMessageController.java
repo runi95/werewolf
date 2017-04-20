@@ -14,6 +14,7 @@ import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinLobbyService;
 import com.werewolf.services.LobbyPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -41,9 +42,10 @@ public class StompMessageController {
     @Autowired
     LobbyEntityRepository lobbyEntityRepository;
 
-    @MessageMapping("/lobbymessages")
-    @SendTo("/action/lobbymessages")
-    public String send(JoinLobbyMessage message, Principal principal) {
+    @MessageMapping("/lobbymessages/{gameid}")
+    @SendTo("/action/lobbymessages/{gameid}")
+    public String send(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
+    	System.out.println("action/lobbymessages/" + gameid);
         String username = principal.getName();
         User loggedinuser = accountService.findByUsername(username);
         LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
@@ -69,9 +71,10 @@ public class StompMessageController {
         return arrayToJson;
     }
 
-    @MessageMapping("/joinlobby")
-    @SendToUser("/action/joiblobby")
-    public String reply(JoinLobbyMessage message, Principal principal) {
+    @MessageMapping("/joinlobby//{gameid}")
+    @SendToUser("/action/joinlobby/{gameid}")
+    public String reply(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
+    	System.out.println("action/joinlobby/" + gameid);
         List<LobbyMessage> lml = new ArrayList<>();
         String username = principal.getName();
         User loggedinuser = accountService.findByUsername(username);
