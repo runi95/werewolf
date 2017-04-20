@@ -7,7 +7,7 @@ import com.werewolf.entities.LobbyPlayer;
 public interface JoinLobbyService {
 
     LobbyEntity create(JoinLobbyForm joinLobbyForm);
-    void join(JoinLobbyForm joinLobbyForm);
+    LobbyEntity join(JoinLobbyForm joinLobbyForm);
     void leave(LobbyPlayer lobbyPlayer);
 
     LobbyEntity findByGameId(String gameId);

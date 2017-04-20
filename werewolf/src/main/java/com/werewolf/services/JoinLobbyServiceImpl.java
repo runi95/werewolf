@@ -38,7 +38,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     }
 
     @Override
-    public void join(JoinLobbyForm joinLobbyForm) {
+    public LobbyEntity join(JoinLobbyForm joinLobbyForm) {
         if(lobbyPlayerRepository.findByUser(joinLobbyForm.getUser()).isPresent())
             leave(lobbyPlayerRepository.findByUser(joinLobbyForm.getUser()).get());
 
@@ -51,6 +51,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
         lobbyEntity.addPlayer(lobbyPlayer);
         
         lobbyEntityRepository.save(lobbyEntity);
+        
+        return lobbyEntity;
     }
     @Override
     public void leave(LobbyPlayer lobbyPlayer) {
