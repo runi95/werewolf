@@ -58,6 +58,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     public void leave(LobbyPlayer lobbyPlayer) {
         LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
         lobbyEntity.getPlayers().remove(lobbyPlayer);
+        
+        lobbyEntityRepository.save(lobbyEntity);
     }
 
     @Override
