@@ -18,12 +18,16 @@ import com.werewolf.controllers.StompMessageController;
 import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.User;
 import com.werewolf.services.AccountService;
+import com.werewolf.services.JoinLobbyService;
 import com.werewolf.services.LobbyPlayerService;
 
 public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
 
 	@Autowired
     private SimpMessagingTemplate simpTemplate;
+	
+	@Autowired
+	private JoinLobbyService joinLobbyService;
 	
 	@Autowired
 	private LobbyPlayerService lobbyPlayerService;
@@ -70,6 +74,8 @@ public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
     		
     		List<LobbyMessage> lobbyMessages = new ArrayList<>();
     		lobbyMessages.add(new LobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname(), "leave"));
+    		
+    		joinLobbyService.leave(lobbyPlayer);
     		
     		simpTemplate.convertAndSend("/action/lobbymessages/" + lobbyPlayer.getLobby().getGameId(), StompMessageController.convertArrayToJson(lobbyMessages));
     	}
