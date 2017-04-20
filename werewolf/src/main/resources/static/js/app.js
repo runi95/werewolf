@@ -1,5 +1,5 @@
 var stompClient = null;
-var gamecode = "${gamecode}";
+var gamecode = undefined;
 
 function setConnected(connected) {
     if(connected) {
@@ -17,10 +17,10 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/action/lobbymessages', function (messageOutput) {
+        stompClient.subscribe('/action/lobbymessages/' + gamecode, function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
-        stompClient.subscribe('/action/joinlobby', function (messageOutput) {
+        stompClient.subscribe('/action/joinlobby/' + gamecode, function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
         sendMessage();
@@ -37,11 +37,11 @@ function disconnect() {
 }
 
 function broadcastMessage(message) {
-    stompClient.send("/app/lobbymessages", {}, JSON.stringify(message))
+    stompClient.send('/app/lobbymessages/', {}, JSON.stringify(message))
 }
 // This is the message that will be sent to the server
 function sendPrivateMessage(message) {
-    stompClient.send("/app/joinlobby", {}, JSON.stringify(message));
+    stompClient.send('/app/joinlobby/', {}, JSON.stringify(message));
 }
 
 function receiveMessage(message) {
@@ -66,6 +66,9 @@ function receiveMessage(message) {
 }
 
 // This function runs on initialization
-$(function () {
-    connect();
+$.ajax({
+    url: '/lobby/gamecoderequest',
+    type: 'GET',
+    datatype: 'json',
+    success: function(data) { gamecode = data; connect();}
 });
