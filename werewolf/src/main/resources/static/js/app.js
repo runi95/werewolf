@@ -23,7 +23,6 @@ function connect() {
         stompClient.subscribe('/action/joinlobby/' + gamecode, function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
-        sendPrivateMessage({"action":"getallplayers"});
     });
 }
 
