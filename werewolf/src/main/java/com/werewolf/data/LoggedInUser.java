@@ -8,6 +8,7 @@ import com.werewolf.entities.User;
 
 public class LoggedInUser extends org.springframework.security.core.userdetails.User{
 	
+	private static final long serialVersionUID = 4844420936118662103L;
 	long id;
     String name;
 
