@@ -98,6 +98,14 @@ body {
   border-bottom-color: #fff;
 }
 
+.list-group-item {
+	text-shadow: none;	
+}
+
+.list-group-item-default {
+	color: #505050;
+}
+
 @media (min-width: 768px) {
   .masthead-brand {
     float: left;
