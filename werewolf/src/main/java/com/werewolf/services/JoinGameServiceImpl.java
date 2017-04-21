@@ -2,9 +2,7 @@ package com.werewolf.services;
 
 import com.werewolf.data.GameEntityRepository;
 import com.werewolf.data.JoinGameForm;
-import com.werewolf.data.LobbyEntityRepository;
 import com.werewolf.entities.GameEntity;
-import com.werewolf.entities.LobbyEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;

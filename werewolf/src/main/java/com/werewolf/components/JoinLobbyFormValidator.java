@@ -1,10 +1,6 @@
 package com.werewolf.components;
 
 import com.werewolf.data.JoinLobbyForm;
-import com.werewolf.entities.GameEntity;
-import com.werewolf.entities.LobbyEntity;
-import com.werewolf.entities.LobbyPlayer;
-import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinGameService;
 import com.werewolf.services.JoinLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
