@@ -22,7 +22,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -47,9 +50,9 @@ public class PreGameController {
         return "main";
     }
 
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public ModelAndView getHomePage() {
-        return new ModelAndView("main", "joinGameForm", new JoinGameForm());
+    @RequestMapping(value = "/home")
+    public String getHomePage(@RequestParam Optional<String> error) {
+        return "main";
     }
 
     @RequestMapping(value = "/lobby", method = RequestMethod.GET)
@@ -58,7 +61,7 @@ public class PreGameController {
     }
 
     @RequestMapping(value = "/lobby", method = RequestMethod.POST)
-    public String postLobby(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult, Model model) {
+    public ModelAndView postLobby(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult) {
         // TODO: Make sure this process is failsafe!
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName(); // Get logged in username
@@ -69,15 +72,17 @@ public class PreGameController {
 
         LobbyEntity lobbyEntity = null;
 
-        if(joinLobbyForm.getGameid().equals(""))
+        if(joinLobbyForm.getGameid().equals("")) {
             lobbyEntity = joinLobbyService.create(joinLobbyForm); // No game id means nothing to validate
-        else {
+        } else {
             joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
-            lobbyEntity = joinLobbyService.join(joinLobbyForm);
+            if(bindingResult.hasErrors())
+            	return new ModelAndView("main", "error", "error joining lobby, please check the Game ID again");
+            else
+            	lobbyEntity = joinLobbyService.join(joinLobbyForm);
         }
 
-        model.addAttribute("gamecode", lobbyEntity.getGameId());
-        return "lobby";
+        return new ModelAndView("lobby", "gamecode", lobbyEntity.getGameId());
     }
 
 }

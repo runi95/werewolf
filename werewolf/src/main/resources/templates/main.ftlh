@@ -15,6 +15,10 @@
 
                                 <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
 
+								<#if error??>
+            						<p class="text-danger">${error}</p>
+        						</#if>
+
       							<div class="input-group">
       								<span class="input-group-addon"><i></i></span>
    								    <input id="gameid" name="gameid" type="text" placeholder="Game ID" class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">

@@ -1,6 +1,7 @@
 var stompClient = null;
 var playerlist = {}; // Initialize an empty object that will contain players
 var gamecode = null;
+var ready = false; // Player is not ready upon load
 
 function setConnected(connected) {
     if(connected) {
@@ -57,7 +58,7 @@ function receiveMessage(message) {
                     break;
                 case "owner":
                 	addPlayer(message[i].playerid, message[i].nickname);
-                	document.getElementById(message[i].playerid).setAttribute("class", "text-success");
+                	document.getElementById(message[i].playerid).setAttribute("class", "list-group-item list-group-item-success");
                 default:
                     break;
             }
@@ -67,10 +68,11 @@ function receiveMessage(message) {
 function addPlayer(playerid, nickname) {
 	if (!playerlist.hasOwnProperty(playerid)) {
 		playerlist[playerid] = nickname;
-		var player = document.createElement("p");
+		var player = document.createElement("li");
     	var text = document.createTextNode(nickname);
     	player.appendChild(text);
     	player.setAttribute("id", playerid);
+    	player.setAttribute("class", "list-group-item list-group-item-default");
     	document.getElementById("plist").appendChild(player);
 	}
 }
@@ -79,6 +81,20 @@ function removePlayer(playerid, nickname) {
 	if(playerlist.hasOwnProperty(playerid)) {
 		delete playerlist[playerid];
 		document.getElementById(playerid).remove();
+	}
+}
+
+function changeReadyState() {
+	ready = !ready;
+	var elem = document.getElementById("btnready");
+	if(ready) {
+		//sendPrivateMessage({"action":"ready"});
+		elem.setAttribute("class", "btn btn-danger btn-block");
+		elem.innerHTML = "Unready";
+	} else {
+		//sendPrivateMessage({"action":"unready"});
+		elem.setAttribute("class", "btn btn-success btn-block");
+		elem.innerHTML = "Ready";
 	}
 }
 
