@@ -6,6 +6,8 @@ import com.werewolf.entities.LobbyPlayer;
 
 public interface JoinLobbyService {
 
+	void dropTable();
+	
     LobbyEntity create(JoinLobbyForm joinLobbyForm);
     LobbyEntity join(JoinLobbyForm joinLobbyForm);
     void leave(LobbyPlayer lobbyPlayer);

@@ -4,8 +4,11 @@ package com.werewolf.services;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.data.LobbyEntityRepository;
 import com.werewolf.data.LobbyPlayerRepository;
+import com.werewolf.data.NameDictionaryRepository;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
+import com.werewolf.entities.NameDictionary;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,15 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
     @Autowired
     LobbyPlayerRepository lobbyPlayerRepository;
+    
+    @Autowired
+    NameDictionaryRepository nameDictionaryRepository;
+    
+    @Override
+    public void dropTable() {
+    	lobbyPlayerRepository.deleteAll();
+    	lobbyEntityRepository.deleteAll();
+    }
 
     // Assumes that there are no games with given id
     @Override
@@ -44,6 +56,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
         LobbyEntity lobbyEntity = lobbyEntityRepository.findByGameid(joinLobbyForm.getGameid()).orElseThrow(() -> new IllegalArgumentException("A lobby with that gameId does not exist"));
 
+        if(invalidNickname(joinLobbyForm.getNickname()))
+        	joinLobbyForm.setNickname(generateNewNickname());
+        
         LobbyPlayer lobbyPlayer = new LobbyPlayer();
         lobbyPlayer.setNickname(joinLobbyForm.getNickname());
         lobbyPlayer.setUser(joinLobbyForm.getUser());
@@ -99,5 +114,27 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
         if(gameidIsPresent(generatedGameid))
             return generateNewGameid();
         else return generatedGameid;
+    }
+    
+    private boolean invalidNickname(String nickname) {
+    	if(nickname != null) {
+    		nickname = nickname.replaceAll("\\s+","");
+    		if(nickname.equals(""))
+    			return true;
+    		else 
+    			return false;
+    	}else
+    		return true;
+    }
+    
+    private String generateNewNickname() {
+    	SecureRandom random = new SecureRandom();
+    	int repositorySize = (int)nameDictionaryRepository.count();
+    	int num = random.nextInt(repositorySize) + 1;
+    	NameDictionary name = nameDictionaryRepository.findOne(num);
+    	num = random.nextInt(repositorySize) + 1;
+    	NameDictionary surname = nameDictionaryRepository.findOne(num);
+    	
+    	return name.getName() + " " + surname.getName();
     }
 }

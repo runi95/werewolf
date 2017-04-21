@@ -7,7 +7,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.werewolf.data.AccountRepository;
+import com.werewolf.data.NameDictionaryEnum;
+import com.werewolf.data.NameDictionaryRepository;
+import com.werewolf.entities.NameDictionary;
 import com.werewolf.entities.User;
+import com.werewolf.services.JoinLobbyService;
 
 @Component
 public class DevUserCreator implements ApplicationListener<ContextRefreshedEvent> {
@@ -15,6 +19,12 @@ public class DevUserCreator implements ApplicationListener<ContextRefreshedEvent
     @Autowired
     AccountRepository userRepository;
 
+    @Autowired
+    JoinLobbyService joinLobbyService;
+    
+    @Autowired
+    NameDictionaryRepository nameDictionaryRepository;
+    
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if(!userRepository.findByUsername("admin").isPresent()) {
@@ -23,5 +33,16 @@ public class DevUserCreator implements ApplicationListener<ContextRefreshedEvent
             user.setPasswordHash(new BCryptPasswordEncoder().encode("password"));
             userRepository.save(user);
         }
+        
+        if(!(nameDictionaryRepository.count() > 0)) {
+        	NameDictionaryEnum[] enumValues = NameDictionaryEnum.values();
+        	for(int i = 0; i < enumValues.length; i++) {
+        		NameDictionary nameDictionary = new NameDictionary();
+        		nameDictionary.setName(enumValues[i].toString());
+        		nameDictionaryRepository.save(nameDictionary);
+        	}
+        }
+        
+        joinLobbyService.dropTable();
     }
 }
