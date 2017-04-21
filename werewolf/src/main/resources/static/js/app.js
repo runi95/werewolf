@@ -57,7 +57,7 @@ function receiveMessage(message) {
                     break;
                 case "owner":
                 	addPlayer(message[i].playerid, message[i].nickname);
-                	document.getElementById(message[i].playerid).setAttribute("class", "text-primary");
+                	document.getElementById(message[i].playerid).setAttribute("class", "text-success");
                 default:
                     break;
             }
