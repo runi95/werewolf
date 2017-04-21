@@ -4,7 +4,7 @@
 		<div class="site-wrapper-inner">
     		<div class="cover-container">
     			<div class="inner cover">
-    				<h1>Lobby code: ${gamecode}</h1>
+    				<h1>Lobby code: <b class="text-primary">${gamecode}</b></h1>
 					<p>Players:</p>
 					<div id="plist"></div>
    			 		<script src="js/app.js"></script>
