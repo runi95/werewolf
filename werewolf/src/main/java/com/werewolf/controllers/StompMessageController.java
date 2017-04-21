@@ -67,7 +67,10 @@ public class StompMessageController {
         LobbyEntity lobby = lobbyPlayer.getLobby();
 
         for(LobbyPlayer lp : lobby.getPlayers()) {
-            lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()),lp.getNickname(), "join"));
+        	if(lp.getId() == lobbyPlayer.getId())
+        		lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()),lp.getNickname(), "owner"));
+        	else
+        		lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()),lp.getNickname(), "join"));
         }
 
         return convertArrayToJson(lml);

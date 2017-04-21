@@ -55,6 +55,9 @@ function receiveMessage(message) {
                 case "join":
                     addPlayer(message[i].playerid, message[i].nickname);
                     break;
+                case "owner":
+                	addPlayer(message[i].playerid, message[i].nickname);
+                	document.getElementById(message[i].playerid).setAttribute("class", "text-primary");
                 default:
                     break;
             }
