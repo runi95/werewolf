@@ -65,6 +65,7 @@ public class PreGameController {
         User user = accountService.findByUsername(name); // Get logged in User
         joinLobbyForm.setUser(user);
         joinLobbyForm.setUserid(user.getId()); // Might be deprecated, but has been kept
+        joinLobbyForm.setGameid(joinLobbyForm.getGameid().toUpperCase());
 
         LobbyEntity lobbyEntity = null;
 

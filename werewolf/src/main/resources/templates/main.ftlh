@@ -17,7 +17,7 @@
 
       							<div class="input-group">
       								<span class="input-group-addon"><i></i></span>
-   								    <input id="gameid" name="gameid" type="text" placeholder="Game ID" class="form-control" autocomplete="off" pattern="[A-Z0-9]{5}">
+   								    <input id="gameid" name="gameid" type="text" placeholder="Game ID" class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
       							</div>
 
       							<div class="form-group">
