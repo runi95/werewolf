@@ -41,7 +41,7 @@ public class JoinLobbyFormValidator implements Validator{
 
                 if (!joinLobbyService.gameidIsPresent(joinLobbyForm.getGameid())) {
                     // No game nor lobby with given ID exists, error!
-                    errors.rejectValue("gameid", "JoinLobbyForm.gameid.doesnotexist");
+                    errors.rejectValue("gameid", "No lobby with id " + joinLobbyForm.getGameid() + " exists!");
                 }
             }
         }
