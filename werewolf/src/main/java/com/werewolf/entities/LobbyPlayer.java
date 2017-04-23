@@ -19,6 +19,9 @@ public class LobbyPlayer {
     @OneToOne
     @JoinTable(name = "lobbyplayer_user", joinColumns = @JoinColumn(name = "lobbyplayer_nickname"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;
+    
+    @Column(name = "ready")
+    private boolean ready = false;
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
@@ -30,6 +33,10 @@ public class LobbyPlayer {
         this.user = user;
     }
 
+    public void setReady(boolean ready) {
+    	this.ready = ready;
+    }
+    
     public long getId() { return id; }
 
     public String getNickname() {
@@ -42,6 +49,10 @@ public class LobbyPlayer {
         return user;
     }
 
+    public boolean ready() {
+    	return ready;
+    }
+    
 	@Override
 	public String toString() {
 		return "LobbyPlayer [id=" + id + ", nickname=" + nickname + ", lobby=" + lobby + ", user=" + user + "]";

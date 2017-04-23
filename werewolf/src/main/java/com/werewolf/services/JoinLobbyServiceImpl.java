@@ -69,12 +69,39 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
         
         return lobbyEntity;
     }
+    
     @Override
     public void leave(LobbyPlayer lobbyPlayer) {
         LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
         lobbyEntity.getPlayers().remove(lobbyPlayer);
         
         lobbyEntityRepository.save(lobbyEntity);
+    }
+    
+    @Override
+    public Integer setReadyStatus(LobbyPlayer lobbyPlayer, boolean ready) {
+    	if(lobbyPlayer == null)
+    		return null;
+    	
+    	lobbyPlayer.setReady(ready);
+    	lobbyPlayerRepository.save(lobbyPlayer);
+    	
+    	LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
+    	if(ready)
+    		lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() + 1);
+    	else
+    		lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() - 1);
+    	lobbyEntityRepository.save(lobbyEntity);
+    	
+    	return lobbyEntity.getReadyPlayerCount();
+    }
+    
+    @Override
+    public Integer getPlayerCount(LobbyPlayer lobbyPlayer) {
+    	if(lobbyPlayer == null)
+    		return null;
+    	
+    	return lobbyPlayer.getLobby().getPlayers().size();
     }
 
     @Override

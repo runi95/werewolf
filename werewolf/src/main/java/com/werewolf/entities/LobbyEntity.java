@@ -17,6 +17,9 @@ public class LobbyEntity {
     @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "lobbyplayers")
     Set<LobbyPlayer> lobbyplayers;
+    
+    @Column(name = "readyplayercount")
+    private int readyPlayerCount = 0;
 
     public long getlobbyentityid() {
         return lobbyentityid;
@@ -30,6 +33,10 @@ public class LobbyEntity {
         return lobbyplayers;
     }
 
+    public int getReadyPlayerCount() {
+    	return readyPlayerCount;
+    }
+    
     public void setGameid(String gameid) {
         this.gameid = gameid;
     }
@@ -57,6 +64,10 @@ public class LobbyEntity {
         this.lobbyentityid = lobbyentityid;
     }
 
+    public void setReadyPlayerCount(int readyPlayerCount) {
+    	this.readyPlayerCount = readyPlayerCount;
+    }
+    
 	@Override
 	public String toString() {
 		return "LobbyEntity [lobbyentityid=" + lobbyentityid + ", gameid=" + gameid	+ "]";

@@ -77,7 +77,7 @@ public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
     		
     		joinLobbyService.leave(lobbyPlayer);
     		
-    		simpTemplate.convertAndSend("/action/lobbymessages/" + lobbyPlayer.getLobby().getGameId(), StompMessageController.convertArrayToJson(lobbyMessages));
+    		simpTemplate.convertAndSend("/action/lobbymessages/" + lobbyPlayer.getLobby().getGameId(), StompMessageController.convertObjectToJson(lobbyMessages));
     	}
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.werewolf.Messages.JoinLobbyMessage;
 import com.werewolf.Messages.LobbyMessage;
+import com.werewolf.Messages.ReadyAndUnreadyLobbyMessage;
 import com.werewolf.data.LobbyEntityRepository;
 import com.werewolf.data.LobbyPlayerRepository;
 import com.werewolf.entities.LobbyEntity;
@@ -42,21 +43,38 @@ public class StompMessageController {
 	@Autowired
 	LobbyEntityRepository lobbyEntityRepository;
 
+	@SuppressWarnings("unchecked")
 	@MessageMapping("/lobbymessages/{gameid}")
 	@SendTo("/action/lobbymessages/{gameid}")
 	public String send(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
 		LobbyPlayer lobbyPlayer = getPlayerFromPrincipal(principal);
-
-		if (message.getAction() != null && message.getAction().equals("leave")) {
+		Object messageList = null;
+		int readyPlayerCount;
+		int playerCount;
+		
+		switch(message.getAction()) {
+		case "leave":
 			joinLobbyService.leave(lobbyPlayer);
+		case "join":
+			messageList = new ArrayList<LobbyMessage>();
+			((ArrayList<LobbyMessage>)messageList).add(new LobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname(),
+					message.getAction()));
+			break;
+		case "ready":
+			messageList = new ArrayList<ReadyAndUnreadyLobbyMessage>();
+			readyPlayerCount = joinLobbyService.setReadyStatus(lobbyPlayer, true);
+			playerCount = joinLobbyService.getPlayerCount(lobbyPlayer);
+			((ArrayList<ReadyAndUnreadyLobbyMessage>)messageList).add(new ReadyAndUnreadyLobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
+			break;
+		case "unready":
+			messageList = new ArrayList<ReadyAndUnreadyLobbyMessage>();
+			readyPlayerCount = joinLobbyService.setReadyStatus(lobbyPlayer, false);
+			playerCount = joinLobbyService.getPlayerCount(lobbyPlayer);
+			((ArrayList<ReadyAndUnreadyLobbyMessage>)messageList).add(new ReadyAndUnreadyLobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
+			break;
 		}
 
-		List<LobbyMessage> lml = new ArrayList<>();
-
-		lml.add(new LobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname(),
-				message.getAction()));
-
-		return convertArrayToJson(lml);
+		return convertObjectToJson(messageList);
 	}
 
 	@MessageMapping("/joinlobby//{gameid}")
@@ -75,15 +93,9 @@ public class StompMessageController {
 					lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()), lp.getNickname(), "join"));
 			}
 			break;
-		case "ready":
-			//TODO:
-			break;
-		case "unready":
-			//TODO:
-			break;
 		}
 
-		return convertArrayToJson(lml);
+		return convertObjectToJson(lml);
 	}
 
 	private LobbyPlayer getPlayerFromPrincipal(Principal principal) {
@@ -94,13 +106,13 @@ public class StompMessageController {
 		return lobbyPlayer;
 	}
 
-	public static String convertArrayToJson(List<LobbyMessage> messageArray) {
+	public static String convertObjectToJson(Object message) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
 		String arrayToJson = null;
 		try {
-			arrayToJson = objectMapper.writeValueAsString(messageArray);
+			arrayToJson = objectMapper.writeValueAsString(message);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

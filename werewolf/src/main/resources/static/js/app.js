@@ -2,6 +2,7 @@ var stompClient = null;
 var playerlist = {}; // Initialize an empty object that will contain players
 var gamecode = null;
 var ready = false; // Player is not ready upon load
+var owner = null; // ID of the user
 
 function setConnected(connected) {
     if(connected) {
@@ -38,7 +39,7 @@ function disconnect() {
 }
 
 function broadcastMessage(message) {
-    stompClient.send('/app/lobbymessages/' + gamecode, {}, JSON.stringify(message))
+    stompClient.send('/app/lobbymessages/' + gamecode, {}, JSON.stringify(message));
 }
 // This is the message that will be sent to the server
 function sendPrivateMessage(message) {
@@ -48,17 +49,25 @@ function sendPrivateMessage(message) {
 function receiveMessage(message) {
     for(var i = 0; i < message.length; i++) {
             var action = message[i].action;
-
+            
             switch(action) {
-                case "leave":
-                	removePlayer(message[i].playerid, message[i].nickname);
-                    break;
                 case "join":
                     addPlayer(message[i].playerid, message[i].nickname);
                     break;
+                case "updatereadystatus":
+                	someoneClickedReady(message[i].playerid, message[i].readyplayercount, message[i].lobbyplayercount);
+                	break;
                 case "owner":
+                	owner = message[i].playerid;
                 	addPlayer(message[i].playerid, message[i].nickname);
                 	document.getElementById(message[i].playerid).setAttribute("class", "list-group-item list-group-item-success");
+                	break;
+                case "leave":
+                	removePlayer(message[i].playerid, message[i].nickname);
+                    break;
+                case "everyoneready":
+                	
+                	break;
                 default:
                     break;
             }
@@ -86,16 +95,25 @@ function removePlayer(playerid, nickname) {
 
 function changeReadyState() {
 	ready = !ready;
-	var elem = document.getElementById("btnready");
+	document.getElementById("btnready").disabled = true;
 	if(ready) {
-		//sendPrivateMessage({"action":"ready"});
-		elem.setAttribute("class", "btn btn-danger btn-block");
-		elem.innerHTML = "Unready";
-	} else {
-		//sendPrivateMessage({"action":"unready"});
-		elem.setAttribute("class", "btn btn-success btn-block");
-		elem.innerHTML = "Ready";
+		broadcastMessage({"action":"ready"});
+	}else{
+		broadcastMessage({"action":"unready"});
 	}
+}
+
+function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
+	var elem = document.getElementById("btnready");
+	if(playerid === owner) {
+		elem.disabled = false;
+		if(ready) {
+			elem.setAttribute("class", "btn btn-danger btn-block");
+		} else {
+			elem.setAttribute("class", "btn btn-success btn-block");
+		}
+	}
+	elem.innerHTML = "Unready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 3) + ")";
 }
 
 // This function runs on initialization
