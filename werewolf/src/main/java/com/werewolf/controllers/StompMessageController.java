@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.werewolf.Messages.JoinLobbyMessage;
 import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.Messages.ReadyAndUnreadyLobbyMessage;
-import com.werewolf.data.LobbyEntityRepository;
-import com.werewolf.data.LobbyPlayerRepository;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.User;
@@ -36,12 +34,6 @@ public class StompMessageController {
 
 	@Autowired
 	LobbyPlayerService lobbyPlayerService;
-
-	@Autowired
-	LobbyPlayerRepository lobbyPlayerRepository;
-
-	@Autowired
-	LobbyEntityRepository lobbyEntityRepository;
 
 	@SuppressWarnings("unchecked")
 	@MessageMapping("/lobbymessages/{gameid}")
