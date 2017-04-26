@@ -12,7 +12,6 @@ import com.werewolf.gameplay.Evil;
 import com.werewolf.gameplay.Neutral;
 import com.werewolf.gameplay.NeutralEvil;
 import com.werewolf.gameplay.RoleInterface;
-import com.werewolf.gameplay.RolesEnum;
 import com.werewolf.gameplay.Good;
 import com.werewolf.gameplay.roles.Amnesiac;
 import com.werewolf.gameplay.roles.Bandit;
