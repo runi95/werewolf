@@ -12,6 +12,7 @@ import com.werewolf.entities.User;
 import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinLobbyService;
 import com.werewolf.services.LobbyPlayerService;
+import org.jboss.logging.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -96,6 +97,17 @@ public class StompMessageController {
 		}
 
 		return convertObjectToJson(lml);
+	}
+
+	@MessageMapping("/game/{gameid}")
+	@SendToUser("/action/game")
+	public String gamereply(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
+		switch(message.getAction()) {
+            case "initializegame":
+                // Return alive and dead players
+                break;
+        }
+		return "";
 	}
 
 	private LobbyPlayer getPlayerFromPrincipal(Principal principal) {
