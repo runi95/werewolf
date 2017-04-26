@@ -2,13 +2,6 @@
  * Globals
  */
 
-/* Links */
-a,
-a:focus,
-a:hover {
-  color: #fff;
-}
-
 /* Custom default button */
 .btn-default,
 .btn-default:hover,
@@ -19,6 +12,12 @@ a:hover {
   border: 1px solid #fff;
 }
 
+.breadcrumb {
+    color: #333;
+    text-shadow: none;
+    background-color: #191919;
+    border: 1px solid #333;
+}
 
 /*
  * Base structure
