@@ -2,16 +2,25 @@ package com.werewolf.entities;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class GameEntity {
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "gameid", nullable = false, updatable = true)
+    @Column(name = "lobbyentityid", nullable = false, updatable = true)
+    @Basic(optional = false)
+    private long lobbyentityid;
+
+    @Column(name = "gameid")
     private String gameid;
+    
+    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "lobbyplayers")
+    Set<GamePlayer> lobbyplayers;
 
     @Column(name = "rounds", nullable = false)
-    private int rounds;
+    private int rounds = 0;
 
     @ManyToMany
     @JoinTable(
@@ -19,7 +28,7 @@ public class GameEntity {
             joinColumns = @JoinColumn(name = "gameid", referencedColumnName = "gameid"),
             inverseJoinColumns = @JoinColumn(name = "nickname", referencedColumnName = "nickname")
     )
-    private List<InGamePlayer> alivePlayers;
+    private List<GamePlayer> alivePlayers;
 
     @ManyToMany
     @JoinTable(
@@ -27,21 +36,25 @@ public class GameEntity {
             joinColumns = @JoinColumn(name = "gameid", referencedColumnName = "gameid"),
             inverseJoinColumns = @JoinColumn(name = "nickname", referencedColumnName = "nickname")
     )
-    private List<InGamePlayer> deadPlayers;
+    private List<GamePlayer> deadPlayers;
 
     public void setRounds(int rounds) {
         this.rounds = rounds;
     }
 
-    public void setAlivePlayers(List<InGamePlayer> alivePlayers) {
+    public void setAlivePlayers(List<GamePlayer> alivePlayers) {
         this.alivePlayers = alivePlayers;
     }
 
-    public void setDeadPlayers(List<InGamePlayer> deadPlayers) {
+    public void setDeadPlayers(List<GamePlayer> deadPlayers) {
         this.deadPlayers = deadPlayers;
     }
 
-    public String getGame_id() {
+    public void setGameid(String gameid) {
+        this.gameid = gameid;
+    }
+    
+    public String getGameId() {
         return gameid;
     }
 
@@ -49,11 +62,11 @@ public class GameEntity {
         return rounds;
     }
 
-    public List<InGamePlayer> getAlivePlayers() {
+    public List<GamePlayer> getAlivePlayers() {
         return alivePlayers;
     }
 
-    public List<InGamePlayer> getDeadPlayers() {
+    public List<GamePlayer> getDeadPlayers() {
         return deadPlayers;
     }
 

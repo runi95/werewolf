@@ -20,6 +20,17 @@ public class LobbyEntity {
     
     @Column(name = "readyplayercount")
     private int readyPlayerCount = 0;
+    
+    @Column(name = "gamestarted")
+    private boolean gamestarted = false;
+    
+    public boolean getStartedState() {
+    	return gamestarted;
+    }
+    
+    public void setStartedState(boolean gamestarted) {
+    	this.gamestarted = gamestarted;
+    }
 
     public long getlobbyentityid() {
         return lobbyentityid;
