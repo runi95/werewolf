@@ -65,8 +65,11 @@ function receiveMessage(message) {
                 case "leave":
                 	removePlayer(message[i].playerid, message[i].nickname);
                     break;
-                case "everyoneready":
-                	
+                case "gamerequestgranted":
+                	window.location.href = "/game/" + gamecode;
+                	break;
+                case "gamerequestdenied":
+                	// Something went wrong! Should request the real numbers then
                 	break;
                 default:
                     break;
@@ -114,6 +117,10 @@ function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
 		}
 	}
 	elem.innerHTML = "Unready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 3) + ")";
+	
+	if(readyplayercount === lobbyplayercount) {
+		sendPrivateMessage({"action":"requestgame"}); //Ask server if everything is ready
+	}
 }
 
 // This function runs on initialization

@@ -57,6 +57,7 @@ public class StompMessageController {
 			readyPlayerCount = joinLobbyService.setReadyStatus(lobbyPlayer, true);
 			playerCount = joinLobbyService.getPlayerCount(lobbyPlayer);
 			((ArrayList<ReadyAndUnreadyLobbyMessage>)messageList).add(new ReadyAndUnreadyLobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
+			
 			break;
 		case "unready":
 			messageList = new ArrayList<ReadyAndUnreadyLobbyMessage>();
@@ -83,6 +84,13 @@ public class StompMessageController {
 					lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()), lp.getNickname(), "owner"));
 				else
 					lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()), lp.getNickname(), "join"));
+			}
+			break;
+		case "requestgame":
+			if(lobby.getReadyPlayerCount() == lobby.getPlayers().size()) {
+				lml.add(new LobbyMessage("gamerequestgranted", "", ""));
+			}else{
+				lml.add(new LobbyMessage("gamerequestdenied", "", ""));
 			}
 			break;
 		}
