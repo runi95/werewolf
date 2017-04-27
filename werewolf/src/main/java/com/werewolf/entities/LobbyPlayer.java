@@ -17,7 +17,6 @@ public class LobbyPlayer {
     LobbyEntity lobby;
 
     @OneToOne
-    @JoinTable(name = "lobbyplayer_user", joinColumns = @JoinColumn(name = "lobbyplayer_nickname"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;
     
     @Column(name = "ready")
