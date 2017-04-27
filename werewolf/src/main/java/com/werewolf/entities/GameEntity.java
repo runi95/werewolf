@@ -1,6 +1,8 @@
 package com.werewolf.entities;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +30,7 @@ public class GameEntity {
             joinColumns = @JoinColumn(name = "gameid", referencedColumnName = "gameid"),
             inverseJoinColumns = @JoinColumn(name = "nickname", referencedColumnName = "nickname")
     )
-    private List<GamePlayer> alivePlayers;
+    private List<GamePlayer> alivePlayers = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -36,7 +38,7 @@ public class GameEntity {
             joinColumns = @JoinColumn(name = "gameid", referencedColumnName = "gameid"),
             inverseJoinColumns = @JoinColumn(name = "nickname", referencedColumnName = "nickname")
     )
-    private List<GamePlayer> deadPlayers;
+    private List<GamePlayer> deadPlayers = new ArrayList<>();
 
     public void setRounds(int rounds) {
         this.rounds = rounds;
