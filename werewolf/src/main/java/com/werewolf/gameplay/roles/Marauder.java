@@ -1,12 +1,12 @@
 package com.werewolf.gameplay.roles;
 
 import com.werewolf.gameplay.EmulationCharacter;
+import com.werewolf.gameplay.Evil;
 import com.werewolf.gameplay.GameEmulator;
-import com.werewolf.gameplay.Neutral;
 
-public class Jester implements Neutral {
-	private final String name = "Jester";
-	private final String description = "";
+public class Marauder implements Evil {
+	private final String name = "Maurader";
+	private final String description = "You're the boss, the leader of an evil organisation that plans to take over the town, order someone to be killed or head out to kill them yourself if all your minions are dead";
 	
 	@Override
 	public String getName() {
@@ -30,12 +30,11 @@ public class Jester implements Neutral {
 	
 	@Override
 	public String getInquestMessage() {
-		return "Your target seems to be a lunatic. (Amnesiac, Jester)";
+		return "Your target seems to be of high importance. (King, Maurader)";
 	}
 
 	@Override
 	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
-		// Jester does nothing at night.
+		game.kill(self, target);
 	}
-
 }

@@ -1,5 +1,7 @@
 package com.werewolf.gameplay.roles;
 
+import com.werewolf.gameplay.EmulationCharacter;
+import com.werewolf.gameplay.GameEmulator;
 import com.werewolf.gameplay.Good;
 
 public class Bard implements Good {
@@ -24,6 +26,16 @@ public class Bard implements Good {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+	
+	@Override
+	public String getInquestMessage() {
+		return "Your target seems to be popular amongst others. (Bard, Priest, Illusionist)";
+	}
+
+	@Override
+	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
+		game.block(self, target);
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.werewolf.gameplay.roles;
 
 import com.werewolf.gameplay.ChaoticGood;
+import com.werewolf.gameplay.EmulationCharacter;
+import com.werewolf.gameplay.GameEmulator;
 
 public class Amnesiac implements ChaoticGood {
 	private final String name = "Amnesiac";
@@ -24,6 +26,16 @@ public class Amnesiac implements ChaoticGood {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+
+	@Override
+	public String getInquestMessage() {
+		return "Your target seems to be a lunatic. (Amnesiac, Jester)";
+	}
+	
+	@Override
+	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
+		game.amnesiac(self);
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.werewolf.gameplay.roles;
 
+import com.werewolf.gameplay.EmulationCharacter;
+import com.werewolf.gameplay.GameEmulator;
 import com.werewolf.gameplay.Good;
 
 public class Guard implements Good {
@@ -25,5 +27,15 @@ public class Guard implements Good {
 	public String getDescription() {
 		return description;
 	}
+	
+	@Override
+	public String getInquestMessage() {
+		return "Your target seems familiar with weapons. (Bandit, Guard)";
+	}
 
+	@Override
+	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
+		game.guard(self, target);
+	}
+	
 }

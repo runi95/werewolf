@@ -15,6 +15,10 @@ public interface RoleInterface {
 	
 	/** Description of what the role does **/
 	public String getDescription();
+	
+	public String getInquestMessage();
+	
+	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target);
 
 	public static RoleInterface getRandomRole() {
 		Random random = new Random();

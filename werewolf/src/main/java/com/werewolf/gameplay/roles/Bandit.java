@@ -1,6 +1,8 @@
 package com.werewolf.gameplay.roles;
 
+import com.werewolf.gameplay.EmulationCharacter;
 import com.werewolf.gameplay.Evil;
+import com.werewolf.gameplay.GameEmulator;
 
 public class Bandit implements Evil {
 	private final String name = "Bandit";
@@ -24,6 +26,16 @@ public class Bandit implements Evil {
 	@Override
 	public String getDescription() {
 		return description;
+	}
+	
+	@Override
+	public String getInquestMessage() {
+		return "Your target seems familiar with weapons. (Bandit, Guard)";
+	}
+
+	@Override
+	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
+		game.kill(self, target);
 	}
 
 }
