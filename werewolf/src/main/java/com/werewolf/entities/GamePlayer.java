@@ -28,10 +28,6 @@ public class GamePlayer {
 	@OneToOne
     @JoinTable(name = "lobbyplayer_user", joinColumns = @JoinColumn(name = "lobbyplayer_nickname"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private User user;
-	
-	@OneToOne
-	@Column(name = "role", nullable = false, updatable = true)
-	private String role;
 
 	public long getId() {
 		return id;
@@ -63,14 +59,6 @@ public class GamePlayer {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
 	}
 	
 }
