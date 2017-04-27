@@ -3,13 +3,13 @@ package com.werewolf.gameplay;
 import java.util.Random;
 
 import com.werewolf.gameplay.roles.Bandit;
-import com.werewolf.gameplay.roles.Boss;
+import com.werewolf.gameplay.roles.Marauder;
 
 public interface Evil extends RoleInterface {
 	public static final String alignment = "Evil";
 	public static final String goal = "Survive and kill every member of the town";
 	
-	public static final Evil[] evilUnique = new Evil[] {new Boss()};
+	public static final Evil[] evilUnique = new Evil[] {new Marauder()};
 	public static final Evil[] evilNonUnique = new Evil[] {new Bandit()};
 
 	/**

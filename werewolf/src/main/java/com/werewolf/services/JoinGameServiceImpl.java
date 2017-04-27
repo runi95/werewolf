@@ -16,7 +16,7 @@ import com.werewolf.gameplay.Good;
 import com.werewolf.gameplay.roles.Amnesiac;
 import com.werewolf.gameplay.roles.Bandit;
 import com.werewolf.gameplay.roles.Bard;
-import com.werewolf.gameplay.roles.Boss;
+import com.werewolf.gameplay.roles.Marauder;
 import com.werewolf.gameplay.roles.Guard;
 import com.werewolf.gameplay.roles.Inquisitor;
 import com.werewolf.gameplay.roles.Jester;
@@ -52,7 +52,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     	
         GameEntity gameEntity = new GameEntity();
         gameEntity.setGameid(lobbyEntity.getGameId());
-        gameEntity.setAlivePlayers(createPlayers(lobbyEntity.getPlayers()));
+        gameEntity.setAlivePlayers(createPlayers(lobbyEntity.getPlayers(), gameEntity));
     }
 
     @Override
@@ -83,26 +83,26 @@ public class JoinGameServiceImpl implements JoinGameService {
         return gameEntityRepository.findByGameid(gameid).isPresent();
     }
     
-    private List<GamePlayer> createPlayers(Set<LobbyPlayer> lobbyPlayers) {
+    private List<GamePlayer> createPlayers(Set<LobbyPlayer> lobbyPlayers, GameEntity gameEntity) {
     	List<GamePlayer> gamePlayers = new ArrayList<>();
     	List<RoleInterface> lottery = new ArrayList<>();
     	int size = lobbyPlayers.size();
     	switch(size) {
     		case 4:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Jester());
     			lottery.add(new Priest());
     			lottery.add(new King());
     			break;
     		case 5:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Good.getRandomGood());
     			lottery.add(new Amnesiac());
     			lottery.add(new King());
     			break;
     		case 6:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(RoleInterface.getRandomRole());
     			lottery.add(Good.getRandomGood());
@@ -110,7 +110,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 7:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(NeutralEvil.getRandomNeutralEvil());
     			lottery.add(Good.getRandomGood());
@@ -119,7 +119,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 8:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(NeutralEvil.getRandomNeutralEvil());
@@ -129,7 +129,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 9:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(NeutralEvil.getRandomNeutralEvil());
@@ -140,7 +140,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 10:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(NeutralEvil.getRandomNeutralEvil());
@@ -152,7 +152,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 11:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(NeutralEvil.getRandomNeutralEvil());
@@ -165,7 +165,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 12:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(NeutralEvil.getRandomNeutralEvil());
@@ -179,7 +179,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 13:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(NeutralEvil.getRandomNeutralEvil());
@@ -194,7 +194,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 14:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(ChaoticEvil.getRandomChaoticEvil());
@@ -210,7 +210,7 @@ public class JoinGameServiceImpl implements JoinGameService {
     			lottery.add(new King());
     			break;
     		case 15:
-    			lottery.add(new Boss());
+    			lottery.add(new Marauder());
     			lottery.add(new Bandit());
     			lottery.add(Evil.getRandomEvil());
     			lottery.add(ChaoticEvil.getRandomChaoticEvil());
@@ -237,7 +237,8 @@ public class JoinGameServiceImpl implements JoinGameService {
     		GamePlayer player = new GamePlayer();
     		player.setNickname(lobbyPlayer.getNickname());
     		player.setUser(lobbyPlayer.getUser());
-    		player.setRole(role.getName());
+    		player.setRole(role);
+    		player.setGame(gameEntity);
     	}
     	
     	return gamePlayers;
