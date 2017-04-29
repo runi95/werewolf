@@ -19,10 +19,10 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/action/lobbymessages/' + gamecode, function (messageOutput) {
+        stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
-        stompClient.subscribe('/user/action/joinlobby', function (messageOutput) {
+        stompClient.subscribe('/user/action/private', function (messageOutput) {
             receiveMessage(JSON.parse(messageOutput.body));
         });
         setConnected(true);
@@ -39,11 +39,11 @@ function disconnect() {
 }
 
 function broadcastMessage(message) {
-    stompClient.send('/app/lobbymessages/' + gamecode, {}, JSON.stringify(message));
+    stompClient.send('/app/broadcast/' + gamecode, {}, JSON.stringify(message));
 }
 // This is the message that will be sent to the server
 function sendPrivateMessage(message) {
-    stompClient.send('/app/joinlobby/' + gamecode, {}, JSON.stringify(message));
+    stompClient.send('/app/private/' + gamecode, {}, JSON.stringify(message));
 }
 
 function receiveMessage(message) {
@@ -116,7 +116,11 @@ function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
 			elem.setAttribute("class", "btn btn-success btn-block");
 		}
 	}
-	elem.innerHTML = "Unready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 3) + ")";
+	if(ready) {
+		elem.innerHTML = "Unready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 3) + ")";
+	} else {
+		elem.innerHTML = "Ready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 3) + ")";
+	}
 	
 	if(readyplayercount === lobbyplayercount) {
 		sendPrivateMessage({"action":"requestgame"}); //Ask server if everything is ready
