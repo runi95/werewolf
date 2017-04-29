@@ -13,10 +13,19 @@ public class LobbyEntity {
 
     @Column(name = "gameid")
     private String gameid;
+    
+    @Column(name = "rounds", nullable = false)
+    private int rounds = 0;
 
     @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "lobbyplayers")
     Set<LobbyPlayer> lobbyplayers;
+    
+    @OneToMany(mappedBy = "lobby", cascade = CascadeType.ALL)
+    private Set<LobbyPlayer> alivePlayers;
+
+    @OneToMany(mappedBy = "lobby", cascade = CascadeType.ALL)
+    private Set<LobbyPlayer> deadPlayers;
     
     @Column(name = "readyplayercount")
     private int readyPlayerCount = 0;
@@ -28,7 +37,31 @@ public class LobbyEntity {
     	return gamestarted;
     }
     
-    public void setStartedState(boolean gamestarted) {
+    public int getRounds() {
+		return rounds;
+	}
+
+	public void setRounds(int rounds) {
+		this.rounds = rounds;
+	}
+
+	public Set<LobbyPlayer> getAlivePlayers() {
+		return alivePlayers;
+	}
+
+	public void setAlivePlayers(Set<LobbyPlayer> alivePlayers) {
+		this.alivePlayers = alivePlayers;
+	}
+
+	public Set<LobbyPlayer> getDeadPlayers() {
+		return deadPlayers;
+	}
+
+	public void setDeadPlayers(Set<LobbyPlayer> deadPlayers) {
+		this.deadPlayers = deadPlayers;
+	}
+
+	public void setStartedState(boolean gamestarted) {
     	this.gamestarted = gamestarted;
     }
 
