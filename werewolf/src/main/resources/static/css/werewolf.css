@@ -2,9 +2,16 @@
  * Globals
  */
 
+.vote-row {
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
 .breadcrumbs-text {
 	cursor: pointer;
 	color: #327ab4;
+	list-style: none;
+	font-size: 17px;
 }
 
 .breadcrumbs-text-current {
