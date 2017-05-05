@@ -119,6 +119,14 @@ public class StompMessageController {
 		return convertObjectToJson(lml);
 	}
 
+	private void broadcastMessage(String message) {
+		simpTemplate.convertAndSend("/action/broadcast/{gameid}", message);
+	}
+	
+	private void privateMessage(String message) {
+		simpTemplate.convertAndSend("/action/private", message);
+	}
+	
 	private LobbyPlayer getPlayerFromPrincipal(Principal principal) {
 		String username = principal.getName();
 		User loggedinuser = accountService.findByUsername(username);
