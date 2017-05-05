@@ -124,14 +124,22 @@ function addToVoteList(playerid, playername, votes) {
 		var row = document.createElement("tr");
 		var name = document.createElement("th");
 		var vote = document.createElement("th");
-		var votebtn = document.createElement("button");
+		var votebtn;
 		name.innerHTML = playername;
 		name.setAttribute("class", "text-center");
 		row.setAttribute("id", "v" + playerid);
-		votebtn.innerHTML = "Vote(" + votes + ")";
-		votebtn.setAttribute("id", "vb" + playerid);
-		votebtn.setAttribute("class", "btn btn-info btn-block");
-		votebtn.setAttribute("onclick", "voteon(" + playerid + ")");
+		if(playerid == owner) {
+			votebtn = document.createElement("b");
+			votebtn.innerHTML = votes;
+			votebtn.setAttribute("id", "vb" + playerid);
+			votebtn.setAttribute("class", "text-center center-block");
+		} else {
+			votebtn = document.createElement("button");
+			votebtn.innerHTML = "Vote(" + votes + ")";
+			votebtn.setAttribute("id", "vb" + playerid);
+			votebtn.setAttribute("class", "btn btn-info btn-block");
+			votebtn.setAttribute("onclick", "voteon(" + playerid + ")");
+		}
 		vote.appendChild(votebtn);
 		row.appendChild(name);
 		row.appendChild(vote);
