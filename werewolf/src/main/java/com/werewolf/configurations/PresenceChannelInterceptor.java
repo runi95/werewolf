@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
@@ -23,9 +24,6 @@ import com.werewolf.services.LobbyPlayerService;
 
 public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
 
-	@Autowired
-    private SimpMessagingTemplate simpTemplate;
-	
 	@Autowired
 	private JoinLobbyService joinLobbyService;
 	
@@ -57,7 +55,7 @@ public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
                 logger.debug("STOMP Connected [sessionId: " + sessionId + "]");
                 break;
             case DISCONNECT:
-            	disconnect(message);
+            	disconnect(message, channel);
                 logger.debug("STOMP Disconnect [sessionId: " + sessionId + "]");
                 break;
             default:
@@ -66,17 +64,19 @@ public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
         }
     }
     
-    private void disconnect(Message<?> message) {
+    private void disconnect(Message<?> message, MessageChannel channel) {
     	if(message != null && message.getHeaders().containsKey("simpUser")) {
     		UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) message.getHeaders().get("simpUser");
     		User user = accountService.findByUsername(userToken.getName());
     		LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(user);
     		
     		List<LobbyMessage> lobbyMessages = new ArrayList<>();
-    		lobbyMessages.add(new LobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname(), "leave"));
+    		lobbyMessages.add(new LobbyMessage("leave", Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname()));
     		
     		joinLobbyService.leave(lobbyPlayer);
-    		
+    		SimpMessagingTemplate simpTemplate = new SimpMessagingTemplate(channel);
+    		StringMessageConverter msgconv = new StringMessageConverter();
+    		simpTemplate.setMessageConverter(msgconv);
     		simpTemplate.convertAndSend("/action/broadcast/" + lobbyPlayer.getLobby().getGameId(), StompMessageController.convertObjectToJson(lobbyMessages));
     	}
     }
