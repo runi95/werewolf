@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Transactional
 public interface LobbyPlayerRepository extends JpaRepository<LobbyPlayer, Long> {
+	LobbyPlayer findById(String id);
     Optional<LobbyPlayer> findByUser(User user);
     List<LobbyPlayer> findAllByLobby(LobbyEntity lobby);
 }
