@@ -1,43 +1,32 @@
 package com.werewolf.entities;
 
-import javax.persistence.*;
-
-@Entity
 public class LobbyPlayer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = true)
     private String id;
 
-    @Column(name = "nickname", nullable = false, updatable = true)
     private String nickname;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "lobby_lobbyplayers")
-    LobbyEntity lobby;
+    private LobbyEntity lobby;
 
-    @OneToOne
     private User user;
 
     private String voted;
     
     private int votes;
     
-    @Column(name = "ready")
     private boolean ready = false;
     
     private String role;
     
     private String alignment;
     
+    public LobbyPlayer(String id, User user, LobbyEntity lobby) {
+    	this.id = id;
+    	this.user = user;
+    	this.lobby = lobby;
+    }
+    
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public void setLobby(LobbyEntity lobby) { this.lobby = lobby; }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public void setReady(boolean ready) {
@@ -91,10 +80,4 @@ public class LobbyPlayer {
     public String getAlignment() {
     	return alignment;
     }
-    
-	@Override
-	public String toString() {
-		return "LobbyPlayer [id=" + id + ", nickname=" + nickname + ", lobby=" + lobby + ", user=" + user + "]";
-	}
-    
 }

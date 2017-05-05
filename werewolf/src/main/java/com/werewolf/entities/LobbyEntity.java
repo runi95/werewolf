@@ -1,39 +1,37 @@
 package com.werewolf.entities;
 
-import javax.persistence.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
-@Entity
+import com.werewolf.data.JoinLobbyForm;
+
 public class LobbyEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lobbyentityid", nullable = false, updatable = true)
-    @Basic(optional = false)
-    private long lobbyentityid;
-
-    @Column(name = "gameid")
+	
+	// ID used to join this lobby with
     private String gameid;
     
-    @Column(name = "rounds", nullable = false)
+    // How many rounds have this lobby been through?
     private int rounds = 0;
 
-    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "lobbyplayers")
-    Set<LobbyPlayer> lobbyplayers;
+    private Map<String, LobbyPlayer> lobbyplayers = new HashMap<String, LobbyPlayer>();
+    private Map<String, LobbyPlayer> alivePlayers = new HashMap<String, LobbyPlayer>();
+    private Map<String, LobbyPlayer> deadPlayers = new HashMap<String, LobbyPlayer>();
     
-    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL)
-    @Column(name = "aliveplayers")
-    private Set<LobbyPlayer> alivePlayers;
-
-    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL)
-    @Column(name = "deadplayers")
-    private Set<LobbyPlayer> deadPlayers;
-    
-    @Column(name = "readyplayercount")
+    // Amount of players that has clicked ready during the lobby phase
     private int readyPlayerCount = 0;
     
-    @Column(name = "gamestarted")
+    // True if the lobby is in-game and false otherwise
     private boolean gamestarted = false;
+    
+    // Keep track of unused id's
+    private LinkedList<String> nextPlayerId = new LinkedList<>(Arrays.asList(new String[]{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"}));
+    
+    public LobbyEntity(String gameid) {
+    	this.gameid = gameid;
+    }
     
     public boolean getStartedState() {
     	return gamestarted;
@@ -47,76 +45,87 @@ public class LobbyEntity {
 		this.rounds = rounds;
 	}
 
-	public Set<LobbyPlayer> getAlivePlayers() {
-		return alivePlayers;
+	public LobbyPlayer getAlivePlayer(String playerid) {
+		return alivePlayers.get(playerid);
 	}
 
-	public void setAlivePlayers(Set<LobbyPlayer> alivePlayers) {
-		this.alivePlayers = alivePlayers;
+	public void addAlivePlayer(LobbyPlayer alivePlayer) {
+		if(alivePlayer.getId() == null)
+			return;
+		
+		alivePlayers.put(alivePlayer.getId(), alivePlayer);
+	}
+	
+	public int getAliveCount() {
+		return alivePlayers.size();
+	}
+	
+	public Collection<LobbyPlayer> getAlivePlayers() {
+		return alivePlayers.values();
 	}
 
-	public Set<LobbyPlayer> getDeadPlayers() {
-		return deadPlayers;
+	public LobbyPlayer getDeadPlayer(String playerid) {
+		return deadPlayers.get(playerid);
 	}
 
-	public void setDeadPlayers(Set<LobbyPlayer> deadPlayers) {
-		this.deadPlayers = deadPlayers;
+	public void addDeadPlayer(LobbyPlayer deadPlayer) {
+		if(deadPlayer.getId() == null)
+			return;
+		
+		alivePlayers.remove(deadPlayer.getId());
+		deadPlayers.put(deadPlayer.getId(), deadPlayer);
+	}
+	
+	public Collection<LobbyPlayer> getDeadPlayers() {
+		return deadPlayers.values();
 	}
 
 	public void setStartedState(boolean gamestarted) {
     	this.gamestarted = gamestarted;
     }
 
-    public long getlobbyentityid() {
-        return lobbyentityid;
-    }
-
     public String getGameId() {
         return gameid;
     }
 
-    public Set<LobbyPlayer> getPlayers() {
-        return lobbyplayers;
+    public LobbyPlayer getPlayer(String playerid) {
+        return lobbyplayers.get(playerid);
     }
 
     public int getReadyPlayerCount() {
     	return readyPlayerCount;
     }
-    
-    public void setGameid(String gameid) {
-        this.gameid = gameid;
-    }
 
     public void removePlayer(LobbyPlayer player) {
-        if(!lobbyplayers.contains(player))
+        if(player.getId() == null || !lobbyplayers.containsKey(player.getId()))
             return;
 
-        lobbyplayers.remove(player);
-    }
-
-    public void setPlayers(Set<LobbyPlayer> lobbyplayers) {
-        this.lobbyplayers = lobbyplayers;
+        lobbyplayers.remove(player.getId());
+        nextPlayerId.add(player.getId());
     }
     
-    public void addPlayer(LobbyPlayer lobbyPlayer) {
-    	if(lobbyplayers == null)
-    		lobbyplayers = new HashSet<LobbyPlayer>();
+    public LobbyPlayer addPlayer(JoinLobbyForm joinForm) {
+    	if(nextPlayerId.isEmpty())
+    		return null;
     	
-    	lobbyPlayer.setLobby(this);
-    	lobbyplayers.add(lobbyPlayer);
+    	LobbyPlayer lobbyPlayer = new LobbyPlayer(nextPlayerId.getFirst(), joinForm.getUser(), this);
+    	nextPlayerId.removeFirst();
+    	lobbyPlayer.setNickname(joinForm.getNickname());
+    	lobbyplayers.put(lobbyPlayer.getId(), lobbyPlayer);
+    	
+    	return lobbyPlayer;
     }
-
-    public void setlobbyentityid(long lobbyentityid) {
-        this.lobbyentityid = lobbyentityid;
+    
+    public int getPlayerSize() {
+    	return lobbyplayers.size();
+    }
+    
+    public Collection<LobbyPlayer> getPlayers() {
+    	return lobbyplayers.values();
     }
 
     public void setReadyPlayerCount(int readyPlayerCount) {
     	this.readyPlayerCount = readyPlayerCount;
     }
-    
-	@Override
-	public String toString() {
-		return "LobbyEntity [lobbyentityid=" + lobbyentityid + ", gameid=" + gameid	+ "]";
-	}
     
 }

@@ -9,9 +9,7 @@ import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.User;
 import com.werewolf.services.AccountService;
-import com.werewolf.services.JoinGameService;
 import com.werewolf.services.JoinLobbyService;
-import com.werewolf.services.LobbyPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -35,12 +33,6 @@ public class StompMessageController {
 
 	@Autowired
 	JoinLobbyService joinLobbyService;
-
-	@Autowired
-	LobbyPlayerService lobbyPlayerService;
-
-	@Autowired
-	JoinGameService joinGameService;
 	
 	@MessageMapping("/broadcast/{gameid}")
 	@SendTo("/action/broadcast/{gameid}")
@@ -55,7 +47,7 @@ public class StompMessageController {
 		case "leave":
 			joinLobbyService.leave(lobbyPlayer);
 		case "join":
-			messageList.add(new LobbyMessage(message.getAction(), Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname()));
+			messageList.add(new LobbyMessage(message.getAction(), lobbyPlayer.getId(), lobbyPlayer.getNickname()));
 			break;
 		case "ready":
 			readyPlayerCount = joinLobbyService.setReadyStatus(lobbyPlayer, true);
@@ -63,16 +55,16 @@ public class StompMessageController {
 			if(readyPlayerCount == playerCount) {
 				joinLobbyService.loadGame(lobbyPlayer.getLobby());
 			}
-			messageList.add(new LobbyMessage("updatereadystatus", Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
+			messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
 			break;
 		case "unready":
 			readyPlayerCount = joinLobbyService.setReadyStatus(lobbyPlayer, false);
 			playerCount = joinLobbyService.getPlayerCount(lobbyPlayer);
-			messageList.add(new LobbyMessage("updatereadystatus", Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
+			messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
 			break;
 		case "vote":
 			votes = joinLobbyService.vote(lobbyPlayer, message.getPlayerid());
-			messageList.add(new LobbyMessage("updatevotestatus", message.getPlayerid(), Integer.toString(votes)));
+			messageList.add(new LobbyMessage("updatevotestatus", lobbyPlayer.getId(), message.getPlayerid(), Integer.toString(votes)));
 			break;
 		case "unvote":
 			votes = joinLobbyService.removeVote(lobbyPlayer, message.getPlayerid());
@@ -94,9 +86,9 @@ public class StompMessageController {
 		case "getplayers":
 			for (LobbyPlayer lp : lobby.getPlayers()) {
 				if (lp.getId() == lobbyPlayer.getId())
-					lml.add(new LobbyMessage("owner", Long.toString(lp.getUser().getId()), lp.getNickname()));
+					lml.add(new LobbyMessage("owner", lp.getId(), lp.getNickname()));
 				else
-					lml.add(new LobbyMessage("join", Long.toString(lp.getUser().getId()), lp.getNickname()));
+					lml.add(new LobbyMessage("join", lp.getId(), lp.getNickname()));
 			}
 			break;
 		case "requestgame":
@@ -107,12 +99,8 @@ public class StompMessageController {
 			}
 			break;
 		case "initializegame":
-			for(LobbyPlayer lp : lobby.getAlivePlayers()) {
-				lml.add(new LobbyMessage("joinalive", lp.getId(), lp.getNickname(), Integer.toString(lp.getVotes())));
-			}
-			for(LobbyPlayer lp : lobby.getDeadPlayers()) {
-				lml.add(new LobbyMessage("joindead", lp.getId(), lp.getNickname(), lp.getRole(), lp.getAlignment()));
-			}
+			lobby.getAlivePlayers().forEach((lp) -> lml.add(new LobbyMessage("joinalive", lp.getId(), lp.getNickname(), Integer.toString(lp.getVotes()))));
+			lobby.getDeadPlayers().forEach((lp) -> lml.add(new LobbyMessage("joindead", lp.getId(), lp.getNickname(), lp.getRole(), lp.getAlignment())));
 			break;
 		}
 
@@ -130,7 +118,7 @@ public class StompMessageController {
 	private LobbyPlayer getPlayerFromPrincipal(Principal principal) {
 		String username = principal.getName();
 		User loggedinuser = accountService.findByUsername(username);
-		LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(loggedinuser);
+		LobbyPlayer lobbyPlayer = joinLobbyService.getPlayer(loggedinuser.getId());
 
 		return lobbyPlayer;
 	}

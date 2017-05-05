@@ -11,16 +11,12 @@ import com.werewolf.data.NameDictionaryEnum;
 import com.werewolf.data.NameDictionaryRepository;
 import com.werewolf.entities.NameDictionary;
 import com.werewolf.entities.User;
-import com.werewolf.services.JoinLobbyService;
 
 @Component
 public class DevUserCreator implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
     AccountRepository userRepository;
-
-    @Autowired
-    JoinLobbyService joinLobbyService;
     
     @Autowired
     NameDictionaryRepository nameDictionaryRepository;
@@ -42,7 +38,5 @@ public class DevUserCreator implements ApplicationListener<ContextRefreshedEvent
         		nameDictionaryRepository.save(nameDictionary);
         	}
         }
-        
-        joinLobbyService.dropTable();
     }
 }

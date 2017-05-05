@@ -3,8 +3,6 @@ package com.werewolf.services;
 
 import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.data.JoinLobbyForm;
-import com.werewolf.data.LobbyEntityRepository;
-import com.werewolf.data.LobbyPlayerRepository;
 import com.werewolf.data.NameDictionaryRepository;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
@@ -29,44 +27,35 @@ import com.werewolf.gameplay.roles.Priest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 @Repository
 public class JoinLobbyServiceImpl implements JoinLobbyService {
 	
+	private final HashMap<Long, LobbyPlayer> playerMap = new HashMap<>();
+	private final HashMap<String, LobbyEntity> lobbyMap = new HashMap<>();
 	private final HashMap<String, HashMap<String, EmulationCharacter>> gameMap = new HashMap<>();
-	
-    @Autowired
-    LobbyEntityRepository lobbyEntityRepository;
-
-    @Autowired
-    LobbyPlayerRepository lobbyPlayerRepository;
     
     @Autowired
     NameDictionaryRepository nameDictionaryRepository;
     
     @Override
-    public void dropTable() {
-    	lobbyPlayerRepository.deleteAll();
-    	lobbyEntityRepository.deleteAll();
+    public LobbyPlayer getPlayer(long userid) {
+    	return playerMap.get(userid);
     }
 
     // Assumes that there are no games with given id
     @Override
     public LobbyEntity create(JoinLobbyForm joinLobbyForm) {
-        LobbyEntity lobbyEntity = new LobbyEntity();
-
         String gameid = generateNewGameid();
-        lobbyEntity.setGameid(gameid);
-        
-        lobbyEntityRepository.save(lobbyEntity);
+        LobbyEntity lobbyEntity = new LobbyEntity(gameid);
+        lobbyMap.put(gameid, lobbyEntity);
         
         joinLobbyForm.setGameid(gameid);
         join(joinLobbyForm);
@@ -76,21 +65,19 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
     @Override
     public LobbyEntity join(JoinLobbyForm joinLobbyForm) {
-        if(lobbyPlayerRepository.findByUser(joinLobbyForm.getUser()).isPresent())
-            leave(lobbyPlayerRepository.findByUser(joinLobbyForm.getUser()).get());
+    	LobbyPlayer oldLobby = playerMap.get(joinLobbyForm.getUser().getId());
+        if(oldLobby != null)
+            leave(playerMap.get(joinLobbyForm.getUser().getId()));
 
-        LobbyEntity lobbyEntity = lobbyEntityRepository.findByGameid(joinLobbyForm.getGameid()).orElseThrow(() -> new IllegalArgumentException("A lobby with that gameId does not exist"));
+        LobbyEntity lobbyEntity = lobbyMap.get(joinLobbyForm.getGameid());
+        if(lobbyEntity == null)
+        	return null;
 
         if(invalidNickname(joinLobbyForm.getNickname()))
         	joinLobbyForm.setNickname(generateNewNickname());
         
-        LobbyPlayer lobbyPlayer = new LobbyPlayer();
-        lobbyPlayer.setNickname(joinLobbyForm.getNickname());
-        lobbyPlayer.setUser(joinLobbyForm.getUser());
-
-        lobbyEntity.addPlayer(lobbyPlayer);
-        
-        lobbyEntityRepository.save(lobbyEntity);
+        LobbyPlayer lobbyPlayer = lobbyEntity.addPlayer(joinLobbyForm);
+        playerMap.put(joinLobbyForm.getUser().getId(), lobbyPlayer);
         
         return lobbyEntity;
     }
@@ -98,9 +85,11 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     @Override
     public void leave(LobbyPlayer lobbyPlayer) {
         LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
-        lobbyEntity.getPlayers().remove(lobbyPlayer);
-        
-        lobbyEntityRepository.save(lobbyEntity);
+        lobbyEntity.removePlayer(lobbyPlayer);
+        playerMap.remove(lobbyPlayer.getUser().getId());
+        if(lobbyEntity.getPlayerSize() == 0) {
+        	lobbyMap.remove(lobbyEntity.getGameId());
+        }
     }
     
     @Override
@@ -109,14 +98,12 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     		return null;
     	
     	lobbyPlayer.setReady(ready);
-    	lobbyPlayerRepository.save(lobbyPlayer);
     	
     	LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
     	if(ready)
     		lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() + 1);
     	else
     		lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() - 1);
-    	lobbyEntityRepository.save(lobbyEntity);
     	
     	return lobbyEntity.getReadyPlayerCount();
     }
@@ -126,23 +113,12 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     	if(lobbyPlayer == null)
     		return null;
     	
-    	return lobbyPlayer.getLobby().getPlayers().size();
+    	return lobbyPlayer.getLobby().getPlayerSize();
     }
 
     @Override
     public LobbyEntity findByGameId(String gameId) {
-        return lobbyEntityRepository.findByGameid(gameId).orElseThrow(() -> new IllegalArgumentException("A lobby with that gameId does not exist"));
-    }
-
-    @Override
-    @Transactional
-    public LobbyEntity findById(long id) {
-        LobbyEntity lobby = lobbyEntityRepository.findOne(id);
-        if(lobby != null)
-            return lobby;
-        else {
-            throw new IllegalArgumentException("A lobby with that id does not exist");
-        }
+    	return lobbyMap.get(gameId);
     }
 
     @Override
@@ -154,42 +130,35 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
     @Override
     public boolean gameidIsPresent(String gameid) {
-        return lobbyEntityRepository.findByGameid(gameid).isPresent();
+        return lobbyMap.containsKey(gameid);
     }
     
     @Override
     public void loadGame(LobbyEntity lobbyEntity) {
     	lobbyEntity.setStartedState(true);
-		lobbyEntityRepository.save(lobbyEntity); // Make sure others can't join
-													// while game initializes
 
 		gameMap.put(lobbyEntity.getGameId(), new HashMap<>());
 		
-		lobbyEntity.setGameid(lobbyEntity.getGameId());
-		Set<LobbyPlayer> lobbyPlayersWithRoles = createPlayers(lobbyEntity.getPlayers(), lobbyEntity);
-		lobbyEntity.setAlivePlayers(lobbyPlayersWithRoles);
-		lobbyEntityRepository.save(lobbyEntity);
+		Collection<LobbyPlayer> lobbyPlayersWithRoles = createPlayers(lobbyEntity.getPlayers(), lobbyEntity);
+		lobbyPlayersWithRoles.forEach((p) -> lobbyEntity.addAlivePlayer(p));
     }
     
     @Override
     public int vote(LobbyPlayer voter, String voteon) {
-    	LobbyPlayer voteonPlayer = lobbyPlayerRepository.findById(voteon);
+    	LobbyPlayer voteonPlayer = voter.getLobby().getAlivePlayer(voteon);
     	
     	if(voteonPlayer == null)
     		throw new IllegalArgumentException("Tried to vote on nonexisting player!");
-    	else if(voter.getVoted() != null || voter.getVoted().equals(voteon) || voter.getLobby().getDeadPlayers().contains(voter))
+    	else if((voter.getVoted() != null && voter.getVoted().equals(voteon)) || voter.getLobby().getDeadPlayer(voter.getId()) != null || voter.getId().equals(voteon))
     		return voteonPlayer.getVotes();
     	
     	if(voter.getVoted() != null) {
-    		LobbyPlayer oldVoteonPlayer = lobbyPlayerRepository.findById(voter.getVoted());
+    		LobbyPlayer oldVoteonPlayer = playerMap.get(voter.getVoted());
     		oldVoteonPlayer.setVotes(oldVoteonPlayer.getVotes() - 1);
-    		lobbyPlayerRepository.save(oldVoteonPlayer);
     	}
     	
     	voteonPlayer.setVotes(voteonPlayer.getVotes() + 1);
     	voter.setVoted(voteon);
-    	lobbyPlayerRepository.save(voteonPlayer);
-    	lobbyPlayerRepository.save(voter);
     	
     	checkVotes(voteonPlayer);
     	return voteonPlayer.getVotes();
@@ -197,7 +166,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     
     @Override
     public int removeVote(LobbyPlayer voter, String voteon) {
-    	LobbyPlayer voteonPlayer = lobbyPlayerRepository.findById(voteon);
+    	LobbyPlayer voteonPlayer = voter.getLobby().getAlivePlayer(voteon);
     	
     	if(voteonPlayer == null)
     		throw new IllegalArgumentException("Tried to remove vote on nonexisting player!");
@@ -206,8 +175,6 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     	
     	voteonPlayer.setVotes(voteonPlayer.getVotes() - 1);
     	voter.setVoted(null);
-    	lobbyPlayerRepository.save(voteonPlayer);
-    	lobbyPlayerRepository.save(voter);
     	
     	return voteonPlayer.getVotes();
     }
@@ -245,7 +212,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     	return name.getName() + " " + surname.getName();
     }
     
-    private Set<LobbyPlayer> createPlayers(Set<LobbyPlayer> lobbyPlayers, LobbyEntity lobbyEntity) {
+    private Collection<LobbyPlayer> createPlayers(Collection<LobbyPlayer> lobbyPlayers, LobbyEntity lobbyEntity) {
 		List<RoleInterface> lottery = new ArrayList<>();
 		int size = lobbyPlayers.size();
 		switch (size) {
@@ -322,15 +289,11 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     private void checkVotes(LobbyPlayer latestVotedOn) {
     	LobbyEntity lobby = latestVotedOn.getLobby();
     	
-    	if(latestVotedOn.getVotes() >= (Math.ceil(lobby.getAlivePlayers().size()/2.0))) {
-    		lobby.getAlivePlayers().remove(latestVotedOn);
-    		lobby.getDeadPlayers().add(latestVotedOn);
-    		
-    		lobbyEntityRepository.save(lobby);
+    	if(latestVotedOn.getVotes() >= (Math.ceil(lobby.getAliveCount()/2.0))) {
+    		lobby.addDeadPlayer(latestVotedOn);
     		
     		List<LobbyMessage> lobbyMessages = new ArrayList<>();
     		lobbyMessages.add(new LobbyMessage("lynch", latestVotedOn.getId(), latestVotedOn.getNickname(), latestVotedOn.getRole(), latestVotedOn.getAlignment()));
-//    		simpTemplate.convertAndSend("/action/broadcast/" + lobby.getGameId(), StompMessageController.convertObjectToJson(lobbyMessages));
     	}
     }
 }

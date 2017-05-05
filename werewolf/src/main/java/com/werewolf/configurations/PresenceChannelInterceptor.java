@@ -20,15 +20,11 @@ import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.User;
 import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinLobbyService;
-import com.werewolf.services.LobbyPlayerService;
 
 public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
 
 	@Autowired
 	private JoinLobbyService joinLobbyService;
-	
-	@Autowired
-	private LobbyPlayerService lobbyPlayerService;
 	
 	@Autowired
 	private AccountService accountService;
@@ -68,10 +64,10 @@ public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
     	if(message != null && message.getHeaders().containsKey("simpUser")) {
     		UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) message.getHeaders().get("simpUser");
     		User user = accountService.findByUsername(userToken.getName());
-    		LobbyPlayer lobbyPlayer = lobbyPlayerService.findByUser(user);
+    		LobbyPlayer lobbyPlayer = joinLobbyService.getPlayer(user.getId());
     		
     		List<LobbyMessage> lobbyMessages = new ArrayList<>();
-    		lobbyMessages.add(new LobbyMessage("leave", Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname()));
+    		lobbyMessages.add(new LobbyMessage("leave", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
     		
     		joinLobbyService.leave(lobbyPlayer);
     		SimpMessagingTemplate simpTemplate = new SimpMessagingTemplate(channel);

@@ -296,7 +296,7 @@ function voteon(playerid) {
 }
 
 function someoneVoted(playerid, votedon, votes) {
-	var elem = document.getElementById("vb" + playerid);
+	var elem = document.getElementById("vb" + votedon);
 	if(playerid === owner) {
 		elem.disabled = false;
 		if(voted != null) {

@@ -5,9 +5,9 @@ import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 
 public interface JoinLobbyService {
-
-	void dropTable();
 	
+	LobbyPlayer getPlayer(long userid);
+
     LobbyEntity create(JoinLobbyForm joinLobbyForm);
     LobbyEntity join(JoinLobbyForm joinLobbyForm);
     void leave(LobbyPlayer lobbyPlayer);
@@ -18,7 +18,6 @@ public interface JoinLobbyService {
     Integer getPlayerCount(LobbyPlayer lobbyPlayer);
     
     LobbyEntity findByGameId(String gameId);
-    LobbyEntity findById(long id);
 
     boolean gameidIsPresent(String gameid);
 
