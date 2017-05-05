@@ -7,15 +7,16 @@ import java.util.LinkedList;
  */
 
 public class EmulationCharacter {
-	private long playerid;
+	private String playerid;
 	private RoleInterface role;
 	private LinkedList<String> messageList = new LinkedList<>();
 	
-	public EmulationCharacter(long playerid, RoleInterface role) {
+	public EmulationCharacter(String playerid, RoleInterface role) {
+		this.playerid = playerid;
 		this.role = role;
 	}
 
-	public long getPlayerid() {
+	public String getPlayerid() {
 		return playerid;
 	}
 	

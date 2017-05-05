@@ -7,7 +7,7 @@ public class LobbyPlayer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = true)
-    private long id;
+    private String id;
 
     @Column(name = "nickname", nullable = false, updatable = true)
     private String nickname;
@@ -18,10 +18,18 @@ public class LobbyPlayer {
 
     @OneToOne
     private User user;
+
+    private String voted;
+    
+    private int votes;
     
     @Column(name = "ready")
     private boolean ready = false;
-
+    
+    private String role;
+    
+    private String alignment;
+    
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -36,7 +44,23 @@ public class LobbyPlayer {
     	this.ready = ready;
     }
     
-    public long getId() { return id; }
+    public void setVoted(String voted) {
+    	this.voted = voted;
+    }
+    
+    public void setVotes(int votes) {
+    	this.votes = votes;
+    }
+    
+    public void setRole(String role) {
+    	this.role = role;
+    }
+    
+    public void setAlignment(String alignment) {
+    	this.alignment = alignment;
+    }
+    
+    public String getId() { return id; }
 
     public String getNickname() {
         return nickname;
@@ -50,6 +74,22 @@ public class LobbyPlayer {
 
     public boolean ready() {
     	return ready;
+    }
+    
+    public String getVoted() {
+    	return voted;
+    }
+    
+    public int getVotes() {
+    	return votes;
+    }
+    
+    public String getRole() {
+    	return role;
+    }
+    
+    public String getAlignment() {
+    	return alignment;
     }
     
 	@Override

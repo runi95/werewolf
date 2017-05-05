@@ -11,6 +11,9 @@ public interface JoinLobbyService {
     LobbyEntity create(JoinLobbyForm joinLobbyForm);
     LobbyEntity join(JoinLobbyForm joinLobbyForm);
     void leave(LobbyPlayer lobbyPlayer);
+    void loadGame(LobbyEntity lobbyEntity);
+    int vote(LobbyPlayer voter, String voteon);
+    int removeVote(LobbyPlayer voter, String voteon);
     Integer setReadyStatus(LobbyPlayer lobbyPlayer, boolean ready);
     Integer getPlayerCount(LobbyPlayer lobbyPlayer);
     

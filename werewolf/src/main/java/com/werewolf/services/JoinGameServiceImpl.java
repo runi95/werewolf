@@ -155,7 +155,7 @@ public class JoinGameServiceImpl implements JoinGameService {
 			player.setNickname(lobbyPlayer.getNickname());
 			player.setUser(lobbyPlayer.getUser());
 			player.setGame(gameEntity);
-			gameMap.get(gameEntity.getGameId()).put(player.getId(), new EmulationCharacter(player.getId(), role));
+			gameMap.get(gameEntity.getGameId()).put(player.getId(), new EmulationCharacter(Long.toString(player.getId()), role));
 		}
 		
 		return gamePlayers;

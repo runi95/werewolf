@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.werewolf.Messages.JoinLobbyMessage;
 import com.werewolf.Messages.LobbyMessage;
-import com.werewolf.Messages.ReadyAndUnreadyLobbyMessage;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.User;
 import com.werewolf.services.AccountService;
+import com.werewolf.services.JoinGameService;
 import com.werewolf.services.JoinLobbyService;
 import com.werewolf.services.LobbyPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 
 import java.security.Principal;
@@ -25,7 +26,10 @@ import java.util.List;
 
 @Controller
 public class StompMessageController {
-
+	
+	@Autowired
+	SimpMessagingTemplate simpTemplate;
+	
 	@Autowired
 	AccountService accountService;
 
@@ -35,43 +39,52 @@ public class StompMessageController {
 	@Autowired
 	LobbyPlayerService lobbyPlayerService;
 
-	@SuppressWarnings("unchecked")
-	@MessageMapping("/lobbymessages/{gameid}")
-	@SendTo("/action/lobbymessages/{gameid}")
+	@Autowired
+	JoinGameService joinGameService;
+	
+	@MessageMapping("/broadcast/{gameid}")
+	@SendTo("/action/broadcast/{gameid}")
 	public String send(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
 		LobbyPlayer lobbyPlayer = getPlayerFromPrincipal(principal);
-		Object messageList = null;
+		List<LobbyMessage> messageList = new ArrayList<>();
 		int readyPlayerCount;
 		int playerCount;
+		int votes;
 		
 		switch(message.getAction()) {
 		case "leave":
 			joinLobbyService.leave(lobbyPlayer);
 		case "join":
-			messageList = new ArrayList<LobbyMessage>();
-			((ArrayList<LobbyMessage>)messageList).add(new LobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname(),
-					message.getAction()));
+			messageList.add(new LobbyMessage(message.getAction(), Long.toString(lobbyPlayer.getUser().getId()), lobbyPlayer.getNickname()));
 			break;
 		case "ready":
-			messageList = new ArrayList<ReadyAndUnreadyLobbyMessage>();
 			readyPlayerCount = joinLobbyService.setReadyStatus(lobbyPlayer, true);
 			playerCount = joinLobbyService.getPlayerCount(lobbyPlayer);
-			((ArrayList<ReadyAndUnreadyLobbyMessage>)messageList).add(new ReadyAndUnreadyLobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
-			
+			if(readyPlayerCount == playerCount) {
+				joinLobbyService.loadGame(lobbyPlayer.getLobby());
+			}
+			messageList.add(new LobbyMessage("updatereadystatus", Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
 			break;
 		case "unready":
-			messageList = new ArrayList<ReadyAndUnreadyLobbyMessage>();
 			readyPlayerCount = joinLobbyService.setReadyStatus(lobbyPlayer, false);
 			playerCount = joinLobbyService.getPlayerCount(lobbyPlayer);
-			((ArrayList<ReadyAndUnreadyLobbyMessage>)messageList).add(new ReadyAndUnreadyLobbyMessage(Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
+			messageList.add(new LobbyMessage("updatereadystatus", Long.toString(lobbyPlayer.getUser().getId()), Integer.toString(readyPlayerCount), Integer.toString(playerCount)));
+			break;
+		case "vote":
+			votes = joinLobbyService.vote(lobbyPlayer, message.getPlayerid());
+			messageList.add(new LobbyMessage("updatevotestatus", message.getPlayerid(), Integer.toString(votes)));
+			break;
+		case "unvote":
+			votes = joinLobbyService.removeVote(lobbyPlayer, message.getPlayerid());
+			messageList.add(new LobbyMessage("updatevotestatus", message.getPlayerid(), Integer.toString(votes)));
 			break;
 		}
 
 		return convertObjectToJson(messageList);
 	}
 
-	@MessageMapping("/joinlobby//{gameid}")
-	@SendToUser("/action/joinlobby")
+	@MessageMapping("/private/{gameid}")
+	@SendToUser("/action/private")
 	public String reply(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
 		List<LobbyMessage> lml = new ArrayList<>();
 		LobbyPlayer lobbyPlayer = getPlayerFromPrincipal(principal);
@@ -81,32 +94,29 @@ public class StompMessageController {
 		case "getplayers":
 			for (LobbyPlayer lp : lobby.getPlayers()) {
 				if (lp.getId() == lobbyPlayer.getId())
-					lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()), lp.getNickname(), "owner"));
+					lml.add(new LobbyMessage("owner", Long.toString(lp.getUser().getId()), lp.getNickname()));
 				else
-					lml.add(new LobbyMessage(Long.toString(lp.getUser().getId()), lp.getNickname(), "join"));
+					lml.add(new LobbyMessage("join", Long.toString(lp.getUser().getId()), lp.getNickname()));
 			}
 			break;
 		case "requestgame":
 			if(lobby.getReadyPlayerCount() == lobby.getPlayers().size()) {
-				lml.add(new LobbyMessage("gamerequestgranted", "", ""));
+				lml.add(new LobbyMessage("gamerequestgranted", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
 			}else{
-				lml.add(new LobbyMessage("gamerequestdenied", "", ""));
+				lml.add(new LobbyMessage("gamerequestdenied", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
+			}
+			break;
+		case "initializegame":
+			for(LobbyPlayer lp : lobby.getAlivePlayers()) {
+				lml.add(new LobbyMessage("joinalive", lp.getId(), lp.getNickname(), Integer.toString(lp.getVotes())));
+			}
+			for(LobbyPlayer lp : lobby.getDeadPlayers()) {
+				lml.add(new LobbyMessage("joindead", lp.getId(), lp.getNickname(), lp.getRole(), lp.getAlignment()));
 			}
 			break;
 		}
 
 		return convertObjectToJson(lml);
-	}
-
-	@MessageMapping("/game/{gameid}")
-	@SendToUser("/action/game")
-	public String gamereply(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
-		switch(message.getAction()) {
-            case "initializegame":
-                // Return alive and dead players
-                break;
-        }
-		return "";
 	}
 
 	private LobbyPlayer getPlayerFromPrincipal(Principal principal) {

@@ -21,10 +21,12 @@ public class LobbyEntity {
     @Column(name = "lobbyplayers")
     Set<LobbyPlayer> lobbyplayers;
     
-    @OneToMany(mappedBy = "lobby", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL)
+    @Column(name = "aliveplayers")
     private Set<LobbyPlayer> alivePlayers;
 
-    @OneToMany(mappedBy = "lobby", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lobby", fetch = FetchType.EAGER, targetEntity = LobbyPlayer.class, cascade = CascadeType.ALL)
+    @Column(name = "deadplayers")
     private Set<LobbyPlayer> deadPlayers;
     
     @Column(name = "readyplayercount")
