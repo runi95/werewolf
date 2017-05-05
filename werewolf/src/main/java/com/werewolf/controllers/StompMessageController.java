@@ -107,8 +107,8 @@ public class StompMessageController {
 		return convertObjectToJson(lml);
 	}
 
-	private void broadcastMessage(String message) {
-		simpTemplate.convertAndSend("/action/broadcast/{gameid}", message);
+	private void broadcastMessage(String message, String gameid) {
+		simpTemplate.convertAndSend("/action/broadcast/" + gameid, message);
 	}
 	
 	private void privateMessage(String message) {
