@@ -1,5 +1,8 @@
 package com.werewolf.services;
 
+import java.util.List;
+
+import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
@@ -10,12 +13,14 @@ public interface JoinLobbyService {
 
     LobbyEntity create(JoinLobbyForm joinLobbyForm);
     LobbyEntity join(JoinLobbyForm joinLobbyForm);
-    void leave(LobbyPlayer lobbyPlayer);
-    void loadGame(LobbyEntity lobbyEntity);
-    int vote(LobbyPlayer voter, String voteon);
-    int removeVote(LobbyPlayer voter, String voteon);
-    Integer setReadyStatus(LobbyPlayer lobbyPlayer, boolean ready);
-    Integer getPlayerCount(LobbyPlayer lobbyPlayer);
+    List<LobbyMessage> join(String username);
+    List<LobbyMessage> leave(String username);
+    List<LobbyMessage> leave(LobbyPlayer lobbyPlayer);
+    List<LobbyMessage> vote(String username, String voteon, boolean vote);
+    List<LobbyMessage> setReadyStatus(String username, boolean ready);
+    List<LobbyMessage> getPlayers(String username);
+    List<LobbyMessage> gameRequest(String username);
+    List<LobbyMessage> initializeGame(String username);
     
     LobbyEntity findByGameId(String gameId);
 
