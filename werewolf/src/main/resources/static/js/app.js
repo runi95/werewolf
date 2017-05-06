@@ -298,9 +298,15 @@ function loadGame() {
 }
 
 function voteon(playerid) {
-	voted = playerid;
-	var votebtn = document.getElementById("vb" + playerid).disabled = true;
-	broadcastMessage({"action":"vote", "playerid":playerid});
+	if(voted == playerid) {
+		voted = null;
+		var votebtn = document.getElementById("vb" + playerid).disabled = true;
+		broadcastMessage({"action":"unvote", "playerid":playerid});
+	} else {
+		voted = playerid;
+		var votebtn = document.getElementById("vb" + playerid).disabled = true;
+		broadcastMessage({"action":"vote", "playerid":playerid});
+	}
 }
 
 function someoneVoted(playerid, votedon, votes) {
@@ -312,19 +318,18 @@ function someoneVoted(playerid, votedon, votes) {
 		} else {
 			elem.setAttribute("class", "btn btn-info btn-block");
 		}
-		addToLog("You voted on " + votedon);
+		addToLog("You voted on " + playerlist[votedon]);
 	} else {
-		addToLog(playerid + " has voted on " + votedon);
+		addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon]);
 	}
-	if(votedon == voted) {
+	
+	if (votedon == owner) {
+		elem.innerHTML = votes;
+	} else if(votedon == voted) {
 		elem.innerHTML = "Remove Vote(" + votes + ")";
 	} else {
 		elem.innerHTML = "Vote(" + votes + ")";
 	}
-	
-	//if(readyplayercount === lobbyplayercount) {
-		//sendPrivateMessage({"action":"requestgame"}); //Ask server if everything is ready
-	//}
 }
 
 function loadVote() {
