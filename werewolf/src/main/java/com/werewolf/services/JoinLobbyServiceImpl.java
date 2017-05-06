@@ -53,7 +53,6 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		
 		LobbyPlayer lobbyPlayer = getPlayerFromUsername(username);
-		System.out.println("Joined game: " + lobbyPlayer);
 		if(lobbyPlayer == null)
 			return messageList;
 		
