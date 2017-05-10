@@ -20,21 +20,45 @@
 	</div>
 	<div id="game" class="hide">
 		<nav class="navbar navbar-static-top">
+			<div class="phase-div">
+				<img id="dayphase" src="css/img/Werewolf-Day.png" class="phase phase-out">
+				<img id="nightphase" src="css/img/Werewolf-Night.png" class="phase phase-out">
+				<img id="deadphase" src="css/img/Werewolf-Dead.png" class="phase phase-out">
+				<img id="wonphase" src="css/img/Werewolf-Won.png" class="phase phase-out">
+				<img id="lostphase" src="css/img/Werewolf-Lost.png" class="phase phase-out">
+			</div>
 			<ul class="breadcrumb">
-        		<li id="voteref" class="breadcrumbs-text breadcrumbs-text-current" onclick="loadVote()">Vote</li>
+        		<li id="actionref" class="breadcrumbs-text breadcrumbs-text-current" onclick="loadAction()">Action</li>
             	<li id="logref" class="breadcrumbs-text" onclick="loadLog()">Log</li>
             	<li id="graveref" class="breadcrumbs-text" onclick="loadGraveyard()">Graveyard</li>
+            	<li id="roleref" class="breadcrumbs-text" onclick="loadRole()">Role</li>
 			</ul>
-        	<div id="votediv" class="show">
-           		<table class="table table-condensed">
-               		<thead>
-                   		<tr>
-                   			<th class="text-center col-xs-6">Name</th>
-                   			<th class="text-center col-xs-3">Votes</th>
-						</tr>
-					</thead>
-					<tbody id="votelist"></tbody>
-				</table> 
+			<div id="actiondiv" class="show">
+        		<div id="dayactiondiv" class="hide">
+           			<table class="table table-condensed">
+               			<thead>
+                   			<tr>
+                   				<th class="text-center col-xs-6">Name</th>
+                   				<th class="text-center col-xs-3">Lynch</th>
+							</tr>
+						</thead>
+						<tbody id="votelist"></tbody>
+					</table> 
+				</div>
+				<div id="nightactiondiv" class="hide">
+           			<table class="table table-condensed">
+               			<thead>
+                   			<tr>
+                   				<th class="text-center col-xs-6">Name</th>
+                   				<th class="text-center col-xs-3">Action</th>
+							</tr>
+						</thead>
+						<tbody id="nightactionlist"></tbody>
+					</table> 
+				</div>
+				<div id="noactiondiv" class="show">
+				
+				</div>
 			</div>
 			<div id="logdiv" class="hide">
 				<div id="loglist"></div>
@@ -49,6 +73,11 @@
 					</thead>
 					<tbody id="gravelist"></tbody>
 				</table>
+			</div>
+			<div id="rolediv" class="hide">
+				<h1 class="panel-title"><b id="rolename"></b></h1>
+				<table class="table table-condensed">
+					<tbody id="rolelist"></tbody>
 			</div>
 		</nav>
 	</div>

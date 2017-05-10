@@ -44,4 +44,9 @@ public class PreAuthController {
 
         return "redirect:/";
     }
+    
+    @GetMapping(value = "/test")
+    public String test() {
+    	return "test";
+    }
 }

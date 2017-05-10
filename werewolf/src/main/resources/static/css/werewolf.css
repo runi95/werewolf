@@ -2,6 +2,87 @@
  * Globals
  */
 
+.btn-night {
+	background-color: #4800ff;
+}
+
+.btn-nightdef {
+	background-color: #ff6464;
+}
+
+.countdown { 
+   position: relative; 
+   width: 100%;
+}
+
+.countdown-circle {
+  border: 2px solid rgb(50, 122, 180);
+  width: 72px;
+  height: 72px;
+  line-height: 72px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin: 0 auto 40px;
+}
+
+.countdown-circle-old {
+   border-radius: 50%;
+   border: 2px solid #327ab4;
+   padding: auto;
+   padding-left: 36px;
+   padding-right: 36px;
+   padding-top: 36px;
+   padding-bottom: 36px;
+}
+
+.countdown-text {
+   text-align: center;
+   margin: auto;
+   position: absolute; 
+   font-size: 200%;
+   color: rgb(50, 122, 180);
+   width: 50%;
+   height: 50%;
+   top: 10px; left: 0; bottom: 0; right: 0;
+}
+
+.countdown-text-old {
+   margin: auto;
+   position: absolute; 
+   font-size: 200%;
+   color: rgb(50, 122, 180);
+   width: 50%;
+   height: 50%;
+   top: 0; left: 0; bottom: 4px; right: 0;
+}
+
+.phase-div {
+	position: fixed;
+	top: 50%;
+	width: 100%;
+}
+
+.phase {
+  transition: 1s ease;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transition: visibility 1s, opacity 1s linear;
+}
+
+.phase-out {
+	visibility: hidden;
+	opacity: 0;
+}
+
+.phase-in {
+	visibility: visible;
+	opacity: 1;
+}
+
 .vote-row {
 	padding-top: 1em;
 	padding-bottom: 1em;

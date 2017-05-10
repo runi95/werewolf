@@ -1,5 +1,7 @@
 package com.werewolf.entities;
 
+import com.werewolf.gameplay.RoleInterface;
+
 public class LobbyPlayer {
     private String id;
 
@@ -11,11 +13,13 @@ public class LobbyPlayer {
 
     private String voted;
     
+    private String target;
+    
     private int votes;
     
     private boolean ready = false;
     
-    private String role;
+    private RoleInterface role;
     
     private String alignment;
     
@@ -37,11 +41,15 @@ public class LobbyPlayer {
     	this.voted = voted;
     }
     
+    public void setTarget(String target) {
+    	this.target = target;
+    }
+    
     public void setVotes(int votes) {
     	this.votes = votes;
     }
     
-    public void setRole(String role) {
+    public void setRole(RoleInterface role) {
     	this.role = role;
     }
     
@@ -69,11 +77,15 @@ public class LobbyPlayer {
     	return voted;
     }
     
+    public String getTarget() {
+    	return target;
+    }
+    
     public int getVotes() {
     	return votes;
     }
     
-    public String getRole() {
+    public RoleInterface getRole() {
     	return role;
     }
     

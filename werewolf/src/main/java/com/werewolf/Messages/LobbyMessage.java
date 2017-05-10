@@ -10,6 +10,15 @@ public class LobbyMessage {
     public LobbyMessage() {
     }
 
+    public LobbyMessage(String action) {
+    	this.action = action;
+    }
+    
+    public LobbyMessage(String action, String info) {
+    	this.action = action;
+    	this.info = info;
+    }
+    
     public LobbyMessage(String action, String playerid, String info) {
     	this.action = action;
     	this.playerid = playerid;

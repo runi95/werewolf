@@ -1,11 +1,15 @@
 var stompClient = null;
+navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 var playerlist = {}; // Initialize an empty object that will contain players
 var deadplayers = {};
-var aliveplayers= {};
+var aliveplayers = {};
+var invalidtargets = {};
 var gamecode = null;
 var ready = false; // Player is not ready upon load
 var voted = null;
+var nightact = null;
 var owner = null; // ID of the user
+var phase = null;
 
 function setConnected(connected) {
     if(connected) {
@@ -23,10 +27,10 @@ function connect() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
-            receiveMessage(JSON.parse(messageOutput.body));
+            receiveBroadcastMessage(JSON.parse(messageOutput.body));
         });
         stompClient.subscribe('/user/action/private', function (messageOutput) {
-            receiveMessage(JSON.parse(messageOutput.body));
+            receivePrivateMessage(JSON.parse(messageOutput.body));
         });
         setConnected(true);
     });
@@ -49,22 +53,25 @@ function sendPrivateMessage(message) {
     stompClient.send('/app/private/' + gamecode, {}, JSON.stringify(message));
 }
 
-function receiveMessage(message) {
+function receiveBroadcastMessage(message) {
     for(var i = 0; i < message.length; i++) {
             var action = message[i].action;
             
             switch(action) {
+            	case "waitphase":
+            		waitPhase();
+            	break;
+            	case "dayphase":
+            		dayPhase();
+            		break;
+            	case "nightphase":
+            		nightPhase();
+            		break;
                 case "join":
                     addPlayer(message[i].playerid, message[i].info);
                     break;
-                case "joinalive":
-                	addToVoteList(message[i].playerid, message[i].info, message[i].additionalinfo);
-                	break;
-                case "joindead":
-                	addToGraveyard(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
-                	break;
                 case "updatevotestatus":
-                	someoneVoted(message[i].playerid, message[i].info, message[i].additionalinfo);
+                	someoneVoted(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
                 case "updatereadystatus":
                 	someoneClickedReady(message[i].playerid, message[i].info, message[i].additionalinfo);
@@ -75,19 +82,11 @@ function receiveMessage(message) {
                 case "kill":
                 	killPlayer(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
-                case "owner":
-                	owner = message[i].playerid;
-                	addPlayer(message[i].playerid, message[i].info);
-                	document.getElementById(message[i].playerid).setAttribute("class", "list-group-item list-group-item-success");
-                	break;
                 case "leave":
                 	removePlayer(message[i].playerid, message[i].info);
                     break;
-                case "gamerequestgranted":
+                case "lobbyready":
                 	loadGame();
-                	break;
-                case "gamerequestdenied":
-                	// Something went wrong! Should request the real numbers then
                 	break;
                 default:
                     break;
@@ -95,17 +94,104 @@ function receiveMessage(message) {
     }
 }
 
-function dayPhase() {
+function receivePrivateMessage(message) {
+    for(var i = 0; i < message.length; i++) {
+            var action = message[i].action;
+            
+            switch(action) {
+            	case "nightaction":
+            		updateNightAction(message[i].playerid, true);
+            		break;
+            	case "unnightaction":
+            		updateNightAction(message[i].playerid, false);
+            		break;
+                case "join":
+                    addPlayer(message[i].playerid, message[i].info);
+                    break;
+                case "joinalive":
+                	addToActionList(message[i].playerid, message[i].info, message[i].additionalinfo);
+                	break;
+                case "joindead":
+                	addToGraveyard(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
+                	break;
+                case "owner":
+                	owner = message[i].playerid;
+                	addPlayer(message[i].playerid, message[i].info);
+                	document.getElementById(message[i].playerid).setAttribute("class", "list-group-item list-group-item-success");
+                	break;
+                case "dead":
+                	// I'm dead! D:
+                	break;
+                case "nightmessage":
+                	// What happened during the night? :o
+                	break;
+                case "gamephase":
+                	// This is the current gamephase! :3
+                	break;
+                case "role":
+                	setRole(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
+                	break;
+                default:
+                    break;
+            }
+    }
+}
+
+function waitPhase() {
 	
+}
+
+function dayPhase() {
+	phase = "day";
+	if ("vibrate" in navigator) {
+		navigator.vibrate(500);
+	}
+	
+	var elem = document.getElementById("dayphase");
+	elem.setAttribute("class", "phase phase-in");
+	phaseout(elem, 2);
+	loadDayAction();
 }
 
 function lynchPlayer(playerid, playername, playerrole, alignment) {
-	addToLog(nickname + " was lynched by an angry mob!");
+	addToLog(playerlist[playerid] + " was lynched by an angry mob!");
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
 
-function nightPhase() {
+function dead() {
+	if ("vibrate" in navigator) {
+		navigator.vibrate(500);
+	}
 	
+	var elem = document.getElementById("deadphase");
+	elem.setAttribute("class", "phase phase-in");
+	phaseout(elem, 2);
+}
+
+function won() {
+	var elem = document.getElementById("wonphase");
+	elem.setAttribute("class", "phase phase-in");
+}
+
+function lost() {
+	var elem = document.getElementById("lostphase");
+	elem.setAttribute("class", "phase phase-in");
+}
+
+function nightPhase() {
+	phase = "night";
+	if ("vibrate" in navigator) {
+		navigator.vibrate(500);
+	}
+	
+	var elem = document.getElementById("nightphase");
+	elem.setAttribute("class", "phase phase-in");
+	phaseout(elem, 2);
+	loadNightAction();
+}
+
+function phaseout(elem, delay) {
+	setTimeout(function() {elem.setAttribute("class", "phase phase-out"); }, delay*1000);
 }
 
 function killPlayer(playerid, playername, playerrole, alignment) {
@@ -113,21 +199,22 @@ function killPlayer(playerid, playername, playerrole, alignment) {
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
 
-function addToVoteList(playerid, playername, votes) {
+function addToActionList(playerid, playername, votes) {
 	if (!aliveplayers.hasOwnProperty(playerid)) {
 		if(deadplayers.hasOwnProperty(playerid)) {
 			removeFromGraveyard(playerid);
 		}
 		
 		aliveplayers[playerid] = {"name":playername, "votes":votes};
+		
 		var votelist = document.getElementById("votelist");
-		var row = document.createElement("tr");
-		var name = document.createElement("th");
+		var voterow = document.createElement("tr");
+		var votename = document.createElement("th");
 		var vote = document.createElement("th");
 		var votebtn;
-		name.innerHTML = playername;
-		name.setAttribute("class", "text-center");
-		row.setAttribute("id", "v" + playerid);
+		votename.innerHTML = playername;
+		votename.setAttribute("class", "text-center");
+		voterow.setAttribute("id", "v" + playerid);
 		if(playerid == owner) {
 			votebtn = document.createElement("b");
 			votebtn.innerHTML = votes;
@@ -141,9 +228,27 @@ function addToVoteList(playerid, playername, votes) {
 			votebtn.setAttribute("onclick", "voteon(" + playerid + ")");
 		}
 		vote.appendChild(votebtn);
-		row.appendChild(name);
-		row.appendChild(vote);
-		votelist.appendChild(row);
+		voterow.appendChild(votename);
+		voterow.appendChild(vote);
+		votelist.appendChild(voterow);
+		
+		var nightlist = document.getElementById("nightactionlist");
+		var nightrow = document.createElement("tr");
+		var nightname = document.createElement("th");
+		var night = document.createElement("th");
+		var nightbtn;
+		nightname.innerHTML = playername;
+		nightname.setAttribute("class", "text-center");
+		if(playerid != owner) {
+			nightbtn = document.createElement("button");
+			nightbtn.setAttribute("id", "ab" + playerid);
+			nightbtn.setAttribute("class", "btn btn-night btn-block");
+			nightbtn.setAttribute("onclick", "nightaction(" + playerid + ")");
+			night.appendChild(nightbtn);
+		}
+		nightrow.appendChild(nightname);
+		nightrow.appendChild(night);
+		nightlist.appendChild(nightrow);
 	}
 }
 
@@ -261,10 +366,6 @@ function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
 	} else {
 		elem.innerHTML = "Ready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 4) + ")";
 	}
-	
-	if(readyplayercount === lobbyplayercount) {
-		sendPrivateMessage({"action":"requestgame"}); //Ask server if everything is ready
-	}
 }
 
 function loadLobby() {
@@ -298,29 +399,58 @@ function loadGame() {
 }
 
 function voteon(playerid) {
+	var votebtn = document.getElementById("vb" + playerid).disabled = true;
+	
 	if(voted == playerid) {
 		voted = null;
-		var votebtn = document.getElementById("vb" + playerid).disabled = true;
 		broadcastMessage({"action":"unvote", "playerid":playerid});
 	} else {
-		voted = playerid;
-		var votebtn = document.getElementById("vb" + playerid).disabled = true;
 		broadcastMessage({"action":"vote", "playerid":playerid});
 	}
 }
 
-function someoneVoted(playerid, votedon, votes) {
+function nightaction(playerid) {
+	var nightbtn = document.getElementById("ab" + playerid).disabled = true;
+	
+	if(nightact == playerid) {
+		sendPrivateMessage({"action":"unnightaction", "playerid":playerid});
+	} else {
+		sendPrivateMessage({"action":"nightaction", "playerid":playerid});
+	}
+}
+
+function updateNightAction(target, act) {
+	var elem = document.getElementById("ab" + target);
+	elem.disabled = false;
+	
+	if(act) {
+		nightact = target;
+		elem.setAttribute("class", "btn btn-nightdef btn-block");
+	} else {
+		elem.setAttribute("class", "btn btn-nigth btn-block");
+	}
+}
+
+function someoneVoted(playerid, votedon, votes, status) {
 	var elem = document.getElementById("vb" + votedon);
+	
 	if(playerid === owner) {
 		elem.disabled = false;
-		if(voted != null) {
+		
+		if(status === "+") { // Means they voted on this player
+			voted = votedon;
 			elem.setAttribute("class", "btn btn-default btn-block");
-		} else {
+			addToLog("You voted on " + playerlist[votedon]);
+		} else if(status === "-") { // Means they removed their vote from this player			
 			elem.setAttribute("class", "btn btn-info btn-block");
+			addToLog("You removed your vote from " + playerlist[votedon]);
 		}
-		addToLog("You voted on " + playerlist[votedon]);
 	} else {
-		addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon]);
+		if(status === "+") {
+			addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon]);
+		} else if(status === "-") {
+			addToLog(playerlist[playerid] + " has removed thier vote from " + playerlist[votedon]);
+		}
 	}
 	
 	if (votedon == owner) {
@@ -332,49 +462,180 @@ function someoneVoted(playerid, votedon, votes) {
 	}
 }
 
-function loadVote() {
-	var voteref = document.getElementById("voteref");
-	var votediv = document.getElementById("votediv");
+// function 
+
+function loadAction() {
+	if(phase === "night") {
+		loadNightAction();
+	}else if(phase === "day") {
+		loadDayAction();
+	}else {
+		loadNoAction();
+	}
+	
+	var actionref = document.getElementById("actionref");
+	var actiondiv = document.getElementById("actiondiv");
 	var logref = document.getElementById("logref");
 	var logdiv = document.getElementById("logdiv");
 	var graveref = document.getElementById("graveref");
 	var gravediv = document.getElementById("gravediv");
-	voteref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
-	votediv.setAttribute("class", "show");
+	var roleref = document.getElementById("roleref");
+	var rolediv = document.getElementById("rolediv");
+	actionref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	actiondiv.setAttribute("class", "show");
 	logref.setAttribute("class", "breadcrumbs-text");
 	logdiv.setAttribute("class", "hide");
 	graveref.setAttribute("class", "breadcrumbs-text");
 	gravediv.setAttribute("class", "hide");
+	roleref.setAttribute("class", "breadcrumbs-text");
+	rolediv.setAttribute("class", "hide");
+}
+
+function loadNightAction() {
+	var nightdiv = document.getElementById("nightactiondiv");
+	var daydiv = document.getElementById("dayactiondiv");
+	var nodiv = document.getElementById("noactiondiv");
+	nightdiv.setAttribute("class", "show");
+	daydiv.setAttribute("class", "hide");
+	nodiv.setAttribute("class", "hide");
+}
+
+function loadDayAction() {
+	var nightdiv = document.getElementById("nightactiondiv");
+	var daydiv = document.getElementById("dayactiondiv");
+	var nodiv = document.getElementById("noactiondiv");
+	nightdiv.setAttribute("class", "hide");
+	daydiv.setAttribute("class", "show");
+	nodiv.setAttribute("class", "hide");
+}
+
+function loadNoAction() {
+	var nightdiv = document.getElementById("nightactiondiv");
+	var daydiv = document.getElementById("dayactiondiv");
+	var nodiv = document.getElementById("noactiondiv");
+	nightdiv.setAttribute("class", "hide");
+	daydiv.setAttribute("class", "hide");
+	nodiv.setAttribute("class", "show");
 }
 
 function loadLog() {
-	var voteref = document.getElementById("voteref");
-	var votediv = document.getElementById("votediv");
+	var actionref = document.getElementById("actionref");
+	var actiondiv = document.getElementById("actiondiv");
 	var logref = document.getElementById("logref");
 	var logdiv = document.getElementById("logdiv");
 	var graveref = document.getElementById("graveref");
 	var gravediv = document.getElementById("gravediv");
-	voteref.setAttribute("class", "breadcrumbs-text");
-	votediv.setAttribute("class", "hide");
+	var roleref = document.getElementById("roleref");
+	var rolediv = document.getElementById("rolediv");
+	actionref.setAttribute("class", "breadcrumbs-text");
+	actiondiv.setAttribute("class", "hide");
 	logref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
 	logdiv.setAttribute("class", "show");
 	graveref.setAttribute("class", "breadcrumbs-text");
 	gravediv.setAttribute("class", "hide");
+	roleref.setAttribute("class", "breadcrumbs-text");
+	rolediv.setAttribute("class", "hide");
 }
 
 function loadGraveyard() {
-	var voteref = document.getElementById("voteref");
-	var votediv = document.getElementById("votediv");
+	var actionref = document.getElementById("actionref");
+	var actiondiv = document.getElementById("actiondiv");
 	var logref = document.getElementById("logref");
 	var logdiv = document.getElementById("logdiv");
 	var graveref = document.getElementById("graveref");
 	var gravediv = document.getElementById("gravediv");
+	var roleref = document.getElementById("roleref");
+	var rolediv = document.getElementById("rolediv");
+	actionref.setAttribute("class", "breadcrumbs-text");
+	actiondiv.setAttribute("class", "hide");
 	logref.setAttribute("class", "breadcrumbs-text");
 	logdiv.setAttribute("class", "hide");
-	voteref.setAttribute("class", "breadcrumbs-text");
-	votediv.setAttribute("class", "hide");
 	graveref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
 	gravediv.setAttribute("class", "show");
+	roleref.setAttribute("class", "breadcrumbs-text");
+	rolediv.setAttribute("class", "hide");
+}
+
+function loadRole() {
+	var actionref = document.getElementById("actionref");
+	var actiondiv = document.getElementById("actiondiv");
+	var logref = document.getElementById("logref");
+	var logdiv = document.getElementById("logdiv");
+	var graveref = document.getElementById("graveref");
+	var gravediv = document.getElementById("gravediv");
+	var roleref = document.getElementById("roleref");
+	var rolediv = document.getElementById("rolediv");
+	actionref.setAttribute("class", "breadcrumbs-text");
+	actiondiv.setAttribute("class", "hide");
+	logref.setAttribute("class", "breadcrumbs-text");
+	logdiv.setAttribute("class", "hide");
+	graveref.setAttribute("class", "breadcrumbs-text");
+	gravediv.setAttribute("class", "hide");
+	roleref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	rolediv.setAttribute("class", "show");
+}
+
+function setRole(name, alignment, goal, description) {
+	var rolename = document.getElementById("rolename");
+	rolename.innerHTML = name;
+	
+	var rolelist = document.getElementById("rolelist");
+	var alignmentrow = document.createElement("tr");
+	var goalrow = document.createElement("tr");
+	var descriptionrow = document.createElement("tr");
+	
+	var alignmentcol = document.createElement("th");
+	var alignmentbold = document.createElement("b");
+	var alignmentcontent = document.createElement("th");
+	alignmentbold.innerHTML = "Alignment";
+	alignmentcontent.innerHTML = alignment;
+	
+	var goalcol = document.createElement("th");
+	var goalbold = document.createElement("b");
+	var goalcontent = document.createElement("th");
+	goalbold.innerHTML = "Goal";
+	goalcontent.innerHTML = goal;
+	
+	var descriptioncol = document.createElement("th");
+	var descriptionbold = document.createElement("b");
+	var descriptioncontent = document.createElement("th");
+	descriptionbold.innerHTML = "Description";
+	descriptioncontent.innerHTML = description;
+	
+	switch(alignment) {
+	case "Good":
+		alignmentcontent.setAttribute("class", "text-success");
+		break;
+	case "ChaoticGood":
+		alignmentcontent.setAttribute("class", "text-success");
+		break;
+	case "Evil":
+		alignmentcontent.setAttribute("class", "text-danger");
+		break;
+	case "ChaoticEvil":
+		alignmentcontent.setAttribute("class", "text-danger");
+		break;
+	case "NeutralEvil":
+		alignmentcontent.setAttribute("class", "text-warning");
+		break;
+	case "Neutral":
+	default:
+		break;
+	}
+	
+	alignmentcol.appendChild(alignmentbold);
+	alignmentrow.appendChild(alignmentcol);
+	alignmentrow.appendChild(alignmentcontent);
+	goalcol.appendChild(goalbold);
+	goalrow.appendChild(goalcol);
+	goalrow.appendChild(goalcontent);
+	descriptioncol.appendChild(descriptionbold);
+	descriptionrow.appendChild(descriptioncol);
+	descriptionrow.appendChild(descriptioncontent);
+	
+	rolelist.appendChild(alignmentrow);
+	rolelist.appendChild(goalrow);
+	rolelist.appendChild(descriptionrow);
 }
 
 // This function runs on initialization

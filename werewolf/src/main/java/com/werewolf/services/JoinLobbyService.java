@@ -1,8 +1,8 @@
 package com.werewolf.services;
 
-import java.util.List;
-
-import com.werewolf.Messages.LobbyMessage;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
@@ -10,17 +10,18 @@ import com.werewolf.entities.LobbyPlayer;
 public interface JoinLobbyService {
 	
 	LobbyPlayer getPlayer(long userid);
-
     LobbyEntity create(JoinLobbyForm joinLobbyForm);
     LobbyEntity join(JoinLobbyForm joinLobbyForm);
-    List<LobbyMessage> join(String username);
-    List<LobbyMessage> leave(String username);
-    List<LobbyMessage> leave(LobbyPlayer lobbyPlayer);
-    List<LobbyMessage> vote(String username, String voteon, boolean vote);
-    List<LobbyMessage> setReadyStatus(String username, boolean ready);
-    List<LobbyMessage> getPlayers(String username);
-    List<LobbyMessage> gameRequest(String username);
-    List<LobbyMessage> initializeGame(String username);
+    
+    void leave(String username);
+    void vote(String username, String voteon, boolean vote);
+    void setReadyStatus(String username, boolean ready);
+    
+    void getPlayers(String username);
+    void initializeGame(String username);
+    void nightAction(String username, String target, boolean act);
+    void getGamePhase(String username);
+    void getRole(String username);
     
     LobbyEntity findByGameId(String gameId);
 
@@ -34,4 +35,18 @@ public interface JoinLobbyService {
      * @return editform for the given user
      */
     JoinLobbyForm getEditForm(LobbyEntity lobbyEntity);
+    
+    public static String convertObjectToJson(Object message) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+		String arrayToJson = null;
+		try {
+			arrayToJson = objectMapper.writeValueAsString(message);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		return arrayToJson;
+	}
 }
