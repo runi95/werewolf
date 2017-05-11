@@ -27,7 +27,7 @@ public class StompMessageController {
 			joinLobbyService.setReadyStatus(username, true);
 			break;
 		case "unready":
-			joinLobbyService.setReadyStatus(username, true);
+			joinLobbyService.setReadyStatus(username, false);
 			break;
 		case "vote":
 			joinLobbyService.vote(username, message.getPlayerid(), true);

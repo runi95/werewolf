@@ -45,9 +45,9 @@ public class AdvancedMode implements GameMode {
 		
 		if(act) {
 			acter.setTarget(target.getId());
-		
 			messageList.add(new LobbyMessage("nightaction", target.getId()));
 		} else {
+			acter.setTarget(null);
 			messageList.add(new LobbyMessage("unnightaction", target.getId()));
 		}
 		
@@ -90,7 +90,7 @@ public class AdvancedMode implements GameMode {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		LobbyEntity lobby = latestVotedOn.getLobby();
 
-		if (latestVotedOn.getVotes() >= (Math.ceil(lobby.getAliveCount() / 2.0))) {
+		if (latestVotedOn.getVotes() > (Math.ceil(lobby.getAliveCount() / 2.0))) {
 			lobby.addDeadPlayer(latestVotedOn);
 
 			messageList.add(new LobbyMessage("lynch", latestVotedOn.getId(), latestVotedOn.getNickname(),
@@ -285,9 +285,12 @@ public class AdvancedMode implements GameMode {
 			privateMessage(emulationChar.getLobbyPlayer().getUser().getUsername(), JoinLobbyService.convertObjectToJson(messageList));
 		}
 		
-		game.getDeadPlayers().forEach((p) -> { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("kill")})))); lobbyEntity.addDeadPlayer(p.getLobbyPlayer()); } );
+		game.getDeadPlayers().forEach((p) -> { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("kill", p.getLobbyPlayer().getId(), p.getLobbyPlayer().getNickname(), p.getLobbyPlayer().getRole().getName(), p.getLobbyPlayer().getAlignment())})))); lobbyEntity.addDeadPlayer(p.getLobbyPlayer()); } );
 		
 		waitPhase(lobbyEntity, "dayphase");
+		
+		// Setting all targets to null and telling clients about the change
+		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getTarget() != null) { privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("unnightaction", p.getTarget())})))); p.setTarget(null);}});
 	}
 	
 	private void startDay(LobbyEntity lobbyEntity) {
@@ -311,6 +314,9 @@ public class AdvancedMode implements GameMode {
 	
 	private void endDay(LobbyEntity lobbyEntity) {
 		waitPhase(lobbyEntity, "nightphase");
+		
+		// Setting all votes to 0 and telling clients about the change
+		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getVotes() != 0) p.setVotes(0); if(p.getVoted() != null) broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("updatevotestatus", p.getId(), p.getVoted(), "0")}))));});
 	}
 	
 	private Map<String, EmulationCharacter> setUpCharacters(LobbyEntity lobbyEntity) {

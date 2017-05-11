@@ -104,20 +104,21 @@ public class GameEmulator {
 			EmulationCharacter killed = killers.get(killer);
 
 			if (killed != null) {
-				EmulationCharacter guarded = guardsReversed.get(killed);
-				if (guarded != null) {
-					EmulationCharacter guard = guards.get(guarded);
+				EmulationCharacter guard = guardsReversed.get(killed);
+				if (guard != null) {
+					EmulationCharacter guarded = guards.get(guard);
 					guarded.addMessage("Someone attacked you during the night, but a guard saved you.");
 					killer.addMessage("Someone was guarding your target.");
-					guard.addMessage("Someone attacked your target.");
+					guard.addMessage("You died while fighting off an attacker.");
 					deadPlayers.add(killer);
 					deadPlayers.add(guard);
 				} else {
-					EmulationCharacter healed = healersReversed.get(killed);
-					if (healed != null) {
-						EmulationCharacter healer = healers.get(healed);
+					EmulationCharacter healer = healersReversed.get(killed);
+					if (healer != null) {
+						EmulationCharacter healed = healers.get(healer);
 						healed.addMessage("Someone attacked you during the night, but a priest healed you.");
 						healer.addMessage("Your target was attacked, but you saved them.");
+						killer.addMessage("Your target was saved from the attack.");
 					} else {
 						killed.addMessage("Someone attacked you.");
 						deadPlayers.add(killed);

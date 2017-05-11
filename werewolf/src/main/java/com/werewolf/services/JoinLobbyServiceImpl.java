@@ -231,7 +231,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		LobbyPlayer oldTargetPlayer = null;
 		if (lobbyPlayer.getTarget() != null) {
-			oldTargetPlayer = playerMap.get(lobbyPlayer.getTarget());
+			oldTargetPlayer = lobbyPlayer.getLobby().getAlivePlayer(lobbyPlayer.getTarget());
 		}
 		lobbyNightAction(lobbyPlayer.getLobby(), lobbyPlayer, oldTargetPlayer, targetPlayer, act);
 	}
@@ -352,9 +352,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 			lottery.add(new King());
 			break;
 		case 3:
-			lottery.add(new Marauder());
+			lottery.add(new Bard());
 		case 2:
-			lottery.add(new Priest());
+			lottery.add(new Guard());
 		case 1:
 			lottery.add(new Marauder());
 		}
@@ -446,7 +446,6 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	private void lobbyVote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer voteTarget,
 			LobbyPlayer oldVoteTarget, boolean status) {
 
-		System.out.println("debug 4");
 		switch (lobbyEntity.getGameMode()) {
 		case AdvancedMode:
 			advancedGameMode.vote(lobbyEntity, voter, voteTarget, oldVoteTarget, status);
