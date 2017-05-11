@@ -74,8 +74,10 @@ public class AdvancedMode implements GameMode {
     		if(!checkVotes(lobbyEntity, voteTarget))
     			messageList.add(new LobbyMessage("updatevotestatus", voter.getId(), voteTarget.getId(), Integer.toString(voteTarget.getVotes()), "+"));
     	} else {
-    		voteTarget.setVotes(voteTarget.getVotes() - 1);
-    		voter.setVoted(null);
+    		if(voter.getVoted().equals(voteTarget.getId())) {
+    			voteTarget.setVotes(voteTarget.getVotes() - 1);
+    			voter.setVoted(null);
+    		}
     		
     		messageList.add(new LobbyMessage("updatevotestatus", voter.getId(), voteTarget.getId(), Integer.toString(voteTarget.getVotes()), "-"));
     	}
@@ -94,7 +96,9 @@ public class AdvancedMode implements GameMode {
 			messageList.add(new LobbyMessage("lynch", latestVotedOn.getId(), latestVotedOn.getNickname(),
 					latestVotedOn.getRole().getName(), latestVotedOn.getAlignment()));
 			
-			waitPhase(lobbyEntity, "nightphase");
+			if(lobby.getPhaseTime() > 3)
+				lobby.setPhaseTime(3);
+//			waitPhase(lobbyEntity, "nightphase");
 		}
 		
 		if(!messageList.isEmpty()) {
@@ -105,7 +109,6 @@ public class AdvancedMode implements GameMode {
 	}
 	
 	public void dayPhase(LobbyEntity lobbyEntity) {
-		System.out.println("Initialized day phase!");
 		List<LobbyMessage> messageList = new ArrayList<>();
 		lobbyEntity.setPhase("dayphase");
 		
@@ -113,10 +116,11 @@ public class AdvancedMode implements GameMode {
 		
 		if(!messageList.isEmpty())
 			broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
+		
+		startDay(lobbyEntity);
 	}
 	
 	public void nightPhase(LobbyEntity lobbyEntity) {
-		System.out.println("Initialized night phase!");
 		List<LobbyMessage> messageList = new ArrayList<>();
 		lobbyEntity.setPhase("nightphase");
 		
@@ -244,7 +248,7 @@ public class AdvancedMode implements GameMode {
 	}
 	
 	private void startNight(LobbyEntity lobbyEntity) {
-		lobbyEntity.setPhaseTime(5);
+		lobbyEntity.setPhaseTime(15);
 		new Thread() {
 			public void run() {
 				try {
@@ -281,9 +285,32 @@ public class AdvancedMode implements GameMode {
 			privateMessage(emulationChar.getLobbyPlayer().getUser().getUsername(), JoinLobbyService.convertObjectToJson(messageList));
 		}
 		
-		game.getDeadPlayers().forEach((p) -> { privateMessage(p.getLobbyPlayer().getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("dead")})))); lobbyEntity.addDeadPlayer(p.getLobbyPlayer()); } );
+		game.getDeadPlayers().forEach((p) -> { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("kill")})))); lobbyEntity.addDeadPlayer(p.getLobbyPlayer()); } );
 		
 		waitPhase(lobbyEntity, "dayphase");
+	}
+	
+	private void startDay(LobbyEntity lobbyEntity) {
+		lobbyEntity.setPhaseTime(15);
+		new Thread() {
+			public void run() {
+				try {
+					if(lobbyEntity.getPhaseTime() > 0) {
+						Thread.sleep(1000);
+						lobbyEntity.setPhaseTime(lobbyEntity.getPhaseTime() - 1);
+						run();
+					} else {
+						endDay(lobbyEntity);
+					}
+				} catch(InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
+	private void endDay(LobbyEntity lobbyEntity) {
+		waitPhase(lobbyEntity, "nightphase");
 	}
 	
 	private Map<String, EmulationCharacter> setUpCharacters(LobbyEntity lobbyEntity) {

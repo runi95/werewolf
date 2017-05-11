@@ -115,7 +115,7 @@ public class GameEmulator {
 				} else {
 					EmulationCharacter healed = healersReversed.get(killed);
 					if (healed != null) {
-						EmulationCharacter healer = healersReversed.get(healed);
+						EmulationCharacter healer = healers.get(healed);
 						healed.addMessage("Someone attacked you during the night, but a priest healed you.");
 						healer.addMessage("Your target was attacked, but you saved them.");
 					} else {
