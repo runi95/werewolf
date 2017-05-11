@@ -2,28 +2,26 @@ package com.werewolf.gameplay;
 
 import java.util.LinkedList;
 
+import com.werewolf.entities.LobbyPlayer;
+
 /**
  * A dummy class for emulating game rounds
  */
 
 public class EmulationCharacter {
-	private String username, playerid, targetid;
+	private LobbyPlayer lobbyPlayer;
+	private String targetid;
 	private RoleInterface role;
 	private LinkedList<String> messageList = new LinkedList<>();
 	
-	public EmulationCharacter(String username, String playerid, RoleInterface role, String targetid) {
-		this.username = username;
-		this.playerid = playerid;
+	public EmulationCharacter(LobbyPlayer lobbyPlayer, RoleInterface role, String targetid) {
+		this.lobbyPlayer = lobbyPlayer;
 		this.role = role;
 		this.targetid = targetid;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-	
-	public String getPlayerid() {
-		return playerid;
+	public LobbyPlayer getLobbyPlayer() {
+		return lobbyPlayer;
 	}
 	
 	public RoleInterface getRole() {

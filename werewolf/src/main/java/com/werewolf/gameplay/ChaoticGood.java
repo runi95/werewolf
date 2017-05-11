@@ -5,7 +5,7 @@ import java.util.Random;
 import com.werewolf.gameplay.roles.Amnesiac;
 
 public interface ChaoticGood extends RoleInterface {
-	public static final String alignment = "Good";
+	public static final String alignment = "Chaotic Good";
 	public static final String goal = "Survive and kill all evildoers";
 	
 	public static final ChaoticGood[] chaoticGoodUnique = new ChaoticGood[] {};

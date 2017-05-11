@@ -104,6 +104,7 @@ public class GameEmulator {
 			EmulationCharacter killed = killers.get(killer);
 
 			if (killed != null) {
+				System.out.println("A " + killer.getRole().getName() + " has tried to kill a " + killed.getRole().getName());
 				EmulationCharacter guarded = guardsReversed.get(killed);
 				if (guarded != null) {
 					EmulationCharacter guard = guards.get(guarded);

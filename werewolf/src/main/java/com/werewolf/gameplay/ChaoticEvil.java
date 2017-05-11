@@ -3,6 +3,7 @@ package com.werewolf.gameplay;
 import java.util.Random;
 
 public interface ChaoticEvil extends RoleInterface {
+	public static final String alignment = "Chaotic Evil";
 	public static final String goal = "Survive and until every member of the town is dead";
 	
 	public static final ChaoticEvil[] chaoticEvilUnique = new ChaoticEvil[] {};
