@@ -10,6 +10,7 @@ var voted = null;
 var nightact = null;
 var owner = null; // ID of the user
 var phase = null;
+var alive = true;
 
 function setConnected(connected) {
     if(connected) {
@@ -120,13 +121,19 @@ function receivePrivateMessage(message) {
                 	document.getElementById(message[i].playerid).setAttribute("class", "list-group-item list-group-item-success");
                 	break;
                 case "dead":
-                	// I'm dead! D:
+                	dead();
                 	break;
                 case "nightmessage":
                 	// What happened during the night? :o
                 	break;
                 case "gamephase":
                 	// This is the current gamephase! :3
+                	break;
+                case "won":
+                	won();
+                	break;
+                case "lost":
+                	lost();
                 	break;
                 case "role":
                 	setRole(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
@@ -143,7 +150,7 @@ function waitPhase() {
 
 function dayPhase() {
 	phase = "day";
-	if ("vibrate" in navigator) {
+	if ("vibrate" in navigator  && alive) {
 		navigator.vibrate(500);
 	}
 	
@@ -159,6 +166,8 @@ function lynchPlayer(playerid, playername, playerrole, alignment) {
 }
 
 function dead() {
+	alive = false;
+	
 	if ("vibrate" in navigator) {
 		navigator.vibrate(500);
 	}
@@ -180,7 +189,7 @@ function lost() {
 
 function nightPhase() {
 	phase = "night";
-	if ("vibrate" in navigator) {
+	if ("vibrate" in navigator && alive) {
 		navigator.vibrate(500);
 	}
 	
@@ -261,7 +270,7 @@ function removeFromVoteList(playerid) {
 
 function addToLog(message) {
 	var loglist = document.getElementById("loglist");
-	var msg = document.createTextNode(message);
+	var msg = document.createTextNode(message + "<br />");
 	loglist.appendChild(msg);
 }
 
@@ -284,7 +293,7 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
     		name.setAttribute("class", "text-center label-success");
     		role.setAttribute("class", "text-center label-success");
     		break;
-    	case "ChaoticGood":
+    	case "Chaotic Good":
     		name.setAttribute("class", "text-center label-success");
 			role.setAttribute("class", "text-center label-success");
     		break;
@@ -292,7 +301,7 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
     		name.setAttribute("class", "text-center label-danger");
 			role.setAttribute("class", "text-center label-danger");
     		break;
-    	case "ChaoticEvil":
+    	case "Chaotic Evil":
     		name.setAttribute("class", "text-center label-danger");
 			role.setAttribute("class", "text-center label-danger");
     		break;
@@ -300,7 +309,7 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
     		name.setAttribute("class", "text-center");
 			role.setAttribute("class", "text-center");
     		break;
-    	case "NeutralEvil":
+    	case "Neutral Evil":
     		name.setAttribute("class", "text-center label-warning");
 			role.setAttribute("class", "text-center label-warning");
     		break;
@@ -402,8 +411,8 @@ function voteon(playerid) {
 	var votebtn = document.getElementById("vb" + playerid).disabled = true;
 	
 	if(voted == playerid) {
-		voted = null;
 		broadcastMessage({"action":"unvote", "playerid":playerid});
+		voted = null;
 	} else {
 		broadcastMessage({"action":"vote", "playerid":playerid});
 	}
@@ -432,6 +441,7 @@ function updateNightAction(target, act) {
 }
 
 function someoneVoted(playerid, votedon, votes, status) {
+	if(aliveplayers.hasOwnProperty(playerid)) {
 	var elem = document.getElementById("vb" + votedon);
 	
 	if(playerid === owner) {
@@ -459,6 +469,7 @@ function someoneVoted(playerid, votedon, votes, status) {
 		elem.innerHTML = "Remove Vote(" + votes + ")";
 	} else {
 		elem.innerHTML = "Vote(" + votes + ")";
+	}
 	}
 }
 
