@@ -368,8 +368,6 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 			lobbyPlayer.setRole(role);
 			lobbyPlayer.setAlignment(role.getAlignment());
-			System.out.println(
-					"Player (" + lobbyPlayer.getNickname() + ") became " + role.getName() + " with rnd number " + rng);
 		}
 
 		return lobbyPlayers;
