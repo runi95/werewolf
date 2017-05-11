@@ -120,11 +120,8 @@ function receivePrivateMessage(message) {
                 	addPlayer(message[i].playerid, message[i].info);
                 	document.getElementById(message[i].playerid).setAttribute("class", "list-group-item list-group-item-success");
                 	break;
-                case "dead":
-                	dead();
-                	break;
                 case "nightmessage":
-                	// What happened during the night? :o
+                	addToLog(message[i].info);
                 	break;
                 case "gamephase":
                 	// This is the current gamephase! :3
