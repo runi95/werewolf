@@ -75,8 +75,12 @@ public class PreGameController {
             else
             	lobbyEntity = joinLobbyService.join(joinLobbyForm);
         }
-
-        return new ModelAndView("lobby", "gamecode", lobbyEntity.getGameId());
+        
+        // TODO: Fix this properly!
+        if(lobbyEntity != null)
+        	return new ModelAndView("lobby", "gamecode", lobbyEntity.getGameId());
+        else
+        	return new ModelAndView("home");
     }
 
 }
