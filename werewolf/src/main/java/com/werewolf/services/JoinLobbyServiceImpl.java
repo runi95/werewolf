@@ -115,18 +115,21 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		if (lobbyPlayer == null)
 			return;
 
-		lobbyPlayer.setReady(ready);
-
 		LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
-		if (ready)
-			lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() + 1);
-		else
-			lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() - 1);
+		if (ready != lobbyPlayer.ready()) {
+			lobbyPlayer.setReady(ready);
+
+			if (ready)
+				lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() + 1);
+			else
+				lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() - 1);
+		}
 
 		messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(),
 				Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
 
-		loadGame(lobbyEntity);
+		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 3)
+			loadGame(lobbyEntity);
 
 		if (!messageList.isEmpty())
 			broadcastMessage(lobbyPlayer.getLobby().getGameId(), JoinLobbyService.convertObjectToJson(messageList));
@@ -164,7 +167,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		if (voter.getVoted() != null) {
 			oldVoteTarget = voter.getLobby().getAlivePlayer(voter.getVoted());
 		}
-		
+
 		lobbyVote(voter.getLobby(), voter, voteonPlayer, oldVoteTarget, status);
 	}
 
@@ -444,7 +447,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 	private void lobbyVote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer voteTarget,
 			LobbyPlayer oldVoteTarget, boolean status) {
-		
+
 		System.out.println("debug 4");
 		switch (lobbyEntity.getGameMode()) {
 		case AdvancedMode:

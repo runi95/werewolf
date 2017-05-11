@@ -57,7 +57,6 @@
 					</table> 
 				</div>
 				<div id="noactiondiv" class="show">
-				
 				</div>
 			</div>
 			<div id="logdiv" class="hide">

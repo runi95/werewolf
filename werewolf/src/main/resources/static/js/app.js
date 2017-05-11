@@ -101,10 +101,10 @@ function receivePrivateMessage(message) {
             
             switch(action) {
             	case "nightaction":
-            		updateNightAction(message[i].playerid, true);
+            		updateNightAction(message[i].info, true);
             		break;
             	case "unnightaction":
-            		updateNightAction(message[i].playerid, false);
+            		updateNightAction(message[i].info, false);
             		break;
                 case "join":
                     addPlayer(message[i].playerid, message[i].info);
@@ -145,7 +145,10 @@ function receivePrivateMessage(message) {
 }
 
 function waitPhase() {
-	
+	loadNoAction();
+//	var elem = document.getElementById("blackout");
+//	elem.setAttribute("class", "blackout phase-in");
+	phaseout(elem, 2);
 }
 
 function dayPhase() {
@@ -204,6 +207,9 @@ function phaseout(elem, delay) {
 }
 
 function killPlayer(playerid, playername, playerrole, alignment) {
+	if(playerid == owner)
+		dead();
+	
 	addToLog(nickname + " was murdered during the deepest, darkest hours of the night.");
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
@@ -223,7 +229,7 @@ function addToActionList(playerid, playername, votes) {
 		var votebtn;
 		votename.innerHTML = playername;
 		votename.setAttribute("class", "text-center");
-		voterow.setAttribute("id", "v" + playerid);
+		voterow.setAttribute("id", "av" + playerid);
 		if(playerid == owner) {
 			votebtn = document.createElement("b");
 			votebtn.innerHTML = votes;
@@ -248,10 +254,11 @@ function addToActionList(playerid, playername, votes) {
 		var nightbtn;
 		nightname.innerHTML = playername;
 		nightname.setAttribute("class", "text-center");
+		nightrow.setAttribute("id", "an" + playerid);
 		if(playerid != owner) {
 			nightbtn = document.createElement("button");
 			nightbtn.setAttribute("id", "ab" + playerid);
-			nightbtn.setAttribute("class", "btn btn-night btn-block");
+			nightbtn.setAttribute("class", "btn btn-night btn-nightact btn-block");
 			nightbtn.setAttribute("onclick", "nightaction(" + playerid + ")");
 			night.appendChild(nightbtn);
 		}
@@ -261,23 +268,25 @@ function addToActionList(playerid, playername, votes) {
 	}
 }
 
-function removeFromVoteList(playerid) {
+function removeFromActionList(playerid) {
 	if (aliveplayers.hasOwnProperty(playerid)) {
 		delete aliveplayers[playerid];
-		document.getElementById("v" + playerid).remove();
+		document.getElementById("av" + playerid).remove();
+		document.getElementById("an" + playerid).remove();
 	}
 }
 
 function addToLog(message) {
 	var loglist = document.getElementById("loglist");
-	var msg = document.createTextNode(message + "<br />");
+	var msg = document.createElement("div");
+	msg.innerHTML = message;
 	loglist.appendChild(msg);
 }
 
 function addToGraveyard(playerid, playername, playerrole, alignment) {
 	if (!deadplayers.hasOwnProperty(playerid)) {
 		if(aliveplayers.hasOwnProperty(playerid)) {
-			removeFromVoteList(playerid);
+			removeFromActionList(playerid);
 		}
 		
 		deadplayers[playerid] = {"name":playername, "role":playerrole};
@@ -430,13 +439,14 @@ function nightaction(playerid) {
 
 function updateNightAction(target, act) {
 	var elem = document.getElementById("ab" + target);
+	console.log("elem: ab" + target);
 	elem.disabled = false;
 	
 	if(act) {
 		nightact = target;
-		elem.setAttribute("class", "btn btn-nightdef btn-block");
+		elem.setAttribute("class", "btn btn-night btn-default");
 	} else {
-		elem.setAttribute("class", "btn btn-nigth btn-block");
+		elem.setAttribute("class", "btn btn-night btn-nightact");
 	}
 }
 
