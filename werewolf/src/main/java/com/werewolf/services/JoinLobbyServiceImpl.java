@@ -156,14 +156,15 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 			return;
 
 		LobbyPlayer voteonPlayer = voter.getLobby().getAlivePlayer(voteon);
-		if (voteonPlayer == null || (voter.getVoted() != null && voter.getVoted().equals(voteon))
+		if (voteonPlayer == null || (voter.getVoted() != null && voter.getVoted().equals(voteon) && status)
 				|| voter.getLobby().getDeadPlayer(voter.getId()) != null || voter.getId().equals(voteon))
 			return;
 
 		LobbyPlayer oldVoteTarget = null;
 		if (voter.getVoted() != null) {
-			oldVoteTarget = playerMap.get(voter.getVoted());
+			oldVoteTarget = voter.getLobby().getAlivePlayer(voter.getVoted());
 		}
+		
 		lobbyVote(voter.getLobby(), voter, voteonPlayer, oldVoteTarget, status);
 	}
 
@@ -364,7 +365,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 			lobbyPlayer.setRole(role);
 			lobbyPlayer.setAlignment(role.getAlignment());
-			System.out.println("Player (" + lobbyPlayer.getNickname() + ") became " + role.getName() + " with rnd number " + rng);
+			System.out.println(
+					"Player (" + lobbyPlayer.getNickname() + ") became " + role.getName() + " with rnd number " + rng);
 		}
 
 		return lobbyPlayers;
@@ -442,6 +444,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 	private void lobbyVote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer voteTarget,
 			LobbyPlayer oldVoteTarget, boolean status) {
+		
+		System.out.println("debug 4");
 		switch (lobbyEntity.getGameMode()) {
 		case AdvancedMode:
 			advancedGameMode.vote(lobbyEntity, voter, voteTarget, oldVoteTarget, status);
