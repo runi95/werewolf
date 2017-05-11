@@ -5,6 +5,7 @@
     		<div class="cover-container">
     			<div class="inner cover">
     				<div class="form-group">
+    					<div class="absolute-center">
     				    <form class="form-horizontal" action="/lobby" id="joinLobbyForm" name="joinLobbyForm" method="post">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <fieldset>
@@ -30,6 +31,7 @@
         						</div>
         					</fieldset>
         				</form>
+        				</div>
     				</div>
     			</div>
     		</div>

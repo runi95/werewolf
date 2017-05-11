@@ -4,6 +4,7 @@
 		<div class="site-wrapper-inner">
     		<div class="cover-container">
     			<div class="inner cover">
+    				<div class="absolute-center">
     				<form class="form-horizontal" id="accountRegisterForm" name="accountRegisterForm" method="post">
     					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     					<fieldset>
@@ -33,9 +34,9 @@
                 				<a href="/register" class="btn btn-default">Register</a>
                 				<button id="loginbutton" name="loginbutton" class="btn btn-info">Sign in</button>
         					</div>
-
     					</fieldset>
   					</form>
+  					</div>
        			</div>
         	</div>
 		</div>
