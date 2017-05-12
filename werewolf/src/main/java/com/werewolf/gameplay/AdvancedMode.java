@@ -30,7 +30,7 @@ public class AdvancedMode implements GameMode {
 			return;
 		else {
 			lobbyEntity.setStartedState(true);
-			waitPhase(lobbyEntity, "nightphase");
+			initializeGameWait(lobbyEntity, "nightphase");
 		}
 	}
 	
@@ -161,6 +161,21 @@ public class AdvancedMode implements GameMode {
 			startWaitingPhase(lobbyEntity, nextPhase);
 	}
 	
+	private void initializeGameWait(LobbyEntity lobbyEntity, String nextPhase) {
+		List<LobbyMessage> messageList = new ArrayList<>();
+		
+		lobbyEntity.setPhase("waitphase");
+		lobbyEntity.setPhaseTime(30);
+		
+		messageList.add(new LobbyMessage("waitphase"));
+		
+		if(!messageList.isEmpty())
+			broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
+		
+		if(!checkWinCondition(lobbyEntity))
+			startWaitingPhase(lobbyEntity, nextPhase);
+	}
+	
 	private boolean checkWinCondition(LobbyEntity lobbyEntity) {
 		LinkedList<LobbyPlayer> goodList = new LinkedList<>(), evilList = new LinkedList<>(), neutralEvilList = new LinkedList<>(), neutralList = new LinkedList<>();
 		for(LobbyPlayer lp : lobbyEntity.getAlivePlayers()) {
@@ -262,7 +277,7 @@ public class AdvancedMode implements GameMode {
 	}
 	
 	private void startNight(LobbyEntity lobbyEntity) {
-		lobbyEntity.setPhaseTime(15);
+		lobbyEntity.setPhaseTime(20);
 		new Thread() {
 			public void run() {
 				try {
@@ -310,7 +325,7 @@ public class AdvancedMode implements GameMode {
 	}
 	
 	private void startDay(LobbyEntity lobbyEntity) {
-		lobbyEntity.setPhaseTime(15);
+		lobbyEntity.setPhaseTime(60);
 		new Thread() {
 			public void run() {
 				try {

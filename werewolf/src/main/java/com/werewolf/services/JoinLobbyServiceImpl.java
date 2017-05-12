@@ -127,7 +127,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(),
 				Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
 
-		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 3)
+		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 4)
 			loadGame(lobbyEntity);
 
 		if (!messageList.isEmpty())
