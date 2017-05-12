@@ -106,25 +106,28 @@ function receivePrivateMessage(message) {
             	case "unnightaction":
             		updateNightAction(message[i].info, false);
             		break;
+            	case "nightmessage":
+                 	addToLog(message[i].info);
+                 	break;
                 case "join":
                     addPlayer(message[i].playerid, message[i].info);
                     break;
+                case "addinvalidtarget":
+                	addToInvalidTargets(message[i].playerid, message[i].info, message[i].additionalinfo);
+                	break;
                 case "joinalive":
                 	addToActionList(message[i].playerid, message[i].info, message[i].additionalinfo);
                 	break;
                 case "joindead":
                 	addToGraveyard(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
+                case "gamephase":
+                	// This is the current gamephase! :3
+                	break;
                 case "owner":
                 	owner = message[i].playerid;
                 	addPlayer(message[i].playerid, message[i].info);
                 	document.getElementById(message[i].playerid).setAttribute("class", "list-group-item list-group-item-success");
-                	break;
-                case "nightmessage":
-                	addToLog(message[i].info);
-                	break;
-                case "gamephase":
-                	// This is the current gamephase! :3
                 	break;
                 case "won":
                 	won();
@@ -142,10 +145,8 @@ function receivePrivateMessage(message) {
 }
 
 function waitPhase() {
+	phase = "wait";
 	loadNoAction();
-//	var elem = document.getElementById("blackout");
-//	elem.setAttribute("class", "blackout phase-in");
-	phaseout(elem, 2);
 }
 
 function dayPhase() {
@@ -207,7 +208,7 @@ function killPlayer(playerid, playername, playerrole, alignment) {
 	if(playerid == owner)
 		dead();
 	
-	addToLog(nickname + " was murdered during the deepest, darkest hours of the night.");
+	addToLog(playername + " was murdered during the deepest, darkest hours of the night.");
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
 
@@ -436,13 +437,13 @@ function nightaction(playerid) {
 
 function updateNightAction(target, act) {
 	var elem = document.getElementById("ab" + target);
-	console.log("elem: ab" + target);
 	elem.disabled = false;
 	
 	if(act) {
 		nightact = target;
 		elem.setAttribute("class", "btn btn-night btn-default");
 	} else {
+		nightact = null;
 		elem.setAttribute("class", "btn btn-night btn-nightact");
 	}
 }
@@ -461,6 +462,9 @@ function someoneVoted(playerid, votedon, votes, status) {
 		} else if(status === "-") { // Means they removed their vote from this player			
 			elem.setAttribute("class", "btn btn-info btn-block");
 			addToLog("You removed your vote from " + playerlist[votedon]);
+		} else if(status === "x") {
+			voted = null;
+			elem.setAttribute("class", "btn btn-info btn-block");
 		}
 	} else {
 		if(status === "+") {

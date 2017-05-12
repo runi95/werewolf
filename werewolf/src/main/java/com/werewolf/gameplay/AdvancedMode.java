@@ -74,7 +74,7 @@ public class AdvancedMode implements GameMode {
     		if(!checkVotes(lobbyEntity, voteTarget))
     			messageList.add(new LobbyMessage("updatevotestatus", voter.getId(), voteTarget.getId(), Integer.toString(voteTarget.getVotes()), "+"));
     	} else {
-    		if(voter.getVoted().equals(voteTarget.getId())) {
+    		if(voter.getVoted() != null && voter.getVoted().equals(voteTarget.getId())) {
     			voteTarget.setVotes(voteTarget.getVotes() - 1);
     			voter.setVoted(null);
     		}
@@ -316,7 +316,7 @@ public class AdvancedMode implements GameMode {
 		waitPhase(lobbyEntity, "nightphase");
 		
 		// Setting all votes to 0 and telling clients about the change
-		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getVotes() != 0) p.setVotes(0); if(p.getVoted() != null) broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("updatevotestatus", p.getId(), p.getVoted(), "0")}))));});
+		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getVotes() != 0) p.setVotes(0); if(p.getVoted() != null) { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("updatevotestatus", p.getId(), p.getVoted(), "0", "x")})))); p.setVoted(null);}});
 	}
 	
 	private Map<String, EmulationCharacter> setUpCharacters(LobbyEntity lobbyEntity) {

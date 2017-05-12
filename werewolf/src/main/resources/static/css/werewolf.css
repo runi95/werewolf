@@ -90,6 +90,7 @@
 }
 
 .phase {
+  pointer-events: none;
   transition: 1s ease;
   position: absolute;
   width: 100%;

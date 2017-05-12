@@ -160,7 +160,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		LobbyPlayer voteonPlayer = voter.getLobby().getAlivePlayer(voteon);
 		if (voteonPlayer == null || (voter.getVoted() != null && voter.getVoted().equals(voteon) && status)
-				|| voter.getLobby().getDeadPlayer(voter.getId()) != null || voter.getId().equals(voteon))
+				|| voter.getLobby().getDeadPlayer(voter.getId()) != null || voter.getId().equals(voteon) || voter.getLobby().getDeadPlayer(voteon) != null)
 			return;
 
 		LobbyPlayer oldVoteTarget = null;
