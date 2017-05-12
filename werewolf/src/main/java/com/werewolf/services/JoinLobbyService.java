@@ -18,6 +18,7 @@ public interface JoinLobbyService {
     void setReadyStatus(String username, boolean ready);
     
     void getPlayers(String username);
+    void initializeLobby(String username);
     void initializeGame(String username);
     void nightAction(String username, String target, boolean act);
     void getGamePhase(String username);

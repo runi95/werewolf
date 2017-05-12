@@ -80,7 +80,7 @@ public class PreGameController {
         if(lobbyEntity != null)
         	return new ModelAndView("lobby", "gamecode", lobbyEntity.getGameId());
         else
-        	return new ModelAndView("home");
+        	return new ModelAndView("redirect:/");
     }
 
 }

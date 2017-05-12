@@ -1,6 +1,6 @@
 <#import "websocketmaster.ftlh" as m/>
 <@m.master>
-	<div id="lobby" class="show">
+	<div id="lobby" class="hide">
 		<nav class="navbar navbar-static-top">
 			<ul class="breadcrumb">
         		<li id="lobbyref" class="breadcrumbs-text breadcrumbs-text-current" onclick="loadLobby()">Lobby</li>
@@ -75,8 +75,7 @@
 			</div>
 			<div id="rolediv" class="hide">
 				<h1 class="panel-title"><b id="rolename"></b></h1>
-				<table class="table table-condensed">
-					<tbody id="rolelist"></tbody>
+				<table id="roletable" class="table table-condensed">
 			</div>
 		</nav>
 	</div>

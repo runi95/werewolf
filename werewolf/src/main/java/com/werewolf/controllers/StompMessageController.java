@@ -55,6 +55,9 @@ public class StompMessageController {
 		case "getplayers":
 			joinLobbyService.getPlayers(username);
 			break;
+		case "initializelobby":
+			joinLobbyService.initializeLobby(username);
+			break;	
 		case "initializegame":
 			joinLobbyService.initializeGame(username);
 			break;

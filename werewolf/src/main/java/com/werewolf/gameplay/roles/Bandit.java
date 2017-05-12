@@ -35,7 +35,7 @@ public class Bandit implements Evil {
 
 	@Override
 	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
-		game.kill(self, target);
+		game.voteEvilKill(self, target);
 	}
 
 }

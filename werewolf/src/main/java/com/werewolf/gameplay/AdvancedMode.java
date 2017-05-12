@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
+import com.werewolf.gameplay.roles.Jester;
+import com.werewolf.gameplay.roles.King;
 import com.werewolf.services.JoinLobbyService;
 
 @Service
@@ -71,7 +73,7 @@ public class AdvancedMode implements GameMode {
     		voteTarget.setVotes(voteTarget.getVotes() + 1);
     		voter.setVoted(voteTarget.getId());
     	
-    		if(!checkVotes(lobbyEntity, voteTarget))
+    		if(!checkVotes(voter, lobbyEntity, voteTarget))
     			messageList.add(new LobbyMessage("updatevotestatus", voter.getId(), voteTarget.getId(), Integer.toString(voteTarget.getVotes()), "+"));
     	} else {
     		if(voter.getVoted() != null && voter.getVoted().equals(voteTarget.getId())) {
@@ -86,11 +88,11 @@ public class AdvancedMode implements GameMode {
 			broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
 	}
 	
-	private boolean checkVotes(LobbyEntity lobbyEntity, LobbyPlayer latestVotedOn) {
+	private boolean checkVotes(LobbyPlayer voter, LobbyEntity lobbyEntity, LobbyPlayer latestVotedOn) {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		LobbyEntity lobby = latestVotedOn.getLobby();
 
-		if (latestVotedOn.getVotes() > (Math.ceil(lobby.getAliveCount() / 2.0))) {
+		if (latestVotedOn.getVotes() > (Math.floor(lobby.getAliveCount() / 2.0))) {
 			lobby.addDeadPlayer(latestVotedOn);
 
 			messageList.add(new LobbyMessage("lynch", latestVotedOn.getId(), latestVotedOn.getNickname(),
@@ -99,6 +101,18 @@ public class AdvancedMode implements GameMode {
 			if(lobby.getPhaseTime() > 3)
 				lobby.setPhaseTime(3);
 //			waitPhase(lobbyEntity, "nightphase");
+		} else if (voter.getRole() instanceof King) {
+			lobby.addDeadPlayer(latestVotedOn);
+
+			messageList.add(new LobbyMessage("kinglynch", latestVotedOn.getId(), latestVotedOn.getNickname(),
+					latestVotedOn.getRole().getName(), latestVotedOn.getAlignment()));
+			
+			if(latestVotedOn.getRole() instanceof Jester) {
+				new LobbyMessage("jesterkill", voter.getId(), voter.getNickname(), voter.getRole().getName(), voter.getAlignment());
+			}
+			
+			if(lobby.getPhaseTime() > 3)
+				lobby.setPhaseTime(3);
 		}
 		
 		if(!messageList.isEmpty()) {
@@ -280,7 +294,7 @@ public class AdvancedMode implements GameMode {
 		for(EmulationCharacter emulationChar : emulationCharacters.values()) {
 			List<LobbyMessage> messageList = new ArrayList<>();
 			
-			emulationChar.getMessageList().forEach((msg) -> messageList.add(new LobbyMessage("nightmessage", msg)));
+			messageList.addAll(emulationChar.getMessageList());
 			
 			privateMessage(emulationChar.getLobbyPlayer().getUser().getUsername(), JoinLobbyService.convertObjectToJson(messageList));
 		}
@@ -291,6 +305,8 @@ public class AdvancedMode implements GameMode {
 		
 		// Setting all targets to null and telling clients about the change
 		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getTarget() != null) { privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("unnightaction", p.getTarget())})))); p.setTarget(null);}});
+	
+		lobbyEntity.setRounds(lobbyEntity.getRounds() + 1);
 	}
 	
 	private void startDay(LobbyEntity lobbyEntity) {

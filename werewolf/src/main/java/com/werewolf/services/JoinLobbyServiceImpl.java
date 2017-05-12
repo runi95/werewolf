@@ -13,7 +13,6 @@ import com.werewolf.gameplay.Evil;
 import com.werewolf.gameplay.GameModes;
 import com.werewolf.gameplay.Good;
 import com.werewolf.gameplay.Neutral;
-import com.werewolf.gameplay.NeutralEvil;
 import com.werewolf.gameplay.RoleInterface;
 import com.werewolf.gameplay.roles.Amnesiac;
 import com.werewolf.gameplay.roles.Bandit;
@@ -188,8 +187,31 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 				else
 					messageList.add(new LobbyMessage("join", lp.getId(), lp.getNickname()));
 			}
+			if(lobbyEntity.getStartedState())
+				messageList.add(new LobbyMessage("lobbyready"));
 		}
 
+		if (!messageList.isEmpty())
+			privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));
+	}
+	
+	@Override
+	public void initializeLobby(String username) {
+		List<LobbyMessage> messageList = new ArrayList<>();
+
+		LobbyPlayer lobbyPlayer = getPlayerFromUsername(username);
+		if (lobbyPlayer == null)
+			return;
+		
+		LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
+		if(lobbyEntity == null)
+			return;
+		
+		if(lobbyEntity.getStartedState())
+			messageList.add(new LobbyMessage("lobbyready"));
+		else
+			messageList.add(new LobbyMessage("lobby"));
+		
 		if (!messageList.isEmpty())
 			privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));
 	}
@@ -205,6 +227,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
 
 		if (lobbyEntity != null) {
+			if(lobbyPlayer.getAlignment().equals("Evil"))
+				lobbyEntity.getEvilTeam().forEach((p) -> messageList.add(new LobbyMessage("addinvalidtarget", p.getId(), p.getRole().getName(), p.getRole().getAlignment())));
+			
 			lobbyEntity.getAlivePlayers().forEach((lp) -> messageList
 					.add(new LobbyMessage("joinalive", lp.getId(), lp.getNickname(), Integer.toString(lp.getVotes()))));
 			lobbyEntity.getDeadPlayers().forEach((lp) -> messageList.add(new LobbyMessage("joindead", lp.getId(),
@@ -322,14 +347,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		case 8:
 			lottery.add(Evil.getRandomEvil());
 		case 7:
-			lottery.add(new Marauder());
-			lottery.add(new Bandit());
-			lottery.add(NeutralEvil.getRandomNeutralEvil());
-			lottery.add(Good.getRandomGood());
 			lottery.add(new Priest());
-			lottery.add(new Inquisitor());
-			lottery.add(new King());
-			break;
 		case 6:
 			lottery.add(new Marauder());
 			lottery.add(new Bandit());
@@ -354,7 +372,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		case 3:
 			lottery.add(new Bard());
 		case 2:
-			lottery.add(new Guard());
+			lottery.add(new Amnesiac());
 		case 1:
 			lottery.add(new Marauder());
 		}
@@ -368,6 +386,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 			lobbyPlayer.setRole(role);
 			lobbyPlayer.setAlignment(role.getAlignment());
+			if (role.getAlignment().equals("Evil"))
+				lobbyEntity.addToTeamEvil(lobbyPlayer);
 		}
 
 		return lobbyPlayers;
@@ -385,7 +405,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		if (lobbyEntity.getPlayerSize() == 0) {
 			lobbyMap.remove(lobbyEntity.getGameId());
 		} else {
-			messageList.add(new LobbyMessage("leave", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
+			if(!lobbyEntity.getStartedState())
+				messageList.add(new LobbyMessage("leave", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
 		}
 
 		if (!messageList.isEmpty())

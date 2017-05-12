@@ -35,8 +35,7 @@ public class Knight implements Good {
 
 	@Override
 	public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
-		// TODO Auto-generated method stub
-		
+		game.knightKill(self, target);
 	}
 
 }

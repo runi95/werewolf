@@ -14,8 +14,8 @@ var alive = true;
 
 function setConnected(connected) {
     if(connected) {
-        broadcastMessage({"action":"join"});
-        sendPrivateMessage({"action":"getplayers"});
+    	sendPrivateMessage({"action":"getplayers"});
+        sendPrivateMessage({"action":"initializelobby"});
     } else {
         broadcastMessage({"action":"leave"});
     }
@@ -77,11 +77,17 @@ function receiveBroadcastMessage(message) {
                 case "updatereadystatus":
                 	someoneClickedReady(message[i].playerid, message[i].info, message[i].additionalinfo);
                 	break;
+                case "kinglynch":
+                	lynchPlayer(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable, true);
+                	break;
                 case "lynch":
-                	lynchPlayer(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
+                	lynchPlayer(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable, false);
                 	break;
                 case "kill":
-                	killPlayer(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
+                	killPlayer(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable, false);
+                	break;
+                case "jesterkill":
+                	killPlayer(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable, true);
                 	break;
                 case "leave":
                 	removePlayer(message[i].playerid, message[i].info);
@@ -121,8 +127,11 @@ function receivePrivateMessage(message) {
                 case "joindead":
                 	addToGraveyard(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
-                case "gamephase":
-                	// This is the current gamephase! :3
+                case "lobby":
+                	prepareLobby();
+                	break;
+                case "lobbyready":
+                	loadGame();
                 	break;
                 case "owner":
                 	owner = message[i].playerid;
@@ -144,6 +153,18 @@ function receivePrivateMessage(message) {
     }
 }
 
+function prepareLobby() {
+	var lobby = document.getElementById("lobby");
+	lobby.setAttribute("class", "show");
+	broadcastMessage({"action":"join"});
+}
+
+function addToInvalidTargets(playerid, rolename, alignment) {
+	if (!invalidtargets.hasOwnProperty(playerid)) {
+		invalidtargets[playerid] = {"role":rolename, "alignment":alignment};
+	}
+}
+
 function waitPhase() {
 	phase = "wait";
 	loadNoAction();
@@ -161,8 +182,12 @@ function dayPhase() {
 	loadDayAction();
 }
 
-function lynchPlayer(playerid, playername, playerrole, alignment) {
-	addToLog(playerlist[playerid] + " was lynched by an angry mob!");
+function lynchPlayer(playerid, playername, playerrole, alignment, kinged) {
+	if(kinged) {
+		addToLog(playerlist[playerid] + " executed by the king himself!");
+	} else {
+		addToLog(playerlist[playerid] + " was lynched by an angry mob!");
+	}
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
 
@@ -204,11 +229,15 @@ function phaseout(elem, delay) {
 	setTimeout(function() {elem.setAttribute("class", "phase phase-out"); }, delay*1000);
 }
 
-function killPlayer(playerid, playername, playerrole, alignment) {
+function killPlayer(playerid, playername, playerrole, alignment, jester) {
 	if(playerid == owner)
 		dead();
 	
-	addToLog(playername + " was murdered during the deepest, darkest hours of the night.");
+	if(jester) {
+		addToLog(playername + " was haunted to death by a jester.");
+	} else {
+		addToLog(playername + " was murdered during the deepest, darkest hours of the night.");
+	}
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
 
@@ -254,10 +283,24 @@ function addToActionList(playerid, playername, votes) {
 		nightname.setAttribute("class", "text-center");
 		nightrow.setAttribute("id", "an" + playerid);
 		if(playerid != owner) {
-			nightbtn = document.createElement("button");
+			if (!invalidtargets.hasOwnProperty(playerid)) {
+				nightbtn = document.createElement("button");
+				nightbtn.setAttribute("id", "ab" + playerid);
+				nightbtn.setAttribute("class", "btn btn-night btn-nightact btn-block");
+				nightbtn.setAttribute("onclick", "nightaction(" + playerid + ")");
+				night.appendChild(nightbtn);
+			} else {
+				nightbtn = document.createElement("b");
+				nightbtn.setAttribute("id", "ab" + playerid);
+				nightbtn.setAttribute("class", "text-center center-block text-info");
+				nightbtn.innerHTML = "Ally";
+				night.appendChild(nightbtn);
+			}
+		} else {
+			nightbtn = document.createElement("b");
 			nightbtn.setAttribute("id", "ab" + playerid);
-			nightbtn.setAttribute("class", "btn btn-night btn-nightact btn-block");
-			nightbtn.setAttribute("onclick", "nightaction(" + playerid + ")");
+			nightbtn.setAttribute("class", "text-center center-block text-success");
+			nightbtn.innerHTML = "Yourself";
 			night.appendChild(nightbtn);
 		}
 		nightrow.appendChild(nightname);
@@ -601,7 +644,16 @@ function setRole(name, alignment, goal, description) {
 	var rolename = document.getElementById("rolename");
 	rolename.innerHTML = name;
 	
-	var rolelist = document.getElementById("rolelist");
+	var roletable = document.getElementById("roletable");
+	var rolelist = null;
+	
+	rolelist = document.getElementById("rolelist");
+	if(rolelist != null) {
+		rolelist.remove();
+	} else {
+		rolelist = document.createElement("tbody");
+	}
+	
 	var alignmentrow = document.createElement("tr");
 	var goalrow = document.createElement("tr");
 	var descriptionrow = document.createElement("tr");
@@ -658,6 +710,8 @@ function setRole(name, alignment, goal, description) {
 	rolelist.appendChild(alignmentrow);
 	rolelist.appendChild(goalrow);
 	rolelist.appendChild(descriptionrow);
+	
+	roletable.appendChild(rolelist);
 }
 
 // This function runs on initialization

@@ -1,9 +1,7 @@
 package com.werewolf.entities;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import com.werewolf.data.JoinLobbyForm;
@@ -25,6 +23,7 @@ public class LobbyEntity {
 	private Map<String, LobbyPlayer> lobbyplayers = new HashMap<String, LobbyPlayer>();
 	private Map<String, LobbyPlayer> alivePlayers = new HashMap<String, LobbyPlayer>();
 	private Map<String, LobbyPlayer> deadPlayers = new HashMap<String, LobbyPlayer>();
+	private Map<String, LobbyPlayer> teamEvil = new HashMap<String, LobbyPlayer>();
 
 	// Amount of players that has clicked ready during the lobby phase
 	private int readyPlayerCount = 0;
@@ -33,10 +32,6 @@ public class LobbyEntity {
 	private boolean gamestarted = false;
 	
 	private GameModes game;
-
-	// Keep track of unused id's
-	private LinkedList<String> nextPlayerId = new LinkedList<>(Arrays.asList(new String[] { "1", "2", "3", "4", "5",
-			"6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" }));
 
 	public LobbyEntity(String gameid) {
 		this.gameid = gameid;
@@ -79,6 +74,9 @@ public class LobbyEntity {
 		if (alivePlayer.getId() == null)
 			return;
 
+		if(deadPlayers.containsKey(alivePlayer.getId()))
+			deadPlayers.remove(alivePlayer.getId());
+		
 		alivePlayers.put(alivePlayer.getId(), alivePlayer);
 	}
 
@@ -88,6 +86,17 @@ public class LobbyEntity {
 
 	public Collection<LobbyPlayer> getAlivePlayers() {
 		return alivePlayers.values();
+	}
+	
+	public void addToTeamEvil(LobbyPlayer lobbyPlayer) {
+		if(lobbyPlayer == null || lobbyPlayer.getId() == null || teamEvil.containsKey(lobbyPlayer.getId()))
+			return;
+		
+		teamEvil.put(lobbyPlayer.getId(), lobbyPlayer);
+	}
+	
+	public Collection<LobbyPlayer> getEvilTeam() {
+		return teamEvil.values();
 	}
 
 	public LobbyPlayer getDeadPlayer(String playerid) {
@@ -126,16 +135,20 @@ public class LobbyEntity {
 		if (player.getId() == null || !lobbyplayers.containsKey(player.getId()))
 			return;
 
-		lobbyplayers.remove(player.getId());
-		nextPlayerId.add(player.getId());
+		if(!gamestarted)
+			lobbyplayers.remove(player.getId());
 	}
 
 	public LobbyPlayer addPlayer(JoinLobbyForm joinForm) {
-		if (nextPlayerId.isEmpty())
+		if (lobbyplayers.size() >= 20)
 			return null;
 
-		LobbyPlayer lobbyPlayer = new LobbyPlayer(nextPlayerId.getFirst(), joinForm.getUser(), this);
-		nextPlayerId.removeFirst();
+		LobbyPlayer playerAlreadyInLobby = lobbyplayers.get(Long.toString(joinForm.getUser().getId()));
+		
+		if(playerAlreadyInLobby != null)
+			return playerAlreadyInLobby;
+		
+		LobbyPlayer lobbyPlayer = new LobbyPlayer(Long.toString(joinForm.getUser().getId()), joinForm.getUser(), this);
 		lobbyPlayer.setNickname(joinForm.getNickname());
 		lobbyplayers.put(lobbyPlayer.getId(), lobbyPlayer);
 

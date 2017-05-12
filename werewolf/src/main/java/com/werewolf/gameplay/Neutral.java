@@ -2,12 +2,14 @@ package com.werewolf.gameplay;
 
 import java.util.Random;
 
+import com.werewolf.gameplay.roles.Jester;
+
 public interface Neutral extends RoleInterface {
 	public static final String alignment = "Neutral";
 	public static final String goal = "Survive until the end of the game";
 	
 	public static final Neutral[] neutralUnique = new Neutral[] {};
-	public static final Neutral[] neutralNonUnique = new Neutral[] {};
+	public static final Neutral[] neutralNonUnique = new Neutral[] { new Jester() };
 
 	/**
 	 * Unique roles are limited to only one player per game
