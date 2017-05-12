@@ -12,6 +12,14 @@ var owner = null; // ID of the user
 var phase = null;
 var alive = true;
 
+if(!console.WebSocket()) {
+    var notSupported = document.createElement("b");
+    var noweb = document.getElementById("nowebsocket");
+    notSupported.setAttribute("class", "text-danger");
+    notSupported.innerHTML = "ERROR: You do not support websockets!";
+    noweb.appendChild(notSupported);
+}
+
 function setConnected(connected) {
     if(connected) {
     	sendPrivateMessage({"action":"getplayers"});
