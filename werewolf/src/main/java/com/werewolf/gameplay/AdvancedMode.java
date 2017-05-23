@@ -109,8 +109,6 @@ public class AdvancedMode implements GameMode {
 			if (role.getAlignment().equals("Evil"))
 				lobbyEntity.addToTeamEvil(lobbyPlayer);
 		}
-
-		lobbyPlayers.forEach((p) -> lobbyEntity.addAlivePlayer(p));
 	}
 	
 	@Override
