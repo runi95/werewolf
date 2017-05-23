@@ -110,7 +110,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(),
 				Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
 
-		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 4)
+		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 2)
 			loadGame(lobbyEntity);
 
 		if (!messageList.isEmpty())
@@ -356,9 +356,11 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		if (lobbyEntity.getReadyPlayerCount() != lobbyEntity.getReadyPlayerCount())
 			return;
 
+		createPlayers(lobbyEntity);
+		lobbyEntity.getPlayers().forEach((p) -> lobbyEntity.addAlivePlayer(p));
+		
 		lobbyEntity.setGameMode(GameModes.AdvancedMode);
 		initializeLobby(lobbyEntity);
-		createPlayers(lobbyEntity);
 
 		messageList.add(new LobbyMessage("lobbyready"));
 
