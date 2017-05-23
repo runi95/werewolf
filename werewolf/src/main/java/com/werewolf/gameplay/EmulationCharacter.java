@@ -10,12 +10,12 @@ import com.werewolf.entities.LobbyPlayer;
  */
 
 public class EmulationCharacter {
-	private LobbyPlayer lobbyPlayer;
+	private final LobbyPlayer lobbyPlayer;
 	private String targetid;
 	private RoleInterface role;
 	private LinkedList<LobbyMessage> messageList = new LinkedList<>();
 	
-	public EmulationCharacter(LobbyPlayer lobbyPlayer, RoleInterface role, String targetid) {
+	public EmulationCharacter(final LobbyPlayer lobbyPlayer, RoleInterface role, String targetid) {
 		this.lobbyPlayer = lobbyPlayer;
 		this.role = role;
 		this.targetid = targetid;
@@ -52,5 +52,31 @@ public class EmulationCharacter {
 	public String getInquestMessage() {
 		return role.getInquestMessage();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((lobbyPlayer.getId() == null) ? 0 : lobbyPlayer.getId().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmulationCharacter other = (EmulationCharacter) obj;
+		if (lobbyPlayer.getId() == null) {
+			if (other.lobbyPlayer.getId() != null)
+				return false;
+		} else if (!lobbyPlayer.getId().equals(other.lobbyPlayer.getId()))
+			return false;
+		return true;
+	}
+	
 	
 }

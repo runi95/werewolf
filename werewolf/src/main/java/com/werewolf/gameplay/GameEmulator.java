@@ -7,27 +7,21 @@ import com.werewolf.Messages.LobbyMessage;
 
 public class GameEmulator {
 	private HashMap<EmulationCharacter, EmulationCharacter> blockers = new HashMap<>();
-	private HashMap<EmulationCharacter, EmulationCharacter> blockersReversed = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> killers = new HashMap<>();
-	private HashMap<EmulationCharacter, EmulationCharacter> killersReversed = new HashMap<>();
 	
 	private HashMap<EmulationCharacter, EmulationCharacter> knights = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> healers = new HashMap<>();
-	private HashMap<EmulationCharacter, EmulationCharacter> healersReversed = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> guards = new HashMap<>();
-	private HashMap<EmulationCharacter, EmulationCharacter> guardsReversed = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> inquisitors = new HashMap<>();
-	private HashMap<EmulationCharacter, EmulationCharacter> inquisitorsReversed = new HashMap<>();
 	
 	private EmulationCharacter marauder = null;
 	private EmulationCharacter marauderTarget = null;
 	
 	private HashMap<EmulationCharacter, EmulationCharacter> evilKillVotes = new HashMap<>();
-	private HashMap<EmulationCharacter, EmulationCharacter> evilKillVotesReversed = new HashMap<>();
 
 	private LinkedList<EmulationCharacter> amnesiacs = new LinkedList<>();
 
@@ -41,17 +35,14 @@ public class GameEmulator {
 
 	public void block(EmulationCharacter blocker, EmulationCharacter target) {
 		blockers.put(blocker, target);
-		blockersReversed.put(target, blocker);
 	}
 
 	public void guard(EmulationCharacter guard, EmulationCharacter target) {
 		guards.put(guard, target);
-		guardsReversed.put(target, guard);
 	}
 
 	public void voteEvilKill(EmulationCharacter killer, EmulationCharacter target) {
 		evilKillVotes.put(killer, target);
-		evilKillVotesReversed.put(target, killer);
 	}
 	
 	public void forceEvilKill(EmulationCharacter killer, EmulationCharacter target) {
@@ -61,7 +52,6 @@ public class GameEmulator {
 	
 	public void kill(EmulationCharacter killer, EmulationCharacter target) {
 		killers.put(killer, target);
-		killersReversed.put(target, killer);
 	}
 	
 	public void knightKill(EmulationCharacter knight, EmulationCharacter target) {
@@ -70,12 +60,10 @@ public class GameEmulator {
 
 	public void heal(EmulationCharacter healer, EmulationCharacter target) {
 		healers.put(healer, target);
-		healersReversed.put(target, healer);
 	}
 
 	public void inquest(EmulationCharacter inquisitor, EmulationCharacter target) {
 		inquisitors.put(inquisitor, target);
-		inquisitorsReversed.put(target, inquisitor);
 	}
 
 	public void amnesiac(EmulationCharacter amnesiac) {
@@ -98,10 +86,11 @@ public class GameEmulator {
 	private void prepareEvilTargets() {
 		if(marauderTarget == null) {
 			HashMap<EmulationCharacter, Integer> votes = new HashMap<>();
-			for(EmulationCharacter vote : evilKillVotes.values()) {
+			for(EmulationCharacter voter : evilKillVotes.keySet()) {
+				EmulationCharacter vote = evilKillVotes.get(voter);
 				if(votes.containsKey(vote)) {
 					if(votes.get(vote) > Math.floor(evilKillVotes.size()/2.0)) {
-						kill(evilKillVotesReversed.get(vote), vote);
+						kill(voter, vote);
 						return;
 					} else 
 						votes.put(vote, votes.get(vote) + 1);
@@ -124,20 +113,17 @@ public class GameEmulator {
 				target = killers.get(blocked);
 				if (target != null) {
 					killers.remove(blocked);
-					killersReversed.remove(target);
 					break;
 				}
 
 				target = healers.get(blocked);
 				if (target != null) {
 					healers.remove(blocked);
-					healersReversed.remove(target);
 				}
 
 				target = inquisitors.get(blocked);
 				if (target != null) {
 					inquisitors.remove(blocked);
-					inquisitorsReversed.remove(target);
 				}
 			}
 		}
@@ -148,22 +134,27 @@ public class GameEmulator {
 			EmulationCharacter killed = killers.get(killer);
 
 			if (killed != null) {
-				EmulationCharacter guard = guardsReversed.get(killed);
-				if (guard != null) {
-					EmulationCharacter guarded = guards.get(guard);
-					guarded.addNightMessage("Someone attacked you during the night, but a guard saved you.");
-					killer.addNightMessage("Someone was guarding your target.");
-					guard.addNightMessage("You died while fighting off an attacker.");
-					deadPlayers.add(killer);
-					deadPlayers.add(guard);
-				} else {
-					EmulationCharacter healer = healersReversed.get(killed);
-					if (healer != null) {
-						EmulationCharacter healed = healers.get(healer);
-						healed.addNightMessage("Someone attacked you during the night, but a priest healed you.");
-						healer.addNightMessage("Your target was attacked, but you saved them.");
-						killer.addNightMessage("Your target was saved from the attack.");
-					} else {
+				boolean guarded = false;
+				for(EmulationCharacter guard : guards.keySet()) {
+					if(guard.getTargetid().equals(killed.getLobbyPlayer().getId()) && !guarded) {
+						killed.addNightMessage("Someone attacked you during the night, but a guard saved you.");
+						killer.addNightMessage("Someone was guarding your target.");
+						guard.addNightMessage("You died while fighting off an attacker.");
+						deadPlayers.add(killer);
+						deadPlayers.add(guard);
+					}
+				}
+				if(!guarded) {
+					boolean healed = false;
+					for(EmulationCharacter healer : healers.keySet()) {
+						if(healer.getTargetid().equals(killed.getLobbyPlayer().getId())) {
+							healed = true;
+							killed.addNightMessage("Someone attacked you during the night, but a priest healed you.");
+							healer.addNightMessage("Your target was attacked, but you saved them.");
+							killer.addNightMessage("Your target was saved from the attack.");
+						}
+					}
+					if(!healed) {
 						killed.addNightMessage("Someone attacked you.");
 						deadPlayers.add(killed);
 					}
