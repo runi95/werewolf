@@ -650,9 +650,10 @@ function setRole(name, alignment, goal, description) {
 	rolelist = document.getElementById("rolelist");
 	if(rolelist != null) {
 		rolelist.remove();
-	} else {
-		rolelist = document.createElement("tbody");
 	}
+	
+	rolelist = document.createElement("tbody");
+	rolelist.setAttribute("id", "rolelist");
 	
 	var alignmentrow = document.createElement("tr");
 	var goalrow = document.createElement("tr");
@@ -680,16 +681,16 @@ function setRole(name, alignment, goal, description) {
 	case "Good":
 		alignmentcontent.setAttribute("class", "text-success");
 		break;
-	case "ChaoticGood":
+	case "Chaotic Good":
 		alignmentcontent.setAttribute("class", "text-success");
 		break;
 	case "Evil":
 		alignmentcontent.setAttribute("class", "text-danger");
 		break;
-	case "ChaoticEvil":
+	case "Chaotic Evil":
 		alignmentcontent.setAttribute("class", "text-danger");
 		break;
-	case "NeutralEvil":
+	case "Neutral Evil":
 		alignmentcontent.setAttribute("class", "text-warning");
 		break;
 	case "Neutral":
