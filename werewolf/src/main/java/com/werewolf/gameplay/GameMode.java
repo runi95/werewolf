@@ -6,8 +6,12 @@ import com.werewolf.entities.LobbyPlayer;
 /**
  * This is the interface for any GameMode, every public method
  * is going to be used by the JoinLobbyServiceImpl
- * 
- * broadcast and private messages are messages sent to clients,
+ * <p>
+ * Required variable for every GameMode class:
+ *  "@Autowired
+ *  SimpMessagingTemplate simpTemplate;"
+ * <p>
+ * broadcastMessage() and / or privateMessage() messages are messages sent to clients,
  * information about the different messages should be contained in
  * the method's javadoc.
  */
