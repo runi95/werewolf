@@ -356,10 +356,10 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		if (lobbyEntity.getReadyPlayerCount() != lobbyEntity.getReadyPlayerCount())
 			return;
 
-		createPlayers(lobbyEntity);
 		lobbyEntity.getPlayers().forEach((p) -> lobbyEntity.addAlivePlayer(p));
 		
 		lobbyEntity.setGameMode(GameModes.AdvancedMode);
+		createPlayers(lobbyEntity);
 		initializeLobby(lobbyEntity);
 
 		messageList.add(new LobbyMessage("lobbyready"));
