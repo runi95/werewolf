@@ -19,6 +19,11 @@ public interface GameMode {
 	 */
 	public void initalizeGame(LobbyEntity lobbyEntity);
 	
+	/** This method is responsible for setting a role and alignment for every player in the lobby
+	 * then do lobbyEntity.addAlivePlayer(player);
+	 */
+	public void setRoles(LobbyEntity lobbyEntity);
+	
 	/** 
 	 * Runs whenever someone votes, this method should update voteTarget's vote counter
 	 * and check if there are enough voters to lynch a player.

@@ -2,10 +2,12 @@ package com.werewolf.gameplay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -14,8 +16,16 @@ import org.springframework.stereotype.Service;
 import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
+import com.werewolf.gameplay.roles.Amnesiac;
+import com.werewolf.gameplay.roles.Bandit;
+import com.werewolf.gameplay.roles.Bard;
+import com.werewolf.gameplay.roles.Guard;
+import com.werewolf.gameplay.roles.Inquisitor;
 import com.werewolf.gameplay.roles.Jester;
 import com.werewolf.gameplay.roles.King;
+import com.werewolf.gameplay.roles.Knight;
+import com.werewolf.gameplay.roles.Marauder;
+import com.werewolf.gameplay.roles.Priest;
 import com.werewolf.services.JoinLobbyService;
 
 @Service
@@ -32,6 +42,75 @@ public class AdvancedMode implements GameMode {
 			lobbyEntity.setStartedState(true);
 			initializeGameWait(lobbyEntity, "nightphase");
 		}
+	}
+	
+	@Override
+	public void setRoles(LobbyEntity lobbyEntity) {
+		Collection<LobbyPlayer> lobbyPlayers = lobbyEntity.getPlayers();
+		List<RoleInterface> lottery = new ArrayList<>();
+		int size = lobbyPlayers.size();
+		switch (size) {
+		case 15:
+			lottery.add(new Bard());
+		case 14:
+			lottery.add(ChaoticEvil.getRandomChaoticEvil());
+		case 13:
+			lottery.add(new Guard());
+		case 12:
+			lottery.add(new Inquisitor());
+		case 11:
+			lottery.add(Neutral.getRandomNeutral());
+		case 10:
+			lottery.add(new Knight());
+		case 9:
+			lottery.add(RoleInterface.getRandomRole());
+		case 8:
+			lottery.add(Evil.getRandomEvil());
+		case 7:
+			lottery.add(new Priest());
+		case 6:
+			lottery.add(new Marauder());
+			lottery.add(new Bandit());
+			lottery.add(RoleInterface.getRandomRole());
+			lottery.add(Good.getRandomGood());
+			lottery.add(new Inquisitor());
+			lottery.add(new King());
+			break;
+		case 5:
+			lottery.add(new Marauder());
+			lottery.add(new Bandit());
+			lottery.add(Good.getRandomGood());
+			lottery.add(new Amnesiac());
+			lottery.add(new King());
+			break;
+		case 4:
+			lottery.add(new Marauder());
+			lottery.add(new Jester());
+			lottery.add(new Priest());
+			lottery.add(new King());
+			break;
+		case 3:
+			lottery.add(new Bard());
+		case 2:
+			lottery.add(new Amnesiac());
+		case 1:
+			lottery.add(new Marauder());
+		}
+
+		for (LobbyPlayer lobbyPlayer : lobbyPlayers) {
+			Random random = new Random();
+			int sz = lottery.size();
+			int rng = random.nextInt(sz);
+			RoleInterface role = lottery.get(rng);
+			lottery.remove(rng);
+
+			lobbyPlayer.setRole(role);
+			lobbyPlayer.setAlignment(role.getAlignment());
+			if (role.getAlignment().equals("Evil"))
+				lobbyEntity.addToTeamEvil(lobbyPlayer);
+		}
+
+		lobbyPlayers.forEach((p) -> lobbyEntity.addAlivePlayer(p));
 	}
 	
 	@Override
