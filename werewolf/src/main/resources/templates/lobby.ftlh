@@ -1,22 +1,32 @@
 <#import "websocketmaster.ftlh" as m/>
 <@m.master>
 	<div id="lobby" class="hide">
-		<nav class="navbar navbar-static-top">
-			<ul class="breadcrumb">
-        		<li id="lobbyref" class="breadcrumbs-text breadcrumbs-text-current" onclick="loadLobby()">Lobby</li>
-            	<li id="optionsref" class="breadcrumbs-text" onclick="loadOptions()">Options</li>
-			</ul>
-			<div id="lobbydiv" class="show">
-				<div class="page-header">
-    				<h1>Lobby code: <b class="text-primary">${gamecode}</b></h1>
-    			</div>
-    			<ul id="plist" class="list-group"></ul>
-				<button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
-			</div>
-			<div id="optionsdiv" class="hide">
-				
+		<nav class="navbar navbar-inverse navbar-static-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>                        
+					</button>
+					<p class="navbar-text">${gamecode}</p>
+				</div>
+				<div class="collapse navbar-collapse" id="myNavbar">
+					<ul class="nav navbar-nav">
+						<li id="lobbyref" class="active"><p onclick="loadLobby()">Lobby</p></li>
+						<li id="optionsref"><p onclick="loadOptions()">Options</p></li>
+					</ul>
+				</div>
 			</div>
 		</nav>
+		<div id="lobbydiv" class="show">
+			<div class="page-header">
+    			<h1>Lobby code: <b class="text-primary">${gamecode}</b></h1>
+    		</div>
+    		<ul id="plist" class="list-group"></ul>
+			<button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
+		</div>
+		<div id="optionsdiv" class="hide"></div>
 	</div>
 	<div id="game" class="hide">
 		<nav class="navbar navbar-static-top">

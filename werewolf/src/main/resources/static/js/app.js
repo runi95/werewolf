@@ -432,9 +432,9 @@ function loadLobby() {
 	var lobbydiv = document.getElementById("lobbydiv");
 	var optionsref = document.getElementById("optionsref");
 	var optionsdiv = document.getElementById("optionsdiv");
-	lobbyref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	lobbyref.setAttribute("class", "active");
 	lobbydiv.setAttribute("class", "show");
-	optionsref.setAttribute("class", "breadcrumbs-text");
+	optionsref.setAttribute("class", "");
 	optionsdiv.setAttribute("class", "hide");
 }
 
@@ -443,9 +443,9 @@ function loadOptions() {
 	var lobbydiv = document.getElementById("lobbydiv");
 	var optionsref = document.getElementById("optionsref");
 	var optionsdiv = document.getElementById("optionsdiv");
-	lobbyref.setAttribute("class", "breadcrumbs-text");
+	lobbyref.setAttribute("class", "");
 	lobbydiv.setAttribute("class", "hide");
-	optionsref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	optionsref.setAttribute("class", "active");
 	optionsdiv.setAttribute("class", "show");
 }
 

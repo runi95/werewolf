@@ -1,6 +1,101 @@
 /*
  * Globals
  */
+ 
+ .navbar-nav > li > p {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+ 
+ .nav > li > p {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+}
+.nav > li > p:hover,
+.nav > li > p:focus {
+	cursor: pointer;
+  text-decoration: none;
+  background-color: #eee;
+}
+.nav > li.disabled > p {
+  color: #777;
+}
+.nav > li.disabled > p:hover,
+.nav > li.disabled > p:focus {
+  color: #777;
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+.nav .open > p,
+.nav .open > p:hover,
+.nav .open > p:focus {
+  background-color: #eee;
+  border-color: #337ab7;
+}
+
+.navbar-default .navbar-nav > li > p {
+  color: #777;
+}
+.navbar-default .navbar-nav > li > p:hover,
+.navbar-default .navbar-nav > li > p:focus {
+  color: #333;
+  background-color: transparent;
+}
+.navbar-default .navbar-nav > .active > p,
+.navbar-default .navbar-nav > .active > p:hover,
+.navbar-default .navbar-nav > .active > p:focus {
+  color: #555;
+  background-color: #e7e7e7;
+}
+.navbar-default .navbar-nav > .disabled > p,
+.navbar-default .navbar-nav > .disabled > p:hover,
+.navbar-default .navbar-nav > .disabled > p:focus {
+  color: #ccc;
+  background-color: transparent;
+}
+ 
+ .navbar-inverse .navbar-nav > li > p {
+  color: #9d9d9d;
+}
+.navbar-inverse .navbar-nav > li > p:hover,
+.navbar-inverse .navbar-nav > li > p:focus {
+  color: #fff;
+  background-color: transparent;
+}
+.navbar-inverse .navbar-nav > .active > p,
+.navbar-inverse .navbar-nav > .active > p:hover,
+.navbar-inverse .navbar-nav > .active > p:focus {
+  color: #fff;
+  background-color: #080808;
+}
+.navbar-inverse .navbar-nav > .disabled > p,
+.navbar-inverse .navbar-nav > .disabled > p:hover,
+.navbar-inverse .navbar-nav > .disabled > p:focus {
+  color: #444;
+  background-color: transparent;
+}
+ 
+ .navbar-nav > li > p{
+  color: #fff; /* IE8 proofing */
+  color: rgba(255,255,255,.75);
+border-bottom: 2px solid transparent;
+ }
+
+.navbar-nav > li > p:hover,
+.navbar-nav > li > p:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255,255,255,.25);
+}
+.navbar-nav > .active > p,
+.navbar-nav > .active > p:hover,
+.navbar-nav > .active > p:focus {
+  color: #fff;
+  border-bottom-color: #fff;
+}
 
 .absolute-center {
 	position: fixed;
@@ -145,6 +240,14 @@
     border: 1px solid #333;
 }
 
+.list-group-item {
+	text-shadow: none;	
+}
+
+.list-group-item-default {
+	color: #505050;
+}
+
 /*
  * Base structure
  */
@@ -154,6 +257,7 @@ body {
   height: 100%;
   background-color: #333;
 }
+
 body {
   color: #fff;
   text-align: center;
@@ -184,116 +288,4 @@ body {
 /* Padding for spacing */
 .inner {
   padding: 30px;
-}
-
-
-/*
- * Header
- */
-.masthead-brand {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.masthead-nav > li {
-  display: inline-block;
-}
-.masthead-nav > li + li {
-  margin-left: 20px;
-}
-.masthead-nav > li > a {
-  padding-right: 0;
-  padding-left: 0;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff; /* IE8 proofing */
-  color: rgba(255,255,255,.75);
-  border-bottom: 2px solid transparent;
-}
-.masthead-nav > li > a:hover,
-.masthead-nav > li > a:focus {
-  background-color: transparent;
-  border-bottom-color: #a9a9a9;
-  border-bottom-color: rgba(255,255,255,.25);
-}
-.masthead-nav > .active > a,
-.masthead-nav > .active > a:hover,
-.masthead-nav > .active > a:focus {
-  color: #fff;
-  border-bottom-color: #fff;
-}
-
-.list-group-item {
-	text-shadow: none;	
-}
-
-.list-group-item-default {
-	color: #505050;
-}
-
-@media (min-width: 768px) {
-  .masthead-brand {
-    float: left;
-  }
-  .masthead-nav {
-    float: right;
-  }
-}
-
-
-/*
- * Cover
- */
-
-.cover {
-  padding: 0 20px;
-}
-.cover .btn-lg {
-  padding: 10px 20px;
-  font-weight: bold;
-}
-
-
-/*
- * Footer
- */
-
-.mastfoot {
-  color: #999; /* IE8 proofing */
-  color: rgba(255,255,255,.5);
-}
-
-
-/*
- * Affix and center
- */
-
-@media (min-width: 768px) {
-  /* Pull out the header and footer */
-  .masthead {
-    position: fixed;
-    top: 0;
-  }
-  .mastfoot {
-    position: fixed;
-    bottom: 0;
-  }
-  /* Start the vertical centering */
-  .site-wrapper-inner {
-    vertical-align: middle;
-  }
-  /* Handle the widths */
-  .masthead,
-  .mastfoot,
-  .cover-container {
-    width: 100%; /* Must be percentage or pixels for horizontal alignment */
-  }
-}
-
-@media (min-width: 992px) {
-  .masthead,
-  .mastfoot,
-  .cover-container {
-    width: 700px;
-  }
 }
