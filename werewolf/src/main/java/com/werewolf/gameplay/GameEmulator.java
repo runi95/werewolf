@@ -13,7 +13,6 @@ public class GameEmulator {
 	private HashMap<EmulationCharacter, EmulationCharacter> killersReversed = new HashMap<>();
 	
 	private HashMap<EmulationCharacter, EmulationCharacter> knights = new HashMap<>();
-	private HashMap<EmulationCharacter, EmulationCharacter> knightsReversed = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> healers = new HashMap<>();
 	private HashMap<EmulationCharacter, EmulationCharacter> healersReversed = new HashMap<>();
