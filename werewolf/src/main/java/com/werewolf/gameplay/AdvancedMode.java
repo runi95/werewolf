@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.werewolf.Messages.LobbyMessage;
@@ -29,10 +27,7 @@ import com.werewolf.gameplay.roles.Priest;
 import com.werewolf.services.JoinLobbyService;
 
 @Service
-public class AdvancedMode implements GameMode {
-	
-	@Autowired
-	SimpMessagingTemplate simpTemplate;
+public class AdvancedMode extends GameModeMasterClass {
 	
 	@Override
 	public void initalizeGame(LobbyEntity lobbyEntity) {
@@ -242,7 +237,7 @@ public class AdvancedMode implements GameMode {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		
 		lobbyEntity.setPhase("waitphase");
-		lobbyEntity.setPhaseTime(30);
+		lobbyEntity.setPhaseTime(2);
 		
 		messageList.add(new LobbyMessage("waitphase"));
 		
@@ -354,7 +349,7 @@ public class AdvancedMode implements GameMode {
 	}
 	
 	private void startNight(LobbyEntity lobbyEntity) {
-		lobbyEntity.setPhaseTime(20);
+		lobbyEntity.setPhaseTime(5);
 		new Thread() {
 			public void run() {
 				try {
@@ -402,7 +397,7 @@ public class AdvancedMode implements GameMode {
 	}
 	
 	private void startDay(LobbyEntity lobbyEntity) {
-		lobbyEntity.setPhaseTime(60);
+		lobbyEntity.setPhaseTime(5);
 		new Thread() {
 			public void run() {
 				try {
@@ -433,13 +428,5 @@ public class AdvancedMode implements GameMode {
 		lobbyEntity.getAlivePlayers().forEach((p) -> emulationCharacters.put(p.getId(), new EmulationCharacter(p, p.getRole(), p.getTarget())));
 		
 		return emulationCharacters;
-	}
-	
-	private void broadcastMessage(String gameid, String message) {
-		simpTemplate.convertAndSend("/action/broadcast/" + gameid, message);
-	}
-	
-	private void privateMessage(String user, String message) {
-		simpTemplate.convertAndSendToUser(user, "/action/private", message);
 	}
 }
