@@ -8,7 +8,6 @@ import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.NameDictionary;
 import com.werewolf.entities.User;
 import com.werewolf.gameplay.AdvancedMode;
-import com.werewolf.gameplay.GameModes;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -310,14 +309,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	}
 
 	private void createPlayers(LobbyEntity lobbyEntity) {
-		switch(lobbyEntity.getGameMode()) {
-		case AdvancedMode:
-			advancedGameMode.setRoles(lobbyEntity);
-			break;
-		default:
-			advancedGameMode.setRoles(lobbyEntity);
-			break;
-		}
+		lobbyEntity.getGameMode().setRoles(lobbyEntity);
 	}
 
 	private void leave(LobbyPlayer lobbyPlayer) {
@@ -358,7 +350,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		lobbyEntity.getPlayers().forEach((p) -> lobbyEntity.addAlivePlayer(p));
 		
-		lobbyEntity.setGameMode(GameModes.AdvancedMode);
+		lobbyEntity.setGameMode(advancedGameMode);
 		createPlayers(lobbyEntity);
 		initializeLobby(lobbyEntity);
 
@@ -369,39 +361,18 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	}
 
 	private void initializeLobby(LobbyEntity lobbyEntity) {
-		switch (lobbyEntity.getGameMode()) {
-		case AdvancedMode:
-			advancedGameMode.initalizeGame(lobbyEntity);
-			break;
-		default:
-			advancedGameMode.initalizeGame(lobbyEntity);
-			break;
-		}
+		lobbyEntity.getGameMode().initalizeGame(lobbyEntity);
 	}
 
 	private void lobbyNightAction(LobbyEntity lobbyEntity, LobbyPlayer acter, LobbyPlayer oldTarget, LobbyPlayer target,
 			boolean act) {
-		switch (lobbyEntity.getGameMode()) {
-		case AdvancedMode:
-			advancedGameMode.nightAction(lobbyEntity, acter, oldTarget, target, act);
-			break;
-		default:
-			advancedGameMode.nightAction(lobbyEntity, acter, oldTarget, target, act);
-			break;
-		}
+		lobbyEntity.getGameMode().nightAction(lobbyEntity, acter, oldTarget, target, act);
 	}
 
 	private void lobbyVote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer voteTarget,
 			LobbyPlayer oldVoteTarget, boolean status) {
 
-		switch (lobbyEntity.getGameMode()) {
-		case AdvancedMode:
-			advancedGameMode.vote(lobbyEntity, voter, voteTarget, oldVoteTarget, status);
-			break;
-		default:
-			advancedGameMode.vote(lobbyEntity, voter, voteTarget, oldVoteTarget, status);
-			break;
-		}
+		lobbyEntity.getGameMode().vote(lobbyEntity, voter, voteTarget, oldVoteTarget, status);
 	}
 
 	private void broadcastMessage(String gameid, String message) {

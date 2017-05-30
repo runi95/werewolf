@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.werewolf.data.JoinLobbyForm;
-import com.werewolf.gameplay.GameModes;
+import com.werewolf.gameplay.GameModeMasterClass;
 
 public class LobbyEntity {
 
@@ -31,7 +31,7 @@ public class LobbyEntity {
 	// True if the lobby is in-game and false otherwise
 	private boolean gamestarted = false;
 	
-	private GameModes game;
+	private GameModeMasterClass game;
 
 	public LobbyEntity(String gameid) {
 		this.gameid = gameid;
@@ -167,11 +167,11 @@ public class LobbyEntity {
 		this.readyPlayerCount = readyPlayerCount;
 	}
 
-	public void setGameMode(GameModes game) {
+	public void setGameMode(GameModeMasterClass game) {
 		this.game = game;
 	}
 	
-	public GameModes getGameMode() {
+	public GameModeMasterClass getGameMode() {
 		return game;
 	}
 }
