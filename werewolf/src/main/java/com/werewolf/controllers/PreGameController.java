@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -37,16 +38,16 @@ public class PreGameController {
     JoinLobbyService joinLobbyService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getMainPage(Authentication auth) {
+    public ModelAndView getMainPage(Authentication auth, Principal principal) {
         if(!(auth instanceof AnonymousAuthenticationToken) && auth != null) {
-            return "redirect:/home";
+            return new ModelAndView("redirect:/home");
         }
-        return "main";
+        return new ModelAndView("main", "username", principal.getName());
     }
 
     @RequestMapping(value = "/home")
-    public String getHomePage(@RequestParam Optional<String> error) {
-        return "main";
+    public ModelAndView getHomePage(@RequestParam Optional<String> error, Principal principal) {
+        return new ModelAndView("main", "username", principal.getName());
     }
 
     @RequestMapping(value = "/lobby", method = RequestMethod.GET)
