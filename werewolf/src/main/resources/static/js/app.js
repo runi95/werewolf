@@ -546,13 +546,13 @@ function loadAction() {
 	var gravediv = document.getElementById("gravediv");
 	var roleref = document.getElementById("roleref");
 	var rolediv = document.getElementById("rolediv");
-	actionref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	actionref.setAttribute("class", "active");
 	actiondiv.setAttribute("class", "show");
-	logref.setAttribute("class", "breadcrumbs-text");
+	logref.setAttribute("class", "");
 	logdiv.setAttribute("class", "hide");
-	graveref.setAttribute("class", "breadcrumbs-text");
+	graveref.setAttribute("class", "");
 	gravediv.setAttribute("class", "hide");
-	roleref.setAttribute("class", "breadcrumbs-text");
+	roleref.setAttribute("class", "");
 	rolediv.setAttribute("class", "hide");
 }
 
@@ -592,13 +592,13 @@ function loadLog() {
 	var gravediv = document.getElementById("gravediv");
 	var roleref = document.getElementById("roleref");
 	var rolediv = document.getElementById("rolediv");
-	actionref.setAttribute("class", "breadcrumbs-text");
+	actionref.setAttribute("class", "");
 	actiondiv.setAttribute("class", "hide");
-	logref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	logref.setAttribute("class", "active");
 	logdiv.setAttribute("class", "show");
-	graveref.setAttribute("class", "breadcrumbs-text");
+	graveref.setAttribute("class", "");
 	gravediv.setAttribute("class", "hide");
-	roleref.setAttribute("class", "breadcrumbs-text");
+	roleref.setAttribute("class", "");
 	rolediv.setAttribute("class", "hide");
 }
 
@@ -611,13 +611,13 @@ function loadGraveyard() {
 	var gravediv = document.getElementById("gravediv");
 	var roleref = document.getElementById("roleref");
 	var rolediv = document.getElementById("rolediv");
-	actionref.setAttribute("class", "breadcrumbs-text");
+	actionref.setAttribute("class", "");
 	actiondiv.setAttribute("class", "hide");
-	logref.setAttribute("class", "breadcrumbs-text");
+	logref.setAttribute("class", "");
 	logdiv.setAttribute("class", "hide");
-	graveref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	graveref.setAttribute("class", "active");
 	gravediv.setAttribute("class", "show");
-	roleref.setAttribute("class", "breadcrumbs-text");
+	roleref.setAttribute("class", "");
 	rolediv.setAttribute("class", "hide");
 }
 
@@ -630,13 +630,13 @@ function loadRole() {
 	var gravediv = document.getElementById("gravediv");
 	var roleref = document.getElementById("roleref");
 	var rolediv = document.getElementById("rolediv");
-	actionref.setAttribute("class", "breadcrumbs-text");
+	actionref.setAttribute("class", "");
 	actiondiv.setAttribute("class", "hide");
-	logref.setAttribute("class", "breadcrumbs-text");
+	logref.setAttribute("class", "");
 	logdiv.setAttribute("class", "hide");
-	graveref.setAttribute("class", "breadcrumbs-text");
+	graveref.setAttribute("class", "");
 	gravediv.setAttribute("class", "hide");
-	roleref.setAttribute("class", "breadcrumbs-text breadcrumbs-text-current");
+	roleref.setAttribute("class", "active");
 	rolediv.setAttribute("class", "show");
 }
 

@@ -27,9 +27,9 @@
 			</div>
 			<ul>
         		<li><span id="actionref" onclick="loadAction()">Action</span></li>
-            	<li><span id="logref" class="breadcrumbs-text" onclick="loadLog()">Log</span></li>
-            	<li><span id="graveref" class="breadcrumbs-text" onclick="loadGraveyard()">Graveyard</span></li>
-            	<li><span id="roleref" class="breadcrumbs-text" onclick="loadRole()">Role</span></li>
+            	<li><span id="logref" onclick="loadLog()">Log</span></li>
+            	<li><span id="graveref" onclick="loadGraveyard()">Graveyard</span></li>
+            	<li><span id="roleref" onclick="loadRole()">Role</span></li>
 			</ul>
 			<div id="actiondiv" class="show">
         		<div id="dayactiondiv" class="hide">
