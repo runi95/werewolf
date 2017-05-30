@@ -18,10 +18,10 @@ public class User {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = true)
+    @Column(name = "id", nullable = false, updatable = true, unique = true)
     private long id;
 	
-	@Column(name = "username", nullable = false)
+	@Column(name = "username", nullable = false, unique = true)
     private String username;
 	
 	@Column(name = "passwordhash", nullable = false)
