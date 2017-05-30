@@ -2,6 +2,61 @@
  * Globals
  */
  
+ .custom-nav > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #000;
+}
+ 
+ .custom-nav > ul > li {
+ 	float: left;
+ }
+ 
+ .custom-nav > ul > li > span {
+ 	position: relative;
+ 	display: block;
+	color: rgba(255,255,255,.75);
+    padding: 14px 10px;
+    border-bottom: 2px solid transparent;
+ }
+ 
+.custom-nav > ul > li > span:hover,
+.custom-nav > ul > li > span:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: #111;
+  border-bottom-color: rgba(255,255,255,.25);
+}
+
+.custom-nav .active > span,
+.custom-nav .active > span:hover,
+.custom-nav .active > span:focus {
+  color: #fff;
+  background-color: #111;
+  border-bottom-color: #fff;
+}
+
+.custom-nav-right {
+	float: right !important;
+	margin-right: 0px;
+}
+
+.custom-nav-text {
+	cursor: auto 			!important;
+	text-decoration: none	!important;
+	color: #fff; /* IE8 proofing */
+	color: rgba(255,255,255,.75);
+	position: relative;
+ 	display: block;
+ 	padding: 14px 10px;
+ 	border-bottom: 2px solid transparent;
+}
+
+/* 
  .navbar-nav > li > p {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -79,7 +134,7 @@
 }
  
  .navbar-nav > li > p{
-  color: #fff; /* IE8 proofing */
+  color: #fff;
   color: rgba(255,255,255,.75);
 border-bottom: 2px solid transparent;
  }
@@ -96,6 +151,7 @@ border-bottom: 2px solid transparent;
   color: #fff;
   border-bottom-color: #fff;
 }
+*/
 
 .absolute-center {
 	position: fixed;
@@ -131,6 +187,7 @@ border-bottom: 2px solid transparent;
 	background-color: #4200eb;
 }
 
+/*
 .countdown { 
    position: relative; 
    width: 100%;
@@ -177,6 +234,7 @@ border-bottom: 2px solid transparent;
    height: 50%;
    top: 0; left: 0; bottom: 4px; right: 0;
 }
+*/
 
 .phase-div {
 	position: fixed;
