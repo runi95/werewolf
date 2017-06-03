@@ -569,6 +569,8 @@ function loadOpenLobby() {
 	profilediv.setAttribute("class", "hide");
 	openlobbyref.setAttribute("class", "active");
 	openlobbydiv.setAttribute("class", "show");
+
+	document.getElementById("nicknamefield").focus();
 }
 
 function loadLobby() {
