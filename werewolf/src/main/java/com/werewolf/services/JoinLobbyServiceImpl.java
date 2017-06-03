@@ -251,12 +251,12 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	}
 
 	@Override
-	public void getOpenLobbies(String username) {
+	public String getOpenLobbies(String username) {
 		List<LobbyMessage> messageList = new ArrayList<LobbyMessage>();
 
 		lobbyMap.values().forEach((lobby) -> { if(!lobby.getStartedState()) messageList.add(new LobbyMessage("openlobby", lobby.getGameId(), Integer.toString(lobby.getPlayerSize()))); });
 
-		privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));
+		return JoinLobbyService.convertObjectToJson(messageList);
 	}
 
 	public void getGamePhase(String username) {

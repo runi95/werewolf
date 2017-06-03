@@ -18,7 +18,7 @@ public class StompMessageController {
 	@MessageMapping("/broadcast/{gameid}")
 	public void send(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
 		String username = principal.getName();
-		
+
 		switch(message.getAction()) {
 		case "leave":
 			joinLobbyService.leave(username);
@@ -63,9 +63,6 @@ public class StompMessageController {
 			break;
 		case "getgamephase":
 			joinLobbyService.getGamePhase(username);
-			break;
-		case "getopenlobbies":
-			joinLobbyService.getOpenLobbies(username);
 			break;
 		}
 	}

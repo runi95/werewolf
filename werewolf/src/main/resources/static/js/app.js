@@ -22,11 +22,11 @@ if(!window.WebSocket) {
     noweb.appendChild(notSupported);
 }
 
-init();
+getOpenLobbies();
 
 function init() {
     initializeWebsocket();
-    connectToPrivateChannel();
+    connectToChannels();
 }
 
 function initializeWebsocket() {
@@ -34,24 +34,16 @@ function initializeWebsocket() {
     stompClient = Stomp.over(socket);
 }
 
-function connectToPrivateChannel() {
-    console.log('stompClient1: ' + stompClient);
-    stompClient.connect({}, function (frame) {
-        stompClient.subscribe('/user/action/private', function (messageOutput) {
-            receivePrivateMessage(JSON.parse(messageOutput.body));
-        });
-        sendPrivateMessage({"action":"getopenlobbies"});
-    });
-}
-
-function connecToBroadcastChannel() {
+function connectToChannels() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
             receiveBroadcastMessage(JSON.parse(messageOutput.body));
         });
+        stompClient.subscribe('/user/action/private', function (messageOutput) {
+            receivePrivateMessage(JSON.parse(messageOutput.body));
+        });
         sendPrivateMessage({"action":"getplayers"});
-        sendPrivateMessage({"action":"initializelobby"});
     });
 }
 
@@ -60,7 +52,6 @@ function connect() {
     var socket = new SockJS('/werewolf-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
             receiveBroadcastMessage(JSON.parse(messageOutput.body));
         });
@@ -83,7 +74,7 @@ function disconnect() {
 function broadcastMessage(message) {
     stompClient.send('/app/broadcast/' + gamecode, {}, JSON.stringify(message));
 }
-// This is the message that will be sent to the server
+
 function sendPrivateMessage(message) {
     stompClient.send('/app/private', {}, JSON.stringify(message));
 }
@@ -215,6 +206,21 @@ function joinLobby(nickname, gameid) {
     });
 }
 
+function getOpenLobbies(nickname, gameid) {
+    $.ajax({
+        url: '/lobby/openlobbyrequest',
+        type: "GET",
+        datatype: 'json',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        success: function(data) {
+            receivePrivateMessage(data);
+        }
+    });
+}
+
 function joinLobbyReply(message) {
     var gameiddiv = document.getElementById("gameiddiv");
     var gameidfield = document.getElementById("gameidfield");
@@ -242,7 +248,7 @@ function joinLobbyReply(message) {
                 break;
             case "gamecode":
                 gamecode = message[i].info;
-                connecToBroadcastChannel();
+                init();
                 document.getElementById("gamecodenode").innerHTML = gamecode;
                 document.getElementById("menu").setAttribute("class", "hide");
                 document.getElementById("lobby").setAttribute("class", "show");
@@ -474,7 +480,7 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
 	}
 }
 
-function addOpenLobby(lobbycode, players) {
+function addToOpenLobby(lobbycode, players) {
 	if (!openlobbies.hasOwnProperty(lobbycode)) {
 		openlobbies[lobbycode] = players;
 		var lobbytable = document.getElementById("lobbytable");

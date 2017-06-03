@@ -12,7 +12,7 @@
 	    <div id="openlobbydiv" class="hide">
 	    <div class="form-group">
             <div class="absolute-center">
-    	        <form role="form" onsubmit="submitJoinLobbyForm(); return false;" class="form-horizontal" id="joinLobbyForm" name="joinLobbyForm">
+    	        <form role="form" onsubmit="submitJoinLobbyForm(); return false;" id="joinLobbyForm" name="joinLobbyForm">
                     <div class="form-group">
     	                <div id="nicknamediv" class="form-group">
     		                <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname" class="form-control" maxlength="16" autocomplete="off" autofocus>
@@ -31,7 +31,7 @@
                 </form>
 		    </div>
         </div>
-	    <table class="table table-hover">
+	    <table class="table table-condensed">
             <thead>
                 <tr>
                     <th>Lobby Code</th>
