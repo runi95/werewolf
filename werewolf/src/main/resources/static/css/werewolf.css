@@ -1,6 +1,17 @@
 /*
  * Globals
  */
+
+.custom-list-group > ul {
+  padding-left: 0;
+  margin-bottom: 20px;
+}
+
+.custom-list-group li {
+   position: relative;
+   display: block;
+   padding: 10px 15px;
+}
  
  .custom-nav > ul {
     list-style-type: none;

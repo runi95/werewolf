@@ -9,11 +9,13 @@
 		    </ul>
 	    </nav>
 	    <div id="profilediv" class="show">
-	        <p>Username: <span id="profilename"></span></p>
-	        <p>Games: <span id="profilegames"></span></p>
-	        <p>Wins: <span id="profilewins"></span></p>
-	        <p>Losses: <span id="profilelosses"></span></p>
-	        <p>Win Rate: <span id="profilewinrate"></span>%</p>
+	        <ul class="custom-list-group">
+                <li class="custom-list-group">Username: <span id="profilename"></span></li>
+                <li class="custom-list-group">Games: <span id="profilegames"></span></li>
+                <li class="custom-list-group">Wins: <span id="profilewins"></span></li>
+                <li class="custom-list-group">Losses: <span id="profilelosses"></span></li>
+                <li class="custom-list-group">Win Rate: <span id="profilewinrate"></span>%</li>
+	        </ul>
 	    </div>
 	    <div id="openlobbydiv" class="hide">
 	    <div class="form-group">
