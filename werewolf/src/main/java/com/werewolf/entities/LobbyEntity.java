@@ -139,17 +139,17 @@ public class LobbyEntity {
 			lobbyplayers.remove(player.getId());
 	}
 
-	public LobbyPlayer addPlayer(JoinLobbyForm joinForm) {
+	public LobbyPlayer addPlayer(User user, String nickname) {
 		if (lobbyplayers.size() >= 20)
 			return null;
 
-		LobbyPlayer playerAlreadyInLobby = lobbyplayers.get(Long.toString(joinForm.getUser().getId()));
+		LobbyPlayer playerAlreadyInLobby = lobbyplayers.get(Long.toString(user.getId()));
 		
 		if(playerAlreadyInLobby != null)
 			return playerAlreadyInLobby;
 		
-		LobbyPlayer lobbyPlayer = new LobbyPlayer(Long.toString(joinForm.getUser().getId()), joinForm.getUser(), this);
-		lobbyPlayer.setNickname(joinForm.getNickname());
+		LobbyPlayer lobbyPlayer = new LobbyPlayer(Long.toString(user.getId()), user, this);
+		lobbyPlayer.setNickname(nickname);
 		lobbyplayers.put(lobbyPlayer.getId(), lobbyPlayer);
 
 		return lobbyPlayer;

@@ -55,33 +55,4 @@ public class PreGameController {
         return "redirect:/home";
     }
 
-    @RequestMapping(value = "/lobby", method = RequestMethod.POST)
-    public ModelAndView postLobby(@Valid @ModelAttribute("joinLobbyForm") JoinLobbyForm joinLobbyForm, BindingResult bindingResult) {
-        // TODO: Make sure this process is failsafe!
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName(); // Get logged in username
-        User user = accountService.findByUsername(name); // Get logged in User
-        joinLobbyForm.setUser(user);
-        joinLobbyForm.setUserid(user.getId()); // Might be deprecated, but has been kept
-        joinLobbyForm.setGameid(joinLobbyForm.getGameid().toUpperCase());
-
-        LobbyEntity lobbyEntity = null;
-
-        if(joinLobbyForm.getGameid().equals("")) {
-            lobbyEntity = joinLobbyService.create(joinLobbyForm); // No game id means nothing to validate
-        } else {
-            joinLobbyFormValidation.validate(joinLobbyForm, bindingResult);
-            if(bindingResult.hasErrors())
-            	return new ModelAndView("main", "error", "error joining lobby, please check the Game ID again");
-            else
-            	lobbyEntity = joinLobbyService.join(joinLobbyForm);
-        }
-        
-        // TODO: Fix this properly!
-        if(lobbyEntity != null)
-        	return new ModelAndView("lobby", "gamecode", lobbyEntity.getGameId());
-        else
-        	return new ModelAndView("redirect:/");
-    }
-
 }

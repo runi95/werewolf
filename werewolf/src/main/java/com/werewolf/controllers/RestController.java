@@ -1,10 +1,16 @@
 package com.werewolf.controllers;
 
 import java.security.Principal;
+import java.util.List;
 
+import com.werewolf.Messages.LobbyMessage;
+import com.werewolf.data.JoinLobbyForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.User;
@@ -19,8 +25,8 @@ public class RestController {
 	
 	@Autowired
 	JoinLobbyService lobbyPlayerService;
-	
-	@RequestMapping(value = "/lobby/gamecoderequest", method = RequestMethod.GET)
+
+	@GetMapping(value = "/lobby/gamecoderequest")
 	public String gamecoderequest(Principal principal) {
 		String username = principal.getName();
 		User loggedinuser = accountService.findByUsername(username);
@@ -28,5 +34,10 @@ public class RestController {
         
         return lobbyPlayer.getLobby().getGameId();
 	}
-	
+
+	@PostMapping(value = "/lobby/joinlobbyrequest")
+	public List<LobbyMessage> joinlobbyrequest(@RequestBody JoinLobbyForm joinLobbyForm, Principal principal) {
+        String username = principal.getName();
+        return lobbyPlayerService.join(username, joinLobbyForm);
+    }
 }

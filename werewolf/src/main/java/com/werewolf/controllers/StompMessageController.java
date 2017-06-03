@@ -38,7 +38,7 @@ public class StompMessageController {
 		}
 	}
 
-	@MessageMapping("/private/{gameid}")
+	@MessageMapping("/private")
 	public void reply(JoinLobbyMessage message, Principal principal) {
 		String username = principal.getName();
 
@@ -63,6 +63,9 @@ public class StompMessageController {
 			break;
 		case "getgamephase":
 			joinLobbyService.getGamePhase(username);
+			break;
+		case "getopenlobbies":
+			joinLobbyService.getOpenLobbies(username);
 			break;
 		}
 	}

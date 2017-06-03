@@ -41,43 +41,50 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		return playerMap.get(userid);
 	}
 
-	// Assumes that there are no games with given id
 	@Override
-	public LobbyEntity create(JoinLobbyForm joinLobbyForm) {
-		String gameid = generateNewGameid();
-		LobbyEntity lobbyEntity = new LobbyEntity(gameid);
-		lobbyMap.put(gameid, lobbyEntity);
-
-		joinLobbyForm.setGameid(gameid);
-		join(joinLobbyForm);
-
-		return lobbyEntity;
-	}
-
-	@Override
-	public LobbyEntity join(JoinLobbyForm joinLobbyForm) {
+	public List<LobbyMessage> join(String username, JoinLobbyForm joinLobbyForm) {
 		List<LobbyMessage> messageList = new ArrayList<>();
+        List<LobbyMessage> privateMessageList = new ArrayList<>();
 
-		LobbyPlayer oldLobby = playerMap.get(joinLobbyForm.getUser().getId());
+		User user = accountService.findByUsername(username);
+		String gameid = joinLobbyForm.getGameid().toUpperCase();
+		String nickname = joinLobbyForm.getNickname();
+
+		if(gameid == null || gameid.equals("")) {
+            gameid = generateNewGameid();
+            LobbyEntity lobbyEntity = new LobbyEntity(gameid);
+            lobbyMap.put(gameid, lobbyEntity);
+            joinLobbyForm.setGameid(gameid);
+        }
+
+		LobbyPlayer oldLobby = playerMap.get(user.getId());
 		if (oldLobby != null)
-			leave(playerMap.get(joinLobbyForm.getUser().getId()));
+			leave(playerMap.get(user.getId()));
 
-		LobbyEntity lobbyEntity = lobbyMap.get(joinLobbyForm.getGameid());
-		if (lobbyEntity == null)
-			return null;
+		LobbyEntity lobbyEntity = lobbyMap.get(gameid);
+		if (lobbyEntity == null) {
+            privateMessageList.add(new LobbyMessage("error", "404"));
+            return privateMessageList;
+        }
 
-		if (invalidNickname(joinLobbyForm.getNickname()))
-			joinLobbyForm.setNickname(generateNewNickname());
+        if(nickname == null || nickname.equals(""))
+            nickname = generateNewNickname();
+		else if (invalidNickname(joinLobbyForm.getNickname())) {
+            privateMessageList.add(new LobbyMessage("error", "100"));
+            return privateMessageList;
+        }
 
-		LobbyPlayer lobbyPlayer = lobbyEntity.addPlayer(joinLobbyForm);
-		playerMap.put(joinLobbyForm.getUser().getId(), lobbyPlayer);
 
-		messageList.add(new LobbyMessage("join", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
+		LobbyPlayer lobbyPlayer = lobbyEntity.addPlayer(user, nickname);
+		playerMap.put(user.getId(), lobbyPlayer);
+
+		messageList.add(new LobbyMessage("join", lobbyPlayer.getId(), nickname));
+        privateMessageList.add(new LobbyMessage("gamecode", gameid));
 
 		if (!messageList.isEmpty())
 			broadcastMessage(lobbyPlayer.getLobby().getGameId(), JoinLobbyService.convertObjectToJson(messageList));
 
-		return lobbyEntity;
+		return privateMessageList;
 	}
 
 	// Unsure if this is going to be needed, but keeping it anyway
@@ -241,6 +248,15 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 			oldTargetPlayer = lobbyPlayer.getLobby().getAlivePlayer(lobbyPlayer.getTarget());
 		}
 		lobbyNightAction(lobbyPlayer.getLobby(), lobbyPlayer, oldTargetPlayer, targetPlayer, act);
+	}
+
+	@Override
+	public void getOpenLobbies(String username) {
+		List<LobbyMessage> messageList = new ArrayList<LobbyMessage>();
+
+		lobbyMap.values().forEach((lobby) -> { if(!lobby.getStartedState()) messageList.add(new LobbyMessage("openlobby", lobby.getGameId(), Integer.toString(lobby.getPlayerSize()))); });
+
+		privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));
 	}
 
 	public void getGamePhase(String username) {

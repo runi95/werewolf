@@ -3,15 +3,17 @@ package com.werewolf.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 
+import java.util.List;
+
 public interface JoinLobbyService {
 	
 	LobbyPlayer getPlayer(long userid);
-    LobbyEntity create(JoinLobbyForm joinLobbyForm);
-    LobbyEntity join(JoinLobbyForm joinLobbyForm);
+    List<LobbyMessage> join(String username, JoinLobbyForm joinLobbyForm);
     
     void leave(String username);
     void vote(String username, String voteon, boolean vote);
@@ -23,6 +25,7 @@ public interface JoinLobbyService {
     void nightAction(String username, String target, boolean act);
     void getGamePhase(String username);
     void getRole(String username);
+    void getOpenLobbies(String username);
     
     LobbyEntity findByGameId(String gameId);
 

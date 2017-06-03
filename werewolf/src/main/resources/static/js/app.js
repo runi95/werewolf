@@ -4,6 +4,7 @@ var playerlist = {}; // Initialize an empty object that will contain players
 var deadplayers = {};
 var aliveplayers = {};
 var invalidtargets = {};
+var openlobbies = {};
 var gamecode = null;
 var ready = false; // Player is not ready upon load
 var voted = null;
@@ -11,6 +12,7 @@ var nightact = null;
 var owner = null; // ID of the user
 var phase = null;
 var alive = true;
+var error = null;
 
 if(!window.WebSocket) {
     var notSupported = document.createElement("b");
@@ -20,13 +22,37 @@ if(!window.WebSocket) {
     noweb.appendChild(notSupported);
 }
 
-function setConnected(connected) {
-    if(connected) {
-    	sendPrivateMessage({"action":"getplayers"});
+init();
+
+function init() {
+    initializeWebsocket();
+    connectToPrivateChannel();
+}
+
+function initializeWebsocket() {
+    var socket = new SockJS('/werewolf-websocket');
+    stompClient = Stomp.over(socket);
+}
+
+function connectToPrivateChannel() {
+    console.log('stompClient1: ' + stompClient);
+    stompClient.connect({}, function (frame) {
+        stompClient.subscribe('/user/action/private', function (messageOutput) {
+            receivePrivateMessage(JSON.parse(messageOutput.body));
+        });
+        sendPrivateMessage({"action":"getopenlobbies"});
+    });
+}
+
+function connecToBroadcastChannel() {
+    stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
+            receiveBroadcastMessage(JSON.parse(messageOutput.body));
+        });
+        sendPrivateMessage({"action":"getplayers"});
         sendPrivateMessage({"action":"initializelobby"});
-    } else {
-        broadcastMessage({"action":"leave"});
-    }
+    });
 }
 
 // Runs when client connects to messagebroker
@@ -59,7 +85,7 @@ function broadcastMessage(message) {
 }
 // This is the message that will be sent to the server
 function sendPrivateMessage(message) {
-    stompClient.send('/app/private/' + gamecode, {}, JSON.stringify(message));
+    stompClient.send('/app/private', {}, JSON.stringify(message));
 }
 
 function receiveBroadcastMessage(message) {
@@ -135,6 +161,9 @@ function receivePrivateMessage(message) {
                 case "joindead":
                 	addToGraveyard(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
+                case "openlobby":
+                    addToOpenLobby(message[i].playerid, message[i].info);
+                    break;
                 case "lobby":
                 	prepareLobby();
                 	break;
@@ -158,6 +187,69 @@ function receivePrivateMessage(message) {
                 default:
                     break;
             }
+    }
+}
+
+function submitJoinLobbyForm() {
+    var nicknamefield = document.getElementById("nicknamefield");
+    var gameidfield = document.getElementById("gameidfield");
+
+    nicknamefield.disabled = true;
+    gameidfield.disabled = true;
+    joinLobby(nicknamefield.value, gameidfield.value);
+}
+
+function joinLobby(nickname, gameid) {
+    $.ajax({
+        url: '/lobby/joinlobbyrequest',
+        type: "POST",
+        datatype: 'json',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({"nickname":nickname, "gameid":gameid}),
+        success: function(data) {
+            joinLobbyReply(data);
+        }
+    });
+}
+
+function joinLobbyReply(message) {
+    var gameiddiv = document.getElementById("gameiddiv");
+    var gameidfield = document.getElementById("gameidfield");
+    var gameidglyph = document.getElementById("gameidglyph");
+    var nicknamediv = document.getElementById("nicknamediv");
+    var nicknamefield = document.getElementById("nicknamefield");
+    var nicknameglyph = document.getElementById("nicknameglyph");
+    gameidfield.disabled = false;
+    nicknamefield.disabled = false;
+    gameiddiv.setAttribute("class", "form-group");
+    gameidglyph.setAttribute("class", "");
+    nicknamediv.setAttribute("class", "form-group");
+    nicknameglyph.setAttribute("class", "");
+    for(var i = 0; i < message.length; i++) {
+        switch(message[i].action) {
+            case "error":
+                if(message[i].info === "404") {
+                    gameiddiv.setAttribute("class", "form-group has-error has-feedback");
+                    gameidglyph.setAttribute("class", "glyphicon glyphicon-remove form-control-feedback");
+                }
+                else if(message[i].info === "100") {
+                    nicknamediv.setAttribute("class", "form-group has-error has-feedback");
+                    nicknameglyph.setAttribute("class", "glyphicon glyphicon-remove form-control-feedback");
+                }
+                break;
+            case "gamecode":
+                gamecode = message[i].info;
+                connecToBroadcastChannel();
+                document.getElementById("gamecodenode").innerHTML = gamecode;
+                document.getElementById("menu").setAttribute("class", "hide");
+                document.getElementById("lobby").setAttribute("class", "show");
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -382,6 +474,22 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
 	}
 }
 
+function addOpenLobby(lobbycode, players) {
+	if (!openlobbies.hasOwnProperty(lobbycode)) {
+		openlobbies[lobbycode] = players;
+		var lobbytable = document.getElementById("lobbytable");
+		var row = document.createElement("tr");
+		var lobbycodefield = document.createElement("th");
+		var lobbyplayersfield = document.createElement("th");
+		lobbycodefield.innerHTML = lobbycode;
+		lobbyplayersfield.innerHTML = players + '/20';
+		row.setAttribute("id", "l" + lobbycode);
+    	row.appendChild(lobbycodefield);
+    	row.appendChild(lobbyplayersfield);
+    	lobbytable.appendChild(row);
+	}
+}
+
 function removeFromGraveyard(playerid) {
 	if(deadplayers.hasOwnProperty(playerid)) {
 		delete deadplayers[playerid];
@@ -433,6 +541,28 @@ function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
 	} else {
 		elem.innerHTML = "Ready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 4) + ")";
 	}
+}
+
+function loadProfile() {
+	var profileref = document.getElementById("profileref");
+	var profilediv = document.getElementById("profilediv");
+	var openlobbyref = document.getElementById("openlobbyref");
+	var openlobbydiv = document.getElementById("openlobbydiv");
+	profileref.setAttribute("class", "active");
+	profilediv.setAttribute("class", "show");
+	openlobbyref.setAttribute("class", "");
+	openlobbydiv.setAttribute("class", "hide");
+}
+
+function loadOpenLobby() {
+	var profileref = document.getElementById("profileref");
+	var profilediv = document.getElementById("profilediv");
+	var openlobbyref = document.getElementById("openlobbyref");
+	var openlobbydiv = document.getElementById("openlobbydiv");
+	profileref.setAttribute("class", "");
+	profilediv.setAttribute("class", "hide");
+	openlobbyref.setAttribute("class", "active");
+	openlobbydiv.setAttribute("class", "show");
 }
 
 function loadLobby() {
@@ -534,8 +664,6 @@ function someoneVoted(playerid, votedon, votes, status) {
 	}
 	}
 }
-
-// function 
 
 function loadAction() {
 	if(phase === "night") {
@@ -723,13 +851,10 @@ function setRole(name, alignment, goal, description) {
 	roletable.appendChild(rolelist);
 }
 
-// This function runs on initialization
-$.ajax({
-    url: '/lobby/gamecoderequest',
-    type: 'GET',
-    datatype: 'json',
-    success: function(data) { 
-    	gamecode = data;
-    	connect();
-    }
+$(function () {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
 });

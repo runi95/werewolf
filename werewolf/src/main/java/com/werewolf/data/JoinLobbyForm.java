@@ -7,10 +7,6 @@ public class JoinLobbyForm {
 
     private String gameid;
 
-    private long userid;
-
-    private User user;
-
     public String getNickname() {
         return nickname;
     }
@@ -19,12 +15,6 @@ public class JoinLobbyForm {
         return gameid;
     }
 
-    public long getUserid() {
-        return userid;
-    }
-
-    public User getUser() { return user; }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -32,8 +22,4 @@ public class JoinLobbyForm {
     public void setGameid(String gameid) {
         this.gameid = gameid;
     }
-
-    public void setUserid(long userid) { this.userid = userid; }
-
-    public void setUser(User user) { this.user = user; }
 }
