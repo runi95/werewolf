@@ -52,9 +52,24 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		if(gameid == null || gameid.equals("")) {
             gameid = generateNewGameid();
+            final String newgameid = gameid;
             LobbyEntity lobbyEntity = new LobbyEntity(gameid);
             lobbyMap.put(gameid, lobbyEntity);
             joinLobbyForm.setGameid(gameid);
+            new Thread() {
+            	@Override
+				public void run() {
+            		try {
+						Thread.sleep(5000);
+						if(lobbyMap.containsKey(newgameid)) {
+							LobbyEntity gameLobby = lobbyMap.get(newgameid);
+							lobbyMap.remove(gameLobby);
+						}
+					} catch (InterruptedException e) {
+            			e.printStackTrace();
+					}
+				}
+			}.start();
         }
 
 		LobbyPlayer oldLobby = playerMap.get(user.getId());
