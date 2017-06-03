@@ -19,9 +19,6 @@
     		                <span id="nicknameglyph"></span>
     	                </div>
 		                <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
-		                <#if error??>
-           	                <p class="text-danger">${error}</p>
-       	                </#if>
     	                <div id="gameiddiv" class="form-group">
 	    	                <input id="gameidfield" name="gameid" type="text" placeholder="Game ID" class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
 	    	                <span id="gameidglyph"></span>
