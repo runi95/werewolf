@@ -17,12 +17,13 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class JoinLobbyServiceImpl implements JoinLobbyService {
 
-	private final HashMap<Long, LobbyPlayer> playerMap = new HashMap<>();
-	private final HashMap<String, LobbyEntity> lobbyMap = new HashMap<>();
+	private final ConcurrentHashMap<Long, LobbyPlayer> playerMap = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, LobbyEntity> lobbyMap = new ConcurrentHashMap<>();
 
 	@Autowired
 	SimpMessagingTemplate simpTemplate;
