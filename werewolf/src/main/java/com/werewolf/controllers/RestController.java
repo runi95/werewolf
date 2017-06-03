@@ -33,6 +33,13 @@ public class RestController {
         return lobbyPlayerService.getOpenLobbies(username);
 	}
 
+	@GetMapping(value = "/lobby/getprofile")
+	public String getuserprofile(Principal principal) {
+		String username = principal.getName();
+
+		return lobbyPlayerService.getProfile(username);
+	}
+
 	@PostMapping(value = "/lobby/joinlobbyrequest")
 	public List<LobbyMessage> joinlobbyrequest(@RequestBody JoinLobbyForm joinLobbyForm, Principal principal) {
         String username = principal.getName();

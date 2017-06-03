@@ -23,6 +23,7 @@ if(!window.WebSocket) {
 }
 
 getOpenLobbies();
+getProfile();
 
 function init() {
     initializeWebsocket();
@@ -175,10 +176,33 @@ function receivePrivateMessage(message) {
                 case "role":
                 	setRole(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
+                case "profile":
+                    setProfile(message[i].playerid, message[i].info, message[i].additionalinfo);
+                    break;
                 default:
                     break;
             }
     }
+}
+
+function setProfile(username, wins, games) {
+    var profilename = document.getElementById("profilename");
+    var profilegames = document.getElementById("profilegames");
+    var profilewins = document.getElementById("profilewins");
+    var profilelosses = document.getElementById("profilelosses");
+    var profilewinrate = document.getElementById("profilewinrate");
+
+    var losses = games - wins;
+    var winrate = 0;
+    if(games != 0) {
+        winrate = (100*games)/losses;
+    }
+
+    profilename.innerHTML = username;
+    profilegames.innerHTML = games;
+    profilewins.innerHTML = wins;
+    profilelosses.innerHTML = losses;
+    profilewinrate.innerHTML = winrate;
 }
 
 function submitJoinLobbyForm() {
@@ -206,9 +230,24 @@ function joinLobby(nickname, gameid) {
     });
 }
 
-function getOpenLobbies(nickname, gameid) {
+function getOpenLobbies() {
     $.ajax({
         url: '/lobby/openlobbyrequest',
+        type: "GET",
+        datatype: 'json',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        success: function(data) {
+            receivePrivateMessage(data);
+        }
+    });
+}
+
+function getProfile() {
+    $.ajax({
+        url: '/lobby/getprofile',
         type: "GET",
         datatype: 'json',
         headers: {

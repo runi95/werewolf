@@ -103,6 +103,16 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		return privateMessageList;
 	}
 
+	@Override
+	public String getProfile(String username) {
+		List<LobbyMessage> messageList = new ArrayList<>();
+
+		User user = accountService.findByUsername(username);
+		messageList.add(new LobbyMessage("profile", user.getUsername(), Integer.toString(user.getWins()), Integer.toString(user.getGames())));
+
+		return JoinLobbyService.convertObjectToJson(messageList);
+	}
+
 	// Unsure if this is going to be needed, but keeping it anyway
 	@Override
 	public void leave(String username) {

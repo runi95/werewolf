@@ -8,7 +8,13 @@
 			    <li class="custom-nav-right custom-nav-text">User: <b>${username}</b></li>
 		    </ul>
 	    </nav>
-	    <div id="profilediv" class="show"></div>
+	    <div id="profilediv" class="show">
+	        <p>Username: <span id="profilename"></span></p>
+	        <p>Games: <span id="profilegames"></span></p>
+	        <p>Wins: <span id="profilewins"></span></p>
+	        <p>Losses: <span id="profilelosses"></span></p>
+	        <p>Win Rate: <span id="profilewinrate"></span>%</p>
+	    </div>
 	    <div id="openlobbydiv" class="hide">
 	    <div class="form-group">
             <div class="absolute-center">
