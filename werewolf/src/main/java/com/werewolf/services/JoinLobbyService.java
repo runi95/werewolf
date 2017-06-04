@@ -25,7 +25,7 @@ public interface JoinLobbyService {
     void nightAction(String username, String target, boolean act);
     void getGamePhase(String username);
     void getRole(String username);
-    String getOpenLobbies(String username);
+    void getOpenLobbies(String username);
     String getProfile(String username);
     
     LobbyEntity findByGameId(String gameId);

@@ -2,6 +2,7 @@ package com.werewolf.controllers;
 
 import com.werewolf.Messages.JoinLobbyMessage;
 import com.werewolf.services.JoinLobbyService;
+import org.jboss.logging.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -16,7 +17,7 @@ public class StompMessageController {
 	JoinLobbyService joinLobbyService;
 	
 	@MessageMapping("/broadcast/{gameid}")
-	public void send(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
+	public void broadcastToLobby(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
 		String username = principal.getName();
 
 		switch(message.getAction()) {
@@ -39,7 +40,7 @@ public class StompMessageController {
 	}
 
 	@MessageMapping("/private")
-	public void reply(JoinLobbyMessage message, Principal principal) {
+	public void replyToUser(JoinLobbyMessage message, Principal principal) {
 		String username = principal.getName();
 
 		switch (message.getAction()) {
@@ -63,6 +64,9 @@ public class StompMessageController {
 			break;
 		case "getgamephase":
 			joinLobbyService.getGamePhase(username);
+			break;
+		case "getopenlobbies":
+			joinLobbyService.getOpenLobbies(username);
 			break;
 		}
 	}

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,6 +58,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
             LobbyEntity lobbyEntity = new LobbyEntity(gameid);
             lobbyMap.put(gameid, lobbyEntity);
             joinLobbyForm.setGameid(gameid);
+            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, "0")}));
             new Thread() {
             	@Override
 				public void run() {
@@ -65,6 +67,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 						if(lobbyMap.containsKey(newgameid)) {
 							LobbyEntity gameLobby = lobbyMap.get(newgameid);
 							lobbyMap.remove(gameLobby);
+                            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("removeopenlobby", newgameid)}));
 						}
 					} catch (InterruptedException e) {
             			e.printStackTrace();
@@ -93,6 +96,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		LobbyPlayer lobbyPlayer = lobbyEntity.addPlayer(user, nickname);
 		playerMap.put(user.getId(), lobbyPlayer);
+		if(!lobbyEntity.getStartedState())
+            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, Integer.toString(lobbyEntity.getPlayerSize()))}));
 
 		messageList.add(new LobbyMessage("join", lobbyPlayer.getId(), nickname));
         privateMessageList.add(new LobbyMessage("gamecode", gameid));
@@ -277,12 +282,13 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	}
 
 	@Override
-	public String getOpenLobbies(String username) {
+	public void getOpenLobbies(String username) {
 		List<LobbyMessage> messageList = new ArrayList<LobbyMessage>();
 
 		lobbyMap.values().forEach((lobby) -> { if(!lobby.getStartedState()) messageList.add(new LobbyMessage("openlobby", lobby.getGameId(), Integer.toString(lobby.getPlayerSize()))); });
 
-		return JoinLobbyService.convertObjectToJson(messageList);
+        if (!messageList.isEmpty())
+            privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));
 	}
 
 	public void getGamePhase(String username) {
@@ -363,11 +369,15 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
 		lobbyEntity.removePlayer(lobbyPlayer);
 		playerMap.remove(lobbyPlayer.getUser().getId());
+
 		if (lobbyEntity.getPlayerSize() == 0) {
+            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("removeopenlobby", lobbyEntity.getGameId())}));
 			lobbyMap.remove(lobbyEntity.getGameId());
 		} else {
-			if(!lobbyEntity.getStartedState())
-				messageList.add(new LobbyMessage("leave", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
+			if(!lobbyEntity.getStartedState()) {
+                broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", lobbyEntity.getGameId(), Integer.toString(lobbyEntity.getPlayerSize()))}));
+                messageList.add(new LobbyMessage("leave", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
+            }
 		}
 
 		if (!messageList.isEmpty())
@@ -420,6 +430,10 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	private void broadcastMessage(String gameid, String message) {
 		simpTemplate.convertAndSend("/action/broadcast/" + gameid, message);
 	}
+
+	private void broadcastPublicMessage(String message) {
+	    simpTemplate.convertAndSend("/action/broadcast/public", message);
+    }
 
 	private void privateMessage(String user, String message) {
 		simpTemplate.convertAndSendToUser(user, "/action/private", message);

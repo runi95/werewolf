@@ -22,30 +22,34 @@ if(!window.WebSocket) {
     noweb.appendChild(notSupported);
 }
 
-getOpenLobbies();
+//getOpenLobbies();
 getProfile();
-
-function init() {
-    initializeWebsocket();
-    connectToChannels();
-}
+initializeWebsocket();
 
 function initializeWebsocket() {
     var socket = new SockJS('/werewolf-websocket');
     stompClient = Stomp.over(socket);
+    connectoAndSubscribeToPrivate()
 }
 
-function connectToChannels() {
+function connectoAndSubscribeToPrivate() {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
-            receiveBroadcastMessage(JSON.parse(messageOutput.body));
-        });
         stompClient.subscribe('/user/action/private', function (messageOutput) {
             receivePrivateMessage(JSON.parse(messageOutput.body));
         });
-        sendPrivateMessage({"action":"getplayers"});
+        stompClient.subscribe('/action/broadcast/public', function (messageOutput) {
+            receivePrivateMessage(JSON.parse(messageOutput.body));
+        });
+        sendPrivateMessage({"action":"getopenlobbies"});
     });
+}
+
+function subscribeToBroadcast() {
+    stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
+        receiveBroadcastMessage(JSON.parse(messageOutput.body));
+    });
+    sendPrivateMessage({"action":"getplayers"});
 }
 
 // Runs when client connects to messagebroker
@@ -153,12 +157,15 @@ function receivePrivateMessage(message) {
                 case "joindead":
                 	addToGraveyard(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
-                case "openlobby":
-                    addToOpenLobby(message[i].playerid, message[i].info);
-                    break;
                 case "lobby":
                 	prepareLobby();
                 	break;
+                case "openlobby":
+                    addToOpenLobby(message[i].playerid, message[i].info);
+                    break;
+                case "removeopenlobby":
+                    removeOpenLobby(message[i].info);
+                    break;
                 case "lobbyready":
                 	loadGame();
                 	break;
@@ -230,6 +237,8 @@ function joinLobby(nickname, gameid) {
     });
 }
 
+/*
+DEPRECATED!
 function getOpenLobbies() {
     $.ajax({
         url: '/lobby/openlobbyrequest',
@@ -244,6 +253,7 @@ function getOpenLobbies() {
         }
     });
 }
+*/
 
 function getProfile() {
     $.ajax({
@@ -287,7 +297,7 @@ function joinLobbyReply(message) {
                 break;
             case "gamecode":
                 gamecode = message[i].info;
-                init();
+                subscribeToBroadcast();
                 document.getElementById("gamecodenode").innerHTML = gamecode;
                 document.getElementById("menu").setAttribute("class", "hide");
                 document.getElementById("lobby").setAttribute("class", "show");
@@ -520,12 +530,16 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
 }
 
 function addToOpenLobby(lobbycode, players) {
-	if (!openlobbies.hasOwnProperty(lobbycode)) {
+	if(openlobbies.hasOwnProperty(lobbycode)) {
+        var lobbyplayersfield = document.getElementById("olp" + lobbycode);
+        lobbyplayersfield.innerHTML = players + '/20';
+	} else {
 		openlobbies[lobbycode] = players;
 		var lobbytable = document.getElementById("lobbytable");
 		var row = document.createElement("tr");
 		var lobbycodefield = document.createElement("th");
 		var lobbyplayersfield = document.createElement("th");
+		lobbyplayersfield.setAttribute("id", "olp" + lobbycode);
 		lobbycodefield.setAttribute("class", "text-center");
         lobbyplayersfield.setAttribute("class", "text-center");
 		lobbycodefield.innerHTML = lobbycode;
@@ -536,6 +550,13 @@ function addToOpenLobby(lobbycode, players) {
     	row.appendChild(lobbyplayersfield);
     	lobbytable.appendChild(row);
 	}
+}
+
+function removeOpenLobby(lobbycode) {
+    if(openlobbies.hasOwnProperty(lobbycode)) {
+        delete openlobbies[lobbycode];
+        document.getElementById("l" + lobbycode).remove();
+    }
 }
 
 function setLobby(lobbycode) {
