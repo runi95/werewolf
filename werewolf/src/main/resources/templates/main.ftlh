@@ -39,8 +39,8 @@
 	    <table class="table table-condensed">
             <thead>
                 <tr>
-                    <th>Lobby Code</th>
-                    <th>Players</th>
+                    <th class="text-center">Lobby Code</th>
+                    <th class="text-center">Players</th>
                 </tr>
             </thead>
             <tbody id="lobbytable">

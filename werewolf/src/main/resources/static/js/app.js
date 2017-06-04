@@ -526,6 +526,8 @@ function addToOpenLobby(lobbycode, players) {
 		var row = document.createElement("tr");
 		var lobbycodefield = document.createElement("th");
 		var lobbyplayersfield = document.createElement("th");
+		lobbycodefield.setAttribute("class", "text-center");
+        lobbyplayersfield.setAttribute("class", "text-center");
 		lobbycodefield.innerHTML = lobbycode;
 		lobbyplayersfield.innerHTML = players + '/20';
 		row.setAttribute("id", "l" + lobbycode);
