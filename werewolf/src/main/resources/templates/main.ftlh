@@ -56,11 +56,13 @@
     	    </ul>
     	</nav>
     	<div id="lobbydiv" class="show">
-    	    <div class="page-header">
-        	    <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
-        	</div>
-        	<ul id="plist" class="list-group"></ul>
-    		<button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
+    	    <div class="container">
+                <div class="page-header">
+                    <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
+                </div>
+                <ul id="plist" class="list-group"></ul>
+                <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
+    		</div>
     	</div>
     	<div id="optionsdiv" class="hide"></div>
     </div>
