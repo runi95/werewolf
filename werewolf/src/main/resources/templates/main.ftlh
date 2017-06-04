@@ -83,46 +83,54 @@
     		</ul>
     		<div id="actiondiv" class="show">
            		<div id="dayactiondiv" class="hide">
-           			<table class="table table-condensed">
-               			<thead>
-                   			<tr>
-                   				<th class="text-center col-xs-6">Name</th>
-                   				<th class="text-center col-xs-3">Lynch</th>
-        					</tr>
-    					</thead>
-    					<tbody id="votelist"></tbody>
-    				</table>
+           		    <div class="container">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-xs-6">Name</th>
+                                    <th class="text-center col-xs-3">Lynch</th>
+                                </tr>
+                            </thead>
+                            <tbody id="votelist"></tbody>
+                        </table>
+    				</div>
     			</div>
     			<div id="nightactiondiv" class="hide">
-           			<table class="table table-condensed">
-               			<thead>
-                   			<tr>
-                   				<th class="text-center col-xs-6">Name</th>
-                   				<th class="text-center col-xs-3">Action</th>
-    						</tr>
-    					</thead>
-    					<tbody id="nightactionlist"></tbody>
-    				</table>
+    			    <div class="container">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-center col-xs-6">Name</th>
+                                    <th class="text-center col-xs-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="nightactionlist"></tbody>
+                        </table>
+    				</div>
     			</div>
     			<div id="noactiondiv" class="show"></div>
     		</div>
     		<div id="logdiv" class="hide">
-    			<div id="loglist"></div>
+    			<div id="loglist" class="container"></div>
     		</div>
     		<div id="gravediv" class="hide">
-    			<table class="table table-condensed">
-    				<thead>
-    					<tr>
-                   			<th class="text-center col-xs-6">Name</th>
-                   			<th class="text-center col-xs-3">Role</th>
-                   		</tr>
-    				</thead>
-    				<tbody id="gravelist"></tbody>
-    			</table>
+    		    <div class="container">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-xs-6">Name</th>
+                                <th class="text-center col-xs-3">Role</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gravelist"></tbody>
+                    </table>
+    			</div>
     		</div>
     		<div id="rolediv" class="hide">
-    			<h1 class="panel-title"><b id="rolename"></b></h1>
-    			<table id="roletable" class="table table-condensed">
+    		    <div class="container">
+                    <h1 class="panel-title"><b id="rolename"></b></h1>
+                    <table id="roletable" class="table table-condensed">
+    			</div>
     		</div>
     	</nav>
     </div>
