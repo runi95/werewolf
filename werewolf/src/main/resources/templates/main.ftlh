@@ -8,44 +8,44 @@
 			    <li class="custom-nav-right custom-nav-text">User: <b>${username}</b></li>
 		    </ul>
 	    </nav>
-	    <div id="profilediv" class="show">
-	        <ul class="custom-list-group">
-                <li class="custom-list-group">Username: <span id="profilename"></span></li>
-                <li class="custom-list-group">Games: <span id="profilegames"></span></li>
-                <li class="custom-list-group">Wins: <span id="profilewins"></span></li>
-                <li class="custom-list-group">Losses: <span id="profilelosses"></span></li>
-                <li class="custom-list-group">Win Rate: <span id="profilewinrate"></span>%</li>
-	        </ul>
-	    </div>
-	    <div id="openlobbydiv" class="hide">
-	    <div class="form-group">
-            <div class="absolute-center">
-    	        <form role="form" onsubmit="submitJoinLobbyForm(); return false;" id="joinLobbyForm" name="joinLobbyForm">
-                    <div class="form-group">
-    	                <div id="nicknamediv" class="form-group">
-    		                <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname" class="form-control" maxlength="16" autocomplete="off" autofocus>
-    		                <span id="nicknameglyph"></span>
-    	                </div>
-		                <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
-    	                <div id="gameiddiv" class="form-group">
-	    	                <input id="gameidfield" name="gameid" type="text" placeholder="Game ID" class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
-	    	                <span id="gameidglyph"></span>
-		                </div>
-                        <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
+	    <div class="container" style="padding-top:20px">
+            <div id="profilediv" class="show">
+                <ul class="custom-list-group">
+                    <li class="custom-list-group">Username: <span id="profilename"></span></li>
+                    <li class="custom-list-group">Games: <span id="profilegames"></span></li>
+                    <li class="custom-list-group">Wins: <span id="profilewins"></span></li>
+                    <li class="custom-list-group">Losses: <span id="profilelosses"></span></li>
+                    <li class="custom-list-group">Win Rate: <span id="profilewinrate"></span>%</li>
+                </ul>
+            </div>
+            <div id="openlobbydiv" class="hide">
+                <div class="form-group">
+                    <div class="absolute-center">
+                        <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;" id="joinLobbyForm" name="joinLobbyForm">
+                            <div id="nicknamediv" class="form-group">
+                                <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname" class="form-control" maxlength="16" autocomplete="off" autofocus>
+                                <span id="nicknameglyph"></span>
+                            </div>
+                            <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
+                            <div id="gameiddiv" class="form-group">
+                                <input id="gameidfield" name="gameid" type="text" placeholder="Game ID" class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
+                                <span id="gameidglyph"></span>
+                            </div>
+                            <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
+                        </form>
                     </div>
-                </form>
-		    </div>
-        </div>
-	    <table class="table table-condensed">
-            <thead>
-                <tr>
-                    <th class="text-center">Lobby Code</th>
-                    <th class="text-center">Players</th>
-                </tr>
-            </thead>
-            <tbody id="lobbytable">
-            </tbody>
-        </table>
+                </div>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Lobby Code</th>
+                            <th class="text-center">Players</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lobbytable">
+                    </tbody>
+                </table>
+            </div>
 	    </div>
 	</div>
 	<div id="lobby" class="hide">
