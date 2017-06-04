@@ -531,10 +531,16 @@ function addToOpenLobby(lobbycode, players) {
 		lobbycodefield.innerHTML = lobbycode;
 		lobbyplayersfield.innerHTML = players + '/20';
 		row.setAttribute("id", "l" + lobbycode);
+		row.setAttribute("onClick", "setLobby(" + "'" + lobbycode + "'" + ")");
     	row.appendChild(lobbycodefield);
     	row.appendChild(lobbyplayersfield);
     	lobbytable.appendChild(row);
 	}
+}
+
+function setLobby(lobbycode) {
+    document.getElementById("gameidfield").value = lobbycode;
+    document.getElementById("nicknamefield").focus();
 }
 
 function removeFromGraveyard(playerid) {
