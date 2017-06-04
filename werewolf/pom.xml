@@ -113,7 +113,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-
+		<finalName>werewolf</finalName>
 	</build>
 
 	<scm>
