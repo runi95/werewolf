@@ -237,7 +237,7 @@ public class AdvancedMode extends GameModeMasterClass {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		
 		lobbyEntity.setPhase("waitphase");
-		lobbyEntity.setPhaseTime(2);
+		lobbyEntity.setPhaseTime(3);
 		
 		messageList.add(new LobbyMessage("waitphase"));
 		
@@ -349,7 +349,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	}
 	
 	private void startNight(LobbyEntity lobbyEntity) {
-		lobbyEntity.setPhaseTime(5);
+		lobbyEntity.setPhaseTime(30);
 		new Thread() {
 			public void run() {
 				try {
@@ -397,7 +397,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	}
 	
 	private void startDay(LobbyEntity lobbyEntity) {
-		lobbyEntity.setPhaseTime(5);
+		lobbyEntity.setPhaseTime(60);
 		new Thread() {
 			public void run() {
 				try {
