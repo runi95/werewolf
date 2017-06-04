@@ -35,7 +35,7 @@
                         </form>
                     </div>
                 </div>
-                <table class="table table-condensed">
+                <table class="table table-condensed custom-table-striped">
                     <thead>
                         <tr>
                             <th class="text-center">Lobby Code</th>
