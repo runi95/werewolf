@@ -10,13 +10,21 @@
 	    </nav>
 	    <div class="container" style="padding-top:20px">
             <div id="profilediv" class="show">
-                <ul class="custom-list-group">
-                    <li class="medieval-text custom-list-group">Username: <span id="profilename"></span></li>
-                    <li class="medieval-text custom-list-group">Games: <span id="profilegames"></span></li>
-                    <li class="medieval-text custom-list-group">Wins: <span id="profilewins"></span></li>
-                    <li class="medieval-text custom-list-group">Losses: <span id="profilelosses"></span></li>
-                    <li class="medieval-text custom-list-group">Win Rate: <span id="profilewinrate"></span>%</li>
-                </ul>
+                <div class="row">
+                    <span class="medieval-text">Username: <span id="profilename"></span></span>
+                </div>
+                <div class="row">
+                    <span class="medieval-text">Games: <span id="profilegames"></span></span>
+                </div>
+                <div class="row">
+                    <span class="medieval-text">Wins: <span id="profilewins"></span></span>
+                </div>
+                <div class="row">
+                    <span class="medieval-text">Losses: <span id="profilelosses"></span></span>
+                </div>
+                <div class="row">
+                    <span class="medieval-text">Win Rate: <span id="profilewinrate"></span></span>
+                </div>
             </div>
             <div id="openlobbydiv" class="hide">
                 <div class="form-group">

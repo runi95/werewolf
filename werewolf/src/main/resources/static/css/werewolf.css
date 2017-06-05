@@ -3,12 +3,13 @@
  */
 
 @font-face {
-    font-family: 'Goudy Medieval Reqular'; /*a name to be used later*/
-    src: url('fonts/goudy-medieval-regular.ttf') format('truetype'); /*URL to font*/
+    font-family: 'Goudy Medieval Alternate'; /*a name to be used later*/
+    src: url('fonts/goudy-medieval-alternate.ttf') format('truetype'); /*URL to font*/
 }
 
 .medieval-text {
-    font-family: 'Goudy Medieval Regular';
+    font-family: 'Goudy Medieval Alternate';
+    font-size: 2.5em;
 }
 
 .custom-list-group > ul {
