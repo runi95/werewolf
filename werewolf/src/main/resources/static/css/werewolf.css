@@ -2,6 +2,12 @@
  * Globals
  */
 
+.testclass {
+    border-radius: 25px;
+    background: rgba(115, 173, 33, 0.5);
+    padding: 20px;
+}
+
 @font-face {
     font-family: 'Goudy Medieval Alternate'; /*a name to be used later*/
     src: url('fonts/goudy-medieval-alternate.ttf') format('truetype'); /*URL to font*/

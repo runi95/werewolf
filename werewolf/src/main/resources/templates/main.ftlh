@@ -9,7 +9,7 @@
 		    </ul>
 	    </nav>
 	    <div class="container" style="padding-top:20px">
-            <div id="profilediv" class="show">
+            <div id="profilediv" class="show testclass">
                 <div class="row">
                     <span class="medieval-text">Username: <span id="profilename"></span></span>
                 </div>
