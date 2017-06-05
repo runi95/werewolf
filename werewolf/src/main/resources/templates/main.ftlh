@@ -11,11 +11,11 @@
 	    <div class="container" style="padding-top:20px">
             <div id="profilediv" class="show">
                 <ul class="custom-list-group">
-                    <li class="custom-list-group">Username: <span id="profilename"></span></li>
-                    <li class="custom-list-group">Games: <span id="profilegames"></span></li>
-                    <li class="custom-list-group">Wins: <span id="profilewins"></span></li>
-                    <li class="custom-list-group">Losses: <span id="profilelosses"></span></li>
-                    <li class="custom-list-group">Win Rate: <span id="profilewinrate"></span>%</li>
+                    <li class="medieval-text custom-list-group">Username: <span id="profilename"></span></li>
+                    <li class="medieval-text custom-list-group">Games: <span id="profilegames"></span></li>
+                    <li class="medieval-text custom-list-group">Wins: <span id="profilewins"></span></li>
+                    <li class="medieval-text custom-list-group">Losses: <span id="profilelosses"></span></li>
+                    <li class="medieval-text custom-list-group">Win Rate: <span id="profilewinrate"></span>%</li>
                 </ul>
             </div>
             <div id="openlobbydiv" class="hide">
