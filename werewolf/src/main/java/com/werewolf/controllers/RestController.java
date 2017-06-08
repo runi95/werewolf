@@ -26,15 +26,6 @@ public class RestController {
 	@Autowired
 	JoinLobbyService lobbyPlayerService;
 
-	/*
-	@GetMapping(value = "/lobby/openlobbyrequest")
-	public String gamecoderequest(Principal principal) {
-		String username = principal.getName();
-
-        return lobbyPlayerService.getOpenLobbies(username);
-	}
-	*/
-
 	@GetMapping(value = "/lobby/getprofile")
 	public String getuserprofile(Principal principal) {
 		String username = principal.getName();
