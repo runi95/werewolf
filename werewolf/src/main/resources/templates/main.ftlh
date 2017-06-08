@@ -9,21 +9,23 @@
 		    </ul>
 	    </nav>
 	    <div class="container" style="padding-top:20px">
-            <div id="profilediv" class="show testclass">
-                <div class="row">
-                    <span class="medieval-text">Username: <span id="profilename"></span></span>
-                </div>
-                <div class="row">
-                    <span class="medieval-text">Games: <span id="profilegames"></span></span>
-                </div>
-                <div class="row">
-                    <span class="medieval-text">Wins: <span id="profilewins"></span></span>
-                </div>
-                <div class="row">
-                    <span class="medieval-text">Losses: <span id="profilelosses"></span></span>
-                </div>
-                <div class="row">
-                    <span class="medieval-text">Win Rate: <span id="profilewinrate"></span></span>
+            <div id="profilediv" class="show">
+                <div class="profile-border">
+                    <div class="row">
+                        <span class="medieval-text">Username: <span id="profilename"></span></span>
+                    </div>
+                    <div class="row">
+                        <span class="medieval-text">Games: <span id="profilegames"></span></span>
+                    </div>
+                    <div class="row">
+                        <span class="medieval-text">Wins: <span id="profilewins"></span></span>
+                    </div>
+                    <div class="row">
+                        <span class="medieval-text">Losses: <span id="profilelosses"></span></span>
+                    </div>
+                    <div class="row">
+                        <span class="medieval-text">Win Rate: <span id="profilewinrate"></span></span>
+                    </div>
                 </div>
             </div>
             <div id="openlobbydiv" class="hide">
