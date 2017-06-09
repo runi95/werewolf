@@ -77,71 +77,99 @@
     	<div id="optionsdiv" class="hide"></div>
     </div>
     <div id="game" class="hide">
+        <div class="phase-div">
+    	    <img id="dayphase" src="css/img/Werewolf-Day.png" class="phase phase-out">
+    	    <img id="nightphase" src="css/img/Werewolf-Night.png" class="phase phase-out">
+    		<img id="deadphase" src="css/img/Werewolf-Dead.png" class="phase phase-out">
+    		<img id="wonphase" src="css/img/Werewolf-Won.png" class="phase phase-out">
+    		<img id="lostphase" src="css/img/Werewolf-Lost.png" class="phase phase-out">
+    	</div>
     	<nav class="custom-nav">
-    		<div class="phase-div">
-    			<img id="dayphase" src="css/img/Werewolf-Day.png" class="phase phase-out">
-    			<img id="nightphase" src="css/img/Werewolf-Night.png" class="phase phase-out">
-    			<img id="deadphase" src="css/img/Werewolf-Dead.png" class="phase phase-out">
-    			<img id="wonphase" src="css/img/Werewolf-Won.png" class="phase phase-out">
-    			<img id="lostphase" src="css/img/Werewolf-Lost.png" class="phase phase-out">
-    		</div>
-    		<ul>
-           		<li><span id="actionref" onclick="loadAction()">Action</span></li>
+    	    <ul>
+           	    <li><span id="actionref" onclick="loadAction()">Action</span></li>
                	<li><span id="logref" onclick="loadLog()">Log</span></li>
                	<li><span id="graveref" onclick="loadGraveyard()">Graveyard</span></li>
                	<li><span id="roleref" onclick="loadRole()">Role</span></li>
     		</ul>
-    		<div id="actiondiv" class="show">
-           		<div id="dayactiondiv" class="hide">
-           		    <div class="container">
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th class="text-center col-xs-6">Name</th>
-                                    <th class="text-center col-xs-3">Lynch</th>
-                                </tr>
-                            </thead>
-                            <tbody id="votelist"></tbody>
-                        </table>
-    				</div>
+    	</nav>
+    	<div id="actiondiv" class="show">
+            <div id="dayactiondiv" class="hide">
+           	    <div class="container">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="text-center col-xs-6">Name</th>
+                                <th class="text-center col-xs-3">Lynch</th>
+                            </tr>
+                        </thead>
+                        <tbody id="votelist"></tbody>
+                    </table>
     			</div>
-    			<div id="nightactiondiv" class="hide">
-    			    <div class="container">
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th class="text-center col-xs-6">Name</th>
-                                    <th class="text-center col-xs-3">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="nightactionlist"></tbody>
-                        </table>
-    				</div>
-    			</div>
-    			<div id="noactiondiv" class="show"></div>
     		</div>
-    		<div id="logdiv" class="hide">
-    			<div id="loglist" class="container"></div>
-    		</div>
-    		<div id="gravediv" class="hide">
+    	    <div id="nightactiondiv" class="hide">
     		    <div class="container">
                     <table class="table table-condensed">
                         <thead>
                             <tr>
                                 <th class="text-center col-xs-6">Name</th>
-                                <th class="text-center col-xs-3">Role</th>
+                                <th class="text-center col-xs-3">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="gravelist"></tbody>
+                        <tbody id="nightactionlist"></tbody>
                     </table>
     			</div>
     		</div>
-    		<div id="rolediv" class="hide">
-    		    <div class="container">
-                    <h1 class="panel-title"><b id="rolename"></b></h1>
-                    <table id="roletable" class="table table-condensed">
-    			</div>
+    		<div id="noactiondiv" class="show"></div>
+    	</div>
+    	<div id="logdiv" class="hide">
+    	    <div id="loglist" class="container"></div>
+    	</div>
+    	<div id="gravediv" class="hide">
+    	    <div class="container">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="text-center col-xs-6">Name</th>
+                            <th class="text-center col-xs-3">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gravelist"></tbody>
+                </table>
     		</div>
-    	</nav>
+    	</div>
+    	<div id="rolediv" class="hide">
+    	    <div class="container">
+                <h1 class="panel-title"><b id="rolename"></b></h1>
+                <table id="roletable" class="table table-condensed"></table>
+    		</div>
+    	</div>
+    	<!-- Modal -->
+        <div id="rolemodal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <h4 class="modal-title">Role</h4>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <b id="modalrolename"></b>
+                            <table id="modalroletable" class="table table-condensed"></table>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="center-block btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </@m.master>

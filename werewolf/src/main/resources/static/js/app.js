@@ -180,6 +180,8 @@ function receivePrivateMessage(message) {
                 case "lost":
                 	lost();
                 	break;
+                case "initrole":
+                    showRoleModal(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable)
                 case "role":
                 	setRole(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
@@ -850,6 +852,83 @@ function loadRole() {
 	gravediv.setAttribute("class", "hide");
 	roleref.setAttribute("class", "active");
 	rolediv.setAttribute("class", "show");
+}
+
+function showRoleModal(name, alignment, goal, description) {
+    var rolename = document.getElementById("modalrolename");
+    rolename.innerHTML = name;
+
+    var roletable = document.getElementById("modalroletable");
+    var rolelist = null;
+
+    rolelist = document.getElementById("modalrolelist");
+    if(rolelist != null) {
+        rolelist.remove();
+    }
+
+    rolelist = document.createElement("tbody");
+    rolelist.setAttribute("id", "modalrolelist");
+
+    var alignmentrow = document.createElement("tr");
+	var goalrow = document.createElement("tr");
+	var descriptionrow = document.createElement("tr");
+
+	var alignmentcol = document.createElement("th");
+	var alignmentbold = document.createElement("b");
+	var alignmentcontent = document.createElement("th");
+	alignmentbold.innerHTML = "Alignment";
+	alignmentcontent.innerHTML = alignment;
+
+	var goalcol = document.createElement("th");
+	var goalbold = document.createElement("b");
+	var goalcontent = document.createElement("th");
+	goalbold.innerHTML = "Goal";
+	goalcontent.innerHTML = goal;
+
+	var descriptioncol = document.createElement("th");
+	var descriptionbold = document.createElement("b");
+	var descriptioncontent = document.createElement("th");
+	descriptionbold.innerHTML = "Description";
+	descriptioncontent.innerHTML = description;
+
+	switch(alignment) {
+	case "Good":
+		alignmentcontent.setAttribute("class", "text-success");
+		break;
+	case "Chaotic Good":
+		alignmentcontent.setAttribute("class", "text-success");
+		break;
+	case "Evil":
+		alignmentcontent.setAttribute("class", "text-danger");
+		break;
+	case "Chaotic Evil":
+		alignmentcontent.setAttribute("class", "text-danger");
+		break;
+	case "Neutral Evil":
+		alignmentcontent.setAttribute("class", "text-warning");
+		break;
+	case "Neutral":
+	default:
+		break;
+	}
+
+	alignmentcol.appendChild(alignmentbold);
+	alignmentrow.appendChild(alignmentcol);
+	alignmentrow.appendChild(alignmentcontent);
+	goalcol.appendChild(goalbold);
+	goalrow.appendChild(goalcol);
+	goalrow.appendChild(goalcontent);
+	descriptioncol.appendChild(descriptionbold);
+	descriptionrow.appendChild(descriptioncol);
+	descriptionrow.appendChild(descriptioncontent);
+
+	rolelist.appendChild(alignmentrow);
+	rolelist.appendChild(goalrow);
+	rolelist.appendChild(descriptionrow);
+
+	roletable.appendChild(rolelist);
+
+    $('#rolemodal').modal('show');
 }
 
 function setRole(name, alignment, goal, description) {

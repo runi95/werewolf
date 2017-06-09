@@ -2,6 +2,14 @@
  * Globals
  */
 
+ .modal-content {
+    background-color: #333;
+}
+
+.close {
+    color: #fff
+}
+
 .profile-border {
     border-radius: 25px;
     background: rgba(47, 187, 255, 0.3);
