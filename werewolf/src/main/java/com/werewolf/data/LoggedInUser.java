@@ -1,10 +1,9 @@
 package com.werewolf.data;
 
-import java.util.HashSet;
-
+import com.werewolf.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.werewolf.entities.User;
+import java.util.HashSet;
 
 public class LoggedInUser extends org.springframework.security.core.userdetails.User{
 	

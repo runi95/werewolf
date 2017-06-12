@@ -1,5 +1,6 @@
 package com.werewolf.configurations;
 
+import com.werewolf.services.JoinLobbyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,6 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptorAdapter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-
-import com.werewolf.services.JoinLobbyService;
 
 public class PresenceChannelInterceptor extends ChannelInterceptorAdapter {
 

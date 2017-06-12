@@ -1,9 +1,9 @@
 package com.werewolf.gameplay;
 
-import java.util.LinkedList;
-
 import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.entities.LobbyPlayer;
+
+import java.util.LinkedList;
 
 /**
  * A dummy class for emulating game rounds

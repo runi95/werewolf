@@ -1,12 +1,11 @@
 package com.werewolf.components;
 
+import com.werewolf.data.AccountRegisterForm;
+import com.werewolf.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import com.werewolf.data.AccountRegisterForm;
-import com.werewolf.services.AccountService;
 
 
 @Component

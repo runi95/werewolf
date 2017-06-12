@@ -1,8 +1,8 @@
 package com.werewolf.services;
 
-import java.util.HashSet;
-import java.util.stream.Collectors;
-
+import com.werewolf.data.AccountRepository;
+import com.werewolf.data.LoggedInUser;
+import com.werewolf.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,9 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.werewolf.data.AccountRepository;
-import com.werewolf.data.LoggedInUser;
-import com.werewolf.entities.User;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountDetailsServiceImpl implements UserDetailsService {

@@ -1,9 +1,9 @@
 package com.werewolf.gameplay;
 
+import com.werewolf.Messages.LobbyMessage;
+
 import java.util.HashMap;
 import java.util.LinkedList;
-
-import com.werewolf.Messages.LobbyMessage;
 
 public class GameEmulator {
 	private HashMap<EmulationCharacter, EmulationCharacter> blockers = new HashMap<>();

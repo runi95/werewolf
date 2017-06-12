@@ -1,7 +1,5 @@
 package com.werewolf.data;
 
-import com.werewolf.entities.User;
-
 public class JoinLobbyForm {
     private String nickname;
 

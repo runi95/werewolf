@@ -2,7 +2,6 @@ package com.werewolf.controllers;
 
 import com.werewolf.Messages.JoinLobbyMessage;
 import com.werewolf.services.JoinLobbyService;
-import org.jboss.logging.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

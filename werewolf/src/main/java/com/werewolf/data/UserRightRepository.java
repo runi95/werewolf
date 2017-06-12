@@ -1,8 +1,7 @@
 package com.werewolf.data;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.werewolf.entities.UserRight;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRightRepository extends JpaRepository<UserRight, Long> {
 }

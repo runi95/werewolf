@@ -8,15 +8,12 @@ import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.NameDictionary;
 import com.werewolf.entities.User;
 import com.werewolf.gameplay.AdvancedMode;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 

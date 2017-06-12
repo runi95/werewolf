@@ -1,17 +1,16 @@
 package com.werewolf.services;
 
-import java.util.HashSet;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.werewolf.data.AccountRegisterForm;
 import com.werewolf.data.AccountRepository;
 import com.werewolf.data.UserEditForm;
 import com.werewolf.data.UserRightRepository;
 import com.werewolf.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
 
 @Service
 public class AccountServiceImpl implements AccountService {

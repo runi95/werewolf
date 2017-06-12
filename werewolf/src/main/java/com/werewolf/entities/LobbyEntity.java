@@ -1,11 +1,10 @@
 package com.werewolf.entities;
 
+import com.werewolf.gameplay.GameModeMasterClass;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.werewolf.data.JoinLobbyForm;
-import com.werewolf.gameplay.GameModeMasterClass;
 
 public class LobbyEntity {
 

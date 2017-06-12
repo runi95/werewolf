@@ -1,16 +1,15 @@
 package com.werewolf.components;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
-
 import com.werewolf.data.AccountRepository;
 import com.werewolf.data.NameDictionaryEnum;
 import com.werewolf.data.NameDictionaryRepository;
 import com.werewolf.entities.NameDictionary;
 import com.werewolf.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
 @Component
 public class DevUserCreator implements ApplicationListener<ContextRefreshedEvent> {
