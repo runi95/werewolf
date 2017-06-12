@@ -83,7 +83,7 @@ public class AdvancedMode extends GameModeMasterClass {
 
 			lobbyPlayer.setRole(role);
 			lobbyPlayer.setAlignment(role.getAlignment().getAlignmentName());
-			if (role.getAlignment().equals("Evil"))
+			if (role.getAlignment() == Alignments.Evil)
 				lobbyEntity.addToTeamEvil(lobbyPlayer);
 		}
 	}
@@ -176,7 +176,7 @@ public class AdvancedMode extends GameModeMasterClass {
 			return false;
 	}
 	
-	public void dayPhase(LobbyEntity lobbyEntity) {
+	private void dayPhase(LobbyEntity lobbyEntity) {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		lobbyEntity.setPhase("dayphase");
 		
@@ -188,7 +188,7 @@ public class AdvancedMode extends GameModeMasterClass {
 		startDay(lobbyEntity);
 	}
 	
-	public void nightPhase(LobbyEntity lobbyEntity) {
+	private void nightPhase(LobbyEntity lobbyEntity) {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		lobbyEntity.setPhase("nightphase");
 		
@@ -265,37 +265,37 @@ public class AdvancedMode extends GameModeMasterClass {
 	}
 	
 	private void neutralWins(LinkedList<LobbyPlayer> goodPlayers, LinkedList<LobbyPlayer> evilPlayers, LinkedList<LobbyPlayer> neutralPlayers, LinkedList<LobbyPlayer> neutralEvilPlayers, LobbyEntity lobbyEntity) {
-		goodPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
-		evilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
-		neutralPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
-		neutralEvilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
+		goodPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		evilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		neutralPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
+		neutralEvilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
 		
-		lobbyEntity.getDeadPlayers().forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
-		broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("endgame")}))));
+		lobbyEntity.getDeadPlayers().forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("endgame")}))));
 	
 		System.out.println("Game has ended with a neutral win!");
 	}
 	
 	private void goodWins(LinkedList<LobbyPlayer> goodPlayers, LinkedList<LobbyPlayer> evilPlayers, LinkedList<LobbyPlayer> neutralPlayers, LinkedList<LobbyPlayer> neutralEvilPlayers, LobbyEntity lobbyEntity) {
-		goodPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
-		evilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
-		neutralPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
-		neutralEvilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		goodPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
+		evilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		neutralPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
+		neutralEvilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
 	
-		lobbyEntity.getDeadPlayers().forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
-		broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("endgame")}))));
+		lobbyEntity.getDeadPlayers().forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("endgame")}))));
 	
 		System.out.println("Game has ended with a good win!");
 	}
 	
 	private void evilWins(LinkedList<LobbyPlayer> goodPlayers, LinkedList<LobbyPlayer> evilPlayers, LinkedList<LobbyPlayer> neutralPlayers, LinkedList<LobbyPlayer> neutralEvilPlayers, LobbyEntity lobbyEntity) {
-		goodPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
-		evilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
-		neutralPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
-		neutralEvilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		goodPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		evilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
+		neutralPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("won")})))));
+		neutralEvilPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
 	
-		lobbyEntity.getDeadPlayers().forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
-		broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("endgame")}))));
+		lobbyEntity.getDeadPlayers().forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
+		broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("endgame")}))));
 	
 		System.out.println("Game has ended with an evil win!");
 	}
@@ -368,12 +368,12 @@ public class AdvancedMode extends GameModeMasterClass {
 			privateMessage(emulationChar.getLobbyPlayer().getUser().getUsername(), JoinLobbyService.convertObjectToJson(messageList));
 		}
 		
-		game.getDeadPlayers().forEach((p) -> { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("kill", p.getLobbyPlayer().getId(), p.getLobbyPlayer().getNickname(), p.getLobbyPlayer().getRole().getName(), p.getLobbyPlayer().getAlignment())})))); lobbyEntity.addDeadPlayer(p.getLobbyPlayer()); } );
+		game.getDeadPlayers().forEach((p) -> { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("kill", p.getLobbyPlayer().getId(), p.getLobbyPlayer().getNickname(), p.getLobbyPlayer().getRole().getName(), p.getLobbyPlayer().getAlignment())})))); lobbyEntity.addDeadPlayer(p.getLobbyPlayer()); } );
 		
 		waitPhase(lobbyEntity, "dayphase");
 		
 		// Setting all targets to null and telling clients about the change
-		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getTarget() != null) { privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("unnightaction", p.getTarget())})))); p.setTarget(null);}});
+		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getTarget() != null) { privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("unnightaction", p.getTarget())})))); p.setTarget(null);}});
 	
 		lobbyEntity.setRounds(lobbyEntity.getRounds() + 1);
 	}
@@ -401,7 +401,7 @@ public class AdvancedMode extends GameModeMasterClass {
 		waitPhase(lobbyEntity, "nightphase");
 		
 		// Setting all votes to 0 and telling clients about the change
-		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getVotes() != 0) p.setVotes(0); if(p.getVoted() != null) { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("updatevotestatus", p.getId(), p.getVoted(), "0", "x")})))); p.setVoted(null);}});
+		lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getVotes() != 0) p.setVotes(0); if(p.getVoted() != null) { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("updatevotestatus", p.getId(), p.getVoted(), "0", "x")})))); p.setVoted(null);}});
 	}
 	
 	private Map<String, EmulationCharacter> setUpCharacters(LobbyEntity lobbyEntity) {
