@@ -2,6 +2,29 @@
  * Globals
  */
 
+.nav-pills > li > span {
+  border-radius: 4px;
+}
+
+.nav-pills > li.active > span,
+.nav-pills > li.active > span:hover,
+.nav-pills > li.active > span:focus {
+  color: #fff;
+  background-color: #337ab7;
+}
+
+.nav > li > span {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+}
+
+.nav > li > span:hover,
+.nav > li > span:focus {
+  text-decoration: none;
+  background-color: #eee;
+}
+
  .modal-content {
     background-color: #333;
 }

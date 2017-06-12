@@ -147,7 +147,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(),
 				Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
 
-		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 4 && lobbyEntity.getPlayerSize() < 20)
+		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 2 && lobbyEntity.getPlayerSize() < 20)
             loadGame(lobbyEntity);
 
 		if (!messageList.isEmpty())
@@ -248,7 +248,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		if (lobbyEntity != null) {
 			if(lobbyPlayer.getAlignment().equals("Evil"))
-				lobbyEntity.getEvilTeam().forEach((p) -> messageList.add(new LobbyMessage("addinvalidtarget", p.getId(), p.getRole().getName(), p.getRole().getAlignment())));
+				lobbyEntity.getEvilTeam().forEach((p) -> messageList.add(new LobbyMessage("addinvalidtarget", p.getId(), p.getRole().getName(), p.getRole().getAlignment().getAlignmentName())));
 			
 			lobbyEntity.getAlivePlayers().forEach((lp) -> messageList
 					.add(new LobbyMessage("joinalive", lp.getId(), lp.getNickname(), Integer.toString(lp.getVotes()))));
@@ -256,8 +256,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 					lp.getNickname(), lp.getRole().getName(), lp.getAlignment())));
 
 			messageList
-					.add(new LobbyMessage("role", lobbyPlayer.getRole().getName(), lobbyPlayer.getRole().getAlignment(),
-							lobbyPlayer.getRole().getGoal(), lobbyPlayer.getRole().getDescription()));
+					.add(new LobbyMessage("initrole", lobbyPlayer.getRole().getName(), lobbyPlayer.getRole().getAlignment().getAlignmentName(),
+							lobbyPlayer.getRole().getAlignment().getGoal(), lobbyPlayer.getRole().getDescription()));
 		}
 
 		if (!messageList.isEmpty())
@@ -316,7 +316,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		messageList
 				.add(new LobbyMessage("role", lobbyPlayer.getRole().getName(), lobbyPlayer.getRole().getDescription(),
-						lobbyPlayer.getRole().getAlignment(), lobbyPlayer.getRole().getGoal()));
+						lobbyPlayer.getRole().getAlignment().getAlignmentName(), lobbyPlayer.getRole().getAlignment().getGoal()));
 
 		if (!messageList.isEmpty())
 			privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));

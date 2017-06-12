@@ -14,16 +14,6 @@ import org.springframework.stereotype.Service;
 import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
-import com.werewolf.gameplay.roles.Amnesiac;
-import com.werewolf.gameplay.roles.Bandit;
-import com.werewolf.gameplay.roles.Bard;
-import com.werewolf.gameplay.roles.Guard;
-import com.werewolf.gameplay.roles.Inquisitor;
-import com.werewolf.gameplay.roles.Jester;
-import com.werewolf.gameplay.roles.King;
-import com.werewolf.gameplay.roles.Knight;
-import com.werewolf.gameplay.roles.Marauder;
-import com.werewolf.gameplay.roles.Priest;
 import com.werewolf.services.JoinLobbyService;
 
 @Service
@@ -46,50 +36,50 @@ public class AdvancedMode extends GameModeMasterClass {
 		int size = lobbyPlayers.size();
 		switch (size) {
 		case 15:
-			lottery.add(new Bard());
+			lottery.add(Roles.Bard);
 		case 14:
-			lottery.add(ChaoticEvil.getRandomChaoticEvil());
+			lottery.add(Alignments.ChaoticEvil.getRandomRoleFromThisAlignment());
 		case 13:
-			lottery.add(new Guard());
+			lottery.add(Roles.Guard);
 		case 12:
-			lottery.add(new Inquisitor());
+			lottery.add(Roles.Inquisitor);
 		case 11:
-			lottery.add(Neutral.getRandomNeutral());
+			lottery.add(Alignments.Neutral.getRandomRoleFromThisAlignment());
 		case 10:
-			lottery.add(new Knight());
+			lottery.add(Roles.Knight);
 		case 9:
 			lottery.add(RoleInterface.getRandomRole());
 		case 8:
-			lottery.add(Evil.getRandomEvil());
+			lottery.add(Alignments.Evil.getRandomRoleFromThisAlignment());
 		case 7:
-			lottery.add(new Priest());
+			lottery.add(Roles.Priest);
 		case 6:
-			lottery.add(new Marauder());
-			lottery.add(new Bandit());
+			lottery.add(Roles.Marauder);
+			lottery.add(Roles.Bandit);
 			lottery.add(RoleInterface.getRandomRole());
-			lottery.add(Good.getRandomGood());
-			lottery.add(new Inquisitor());
-			lottery.add(new King());
+			lottery.add(Alignments.Good.getRandomRoleFromThisAlignment());
+			lottery.add(Roles.Inquisitor);
+			lottery.add(Roles.King);
 			break;
 		case 5:
-			lottery.add(new Marauder());
-			lottery.add(new Bandit());
-			lottery.add(Good.getRandomGood());
-			lottery.add(new Amnesiac());
-			lottery.add(new King());
+			lottery.add(Roles.Marauder);
+			lottery.add(Roles.Bandit);
+			lottery.add(Alignments.Good.getRandomRoleFromThisAlignment());
+			lottery.add(Roles.Amnesiac);
+			lottery.add(Roles.King);
 			break;
 		case 4:
-			lottery.add(new Marauder());
-			lottery.add(new Jester());
-			lottery.add(new Priest());
-			lottery.add(new King());
+			lottery.add(Roles.Marauder);
+			lottery.add(Roles.Jester);
+			lottery.add(Roles.Priest);
+			lottery.add(Roles.King);
 			break;
 		case 3:
-			lottery.add(new Bard());
+			lottery.add(Roles.Bard);
 		case 2:
-			lottery.add(new Amnesiac());
+			lottery.add(Roles.Amnesiac);
 		case 1:
-			lottery.add(new Marauder());
+			lottery.add(Roles.Marauder);
 		}
 
 		for (LobbyPlayer lobbyPlayer : lobbyPlayers) {
@@ -100,7 +90,7 @@ public class AdvancedMode extends GameModeMasterClass {
 			lottery.remove(rng);
 
 			lobbyPlayer.setRole(role);
-			lobbyPlayer.setAlignment(role.getAlignment());
+			lobbyPlayer.setAlignment(role.getAlignment().getAlignmentName());
 			if (role.getAlignment().equals("Evil"))
 				lobbyEntity.addToTeamEvil(lobbyPlayer);
 		}
@@ -173,13 +163,13 @@ public class AdvancedMode extends GameModeMasterClass {
 			if(lobby.getPhaseTime() > 3)
 				lobby.setPhaseTime(3);
 //			waitPhase(lobbyEntity, "nightphase");
-		} else if (voter.getRole() instanceof King) {
+		} else if (voter.getRole() == Roles.King) {
 			lobby.addDeadPlayer(latestVotedOn);
 
 			messageList.add(new LobbyMessage("kinglynch", latestVotedOn.getId(), latestVotedOn.getNickname(),
 					latestVotedOn.getRole().getName(), latestVotedOn.getAlignment()));
 			
-			if(latestVotedOn.getRole() instanceof Jester) {
+			if(latestVotedOn.getRole() == Roles.Jester) {
 				new LobbyMessage("jesterkill", voter.getId(), voter.getNickname(), voter.getRole().getName(), voter.getAlignment());
 			}
 			
@@ -252,18 +242,18 @@ public class AdvancedMode extends GameModeMasterClass {
 		LinkedList<LobbyPlayer> goodList = new LinkedList<>(), evilList = new LinkedList<>(), neutralEvilList = new LinkedList<>(), neutralList = new LinkedList<>();
 		for(LobbyPlayer lp : lobbyEntity.getAlivePlayers()) {
 			switch(lp.getRole().getAlignment()) {
-			case "Good":
-			case "Chaotic Good":
+			case Good:
+			case ChaoticGood:
 				goodList.add(lp);
 				break;
-			case "Evil":
-			case "Chaotic Evil":
+			case Evil:
+			case ChaoticEvil:
 				evilList.add(lp);
 				break;
-			case "Neutral Evil":
+			case NeutralEvil:
 				neutralEvilList.add(lp);
 				break;
-			case "Neutral":
+			case Neutral:
 				neutralList.add(lp);
 				break;
 			}

@@ -159,8 +159,17 @@
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <div class="row">
-                            <b id="modalrolename"></b>
-                            <table id="modalroletable" class="table table-condensed"></table>
+                            <div class="col-xs-5 col-sm-3">
+                                <ul id="modalrolelist" class="nav nav-pills nav-stacked"></ul>
+                            </div>
+                            <div class="col-xs-7 col-sm-9">
+                                <div class="row">
+                                    <p class="text-left" id="modalalignment"></p></div>
+                                <div class="row">
+                                    <p class="text-left" id="modalgoal"></p></div>
+                                <div class="row">
+                                    <p class="text-left" id="modaldescription" style="width: auto;"></p></div>
+                            </div>
                         </div>
                     </div>
 

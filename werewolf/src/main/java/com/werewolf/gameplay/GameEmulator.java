@@ -168,7 +168,7 @@ public class GameEmulator {
 			EmulationCharacter knightExecution = knights.get(knight);
 			if(knightExecution != null) {
 				deadPlayers.add(knightExecution);
-				if(knightExecution.getRole() instanceof Good || knightExecution.getRole() instanceof ChaoticGood)
+				if(knightExecution.getRole() == Alignments.Good || knightExecution.getRole().getAlignment() == Alignments.ChaoticGood)
 					deadPlayers.add(knight);
 			}
 		}
@@ -185,10 +185,10 @@ public class GameEmulator {
 	private void emulateAmnesiacs() {
 		for (EmulationCharacter amnesiac : amnesiacs) {
 			if (day >= 2) {
-				RoleInterface newRole = Good.getRandomGood();
+				RoleInterface newRole = Alignments.Good.getRandomRoleFromThisAlignment();
 				amnesiac.setRole(newRole);
 				amnesiac.getLobbyPlayer().setRole(newRole);
-				amnesiac.addMessage(new LobbyMessage("role", amnesiac.getLobbyPlayer().getRole().getName(), amnesiac.getLobbyPlayer().getRole().getAlignment(), amnesiac.getLobbyPlayer().getRole().getGoal(), amnesiac.getLobbyPlayer().getRole().getDescription()));
+				amnesiac.addMessage(new LobbyMessage("role", amnesiac.getLobbyPlayer().getRole().getName(), amnesiac.getLobbyPlayer().getRole().getAlignment().getAlignmentName(), (String)amnesiac.getLobbyPlayer().getRole().getAlignment().getGoal(), amnesiac.getLobbyPlayer().getRole().getDescription()));
 				amnesiac.addNightMessage("You just remembered that you're a " + amnesiac.getRole().getName() + ".");
 			} else {
 				amnesiac.addNightMessage("You struggle to remember who you are.");

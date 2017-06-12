@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import com.werewolf.Messages.LobbyMessage;
+import com.werewolf.Messages.RoleRequestMessages;
 import com.werewolf.data.JoinLobbyForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,4 +39,9 @@ public class RestController {
         String username = principal.getName();
         return lobbyPlayerService.join(username, joinLobbyForm);
     }
+
+    @PostMapping(value = "/lobby/rolerequest")
+	public List<LobbyMessage> rolerequest(@RequestBody RoleRequestMessages roleRequestMessages) {
+		return null;
+	}
 }

@@ -854,11 +854,27 @@ function loadRole() {
 	rolediv.setAttribute("class", "show");
 }
 
+function requestRole(name) {
+    $.ajax({
+        url: '/lobby/joinlobbyrequest',
+        type: "POST",
+        datatype: 'json',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({"nickname":nickname, "gameid":gameid}),
+        success: function(data) {
+            joinLobbyReply(data);
+        }
+    });
+}
+
 function showRoleModal(name, alignment, goal, description) {
     var rolename = document.getElementById("modalrolename");
     rolename.innerHTML = name;
 
-    var roletable = document.getElementById("modalroletable");
+    var rolelist = document.getElementById("modalrolelist");
     var rolelist = null;
 
     rolelist = document.getElementById("modalrolelist");
