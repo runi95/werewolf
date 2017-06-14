@@ -89,7 +89,7 @@
            	    <li><span id="actionref" onclick="loadAction()">Action</span></li>
                	<li><span id="logref" onclick="loadLog()">Log</span></li>
                	<li><span id="graveref" onclick="loadGraveyard()">Graveyard</span></li>
-               	<li><span id="roleref" onclick="loadRole()">Role</span></li>
+               	<li><span id="roleref" onclick="showRole()">Role</span></li>
     		</ul>
     	</nav>
     	<div id="actiondiv" class="show">
@@ -160,11 +160,9 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xs-5 col-sm-3">
-                                <ul class="nav nav-pills nav-stacked">
-                                    <li class="active"><span>Home</span></li>
-                                    <li><span>Menu 1</span></li>
-                                    <li><span>Menu 2</span></li>
-                                </ul>
+                                <ul id="goodrolelist" class="nav nav-pills nav-stacked"></ul>
+                                <ul id="neutralrolelist" class="nav nav-pills nav-stacked"></ul>
+                                <ul id="evilrolelist" class="nav nav-pills nav-stacked"></ul>
                             </div>
                             <div class="col-xs-7 col-sm-9">
                                 <div class="row">

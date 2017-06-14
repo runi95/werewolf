@@ -2,6 +2,11 @@
  * Globals
  */
 
+.text-roleindicator {
+    border-bottom: 2px solid transparent;
+    border-bottom-color: #8a6d3b;
+}
+
 .nav-pills > li > span {
   border-radius: 4px;
 }

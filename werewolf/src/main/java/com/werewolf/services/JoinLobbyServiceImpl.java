@@ -253,8 +253,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 					lp.getNickname(), lp.getRole().getName(), lp.getAlignment())));
 
 			messageList
-					.add(new LobbyMessage("initrole", lobbyPlayer.getRole().getName(), lobbyPlayer.getRole().getAlignment().getAlignmentName(),
-							lobbyPlayer.getRole().getAlignment().getGoal(), lobbyPlayer.getRole().getDescription()));
+					.add(new LobbyMessage("initrole", lobbyPlayer.getRole().getName()));
 		}
 
 		if (!messageList.isEmpty())
@@ -408,6 +407,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
         broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("removeopenlobby", lobbyEntity.getGameId())}));
 		messageList.add(new LobbyMessage("lobbyready"));
+		lobbyEntity.getPlayers().forEach((p) -> { messageList.add(new LobbyMessage("addtorolelist", p.getRole().getName(), p.getRole().getAlignment().getAlignmentName(), p.getRole().getAlignment().getGoal(), p.getRole().getDescription())); });
 
 		if (!messageList.isEmpty())
 			broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
