@@ -153,14 +153,18 @@
                             <span aria-hidden="true">&times;</span>
                             <span class="sr-only">Close</span>
                         </button>
-                        <h4 class="modal-title">Role</h4>
+                        <h4 id="modalrolename" class="modal-title">Role</h4>
                     </div>
 
                     <!-- Modal Body -->
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-xs-5 col-sm-3">
-                                <ul id="modalrolelist" class="nav nav-pills nav-stacked"></ul>
+                                <ul class="nav nav-pills nav-stacked">
+                                    <li class="active"><span>Home</span></li>
+                                    <li><span>Menu 1</span></li>
+                                    <li><span>Menu 2</span></li>
+                                </ul>
                             </div>
                             <div class="col-xs-7 col-sm-9">
                                 <div class="row">
@@ -179,6 +183,5 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </@m.master>

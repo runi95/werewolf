@@ -1,7 +1,6 @@
 package com.werewolf.controllers;
 
 import com.werewolf.Messages.LobbyMessage;
-import com.werewolf.Messages.RoleRequestMessages;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinLobbyService;
@@ -34,9 +33,4 @@ public class RestController {
         String username = principal.getName();
         return lobbyPlayerService.join(username, joinLobbyForm);
     }
-
-    @PostMapping(value = "/lobby/rolerequest")
-	public List<LobbyMessage> rolerequest(@RequestBody RoleRequestMessages roleRequestMessages) {
-		return null;
-	}
 }

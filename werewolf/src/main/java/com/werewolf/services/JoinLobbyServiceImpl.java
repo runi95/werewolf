@@ -312,6 +312,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 			return;
 
 		messageList
+				.add(new LobbyMessage("initrole", lobbyPlayer.getRole().getName(), lobbyPlayer.getRole().getDescription(),
+						lobbyPlayer.getRole().getAlignment().getAlignmentName(), lobbyPlayer.getRole().getAlignment().getGoal()));
+		messageList
 				.add(new LobbyMessage("role", lobbyPlayer.getRole().getName(), lobbyPlayer.getRole().getDescription(),
 						lobbyPlayer.getRole().getAlignment().getAlignmentName(), lobbyPlayer.getRole().getAlignment().getGoal()));
 

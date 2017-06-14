@@ -125,6 +125,9 @@ function receiveBroadcastMessage(message) {
                 case "lobbyready":
                 	loadGame();
                 	break;
+                case "addtorolelist":
+                    addToRoleList();
+                	break;
                 default:
                     break;
             }
@@ -238,24 +241,6 @@ function joinLobby(nickname, gameid) {
         }
     });
 }
-
-/*
-DEPRECATED!
-function getOpenLobbies() {
-    $.ajax({
-        url: '/lobby/openlobbyrequest',
-        type: "GET",
-        datatype: 'json',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        success: function(data) {
-            receivePrivateMessage(data);
-        }
-    });
-}
-*/
 
 function getProfile() {
     $.ajax({
@@ -854,95 +839,36 @@ function loadRole() {
 	rolediv.setAttribute("class", "show");
 }
 
-function requestRole(name) {
-    $.ajax({
-        url: '/lobby/joinlobbyrequest',
-        type: "POST",
-        datatype: 'json',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify({"nickname":nickname, "gameid":gameid}),
-        success: function(data) {
-            joinLobbyReply(data);
-        }
-    });
-}
-
 function showRoleModal(name, alignment, goal, description) {
     var rolename = document.getElementById("modalrolename");
+    var rolealignment = document.getElementById("modalalignment");
+    var rolegoal = document.getElementById("modalgoal");
+    var roledescription = document.getElementById("modaldescription");
     rolename.innerHTML = name;
+    rolealignment.innerHTML = alignment;
+    rolegoal.innerHTML = goal;
+    roledescription.innerHTML = description;
 
-    var rolelist = document.getElementById("modalrolelist");
-    var rolelist = null;
-
-    rolelist = document.getElementById("modalrolelist");
-    if(rolelist != null) {
-        rolelist.remove();
+    switch(alignment) {
+        case "Good":
+    		rolealignment.setAttribute("class", "text-left text-success");
+    		break;
+    	case "Chaotic Good":
+    		rolealignment.setAttribute("class", "text-left text-success");
+    		break;
+    	case "Evil":
+    		rolealignment.setAttribute("class", "text-left text-danger");
+    		break;
+    	case "Chaotic Evil":
+    		rolealignment.setAttribute("class", "text-left text-danger");
+    		break;
+    	case "Neutral Evil":
+    		rolealignment.setAttribute("class", "text-left text-warning");
+    		break;
+    	case "Neutral":
+    	default:
+            break;
     }
-
-    rolelist = document.createElement("tbody");
-    rolelist.setAttribute("id", "modalrolelist");
-
-    var alignmentrow = document.createElement("tr");
-	var goalrow = document.createElement("tr");
-	var descriptionrow = document.createElement("tr");
-
-	var alignmentcol = document.createElement("th");
-	var alignmentbold = document.createElement("b");
-	var alignmentcontent = document.createElement("th");
-	alignmentbold.innerHTML = "Alignment";
-	alignmentcontent.innerHTML = alignment;
-
-	var goalcol = document.createElement("th");
-	var goalbold = document.createElement("b");
-	var goalcontent = document.createElement("th");
-	goalbold.innerHTML = "Goal";
-	goalcontent.innerHTML = goal;
-
-	var descriptioncol = document.createElement("th");
-	var descriptionbold = document.createElement("b");
-	var descriptioncontent = document.createElement("th");
-	descriptionbold.innerHTML = "Description";
-	descriptioncontent.innerHTML = description;
-
-	switch(alignment) {
-	case "Good":
-		alignmentcontent.setAttribute("class", "text-success");
-		break;
-	case "Chaotic Good":
-		alignmentcontent.setAttribute("class", "text-success");
-		break;
-	case "Evil":
-		alignmentcontent.setAttribute("class", "text-danger");
-		break;
-	case "Chaotic Evil":
-		alignmentcontent.setAttribute("class", "text-danger");
-		break;
-	case "Neutral Evil":
-		alignmentcontent.setAttribute("class", "text-warning");
-		break;
-	case "Neutral":
-	default:
-		break;
-	}
-
-	alignmentcol.appendChild(alignmentbold);
-	alignmentrow.appendChild(alignmentcol);
-	alignmentrow.appendChild(alignmentcontent);
-	goalcol.appendChild(goalbold);
-	goalrow.appendChild(goalcol);
-	goalrow.appendChild(goalcontent);
-	descriptioncol.appendChild(descriptionbold);
-	descriptionrow.appendChild(descriptioncol);
-	descriptionrow.appendChild(descriptioncontent);
-
-	rolelist.appendChild(alignmentrow);
-	rolelist.appendChild(goalrow);
-	rolelist.appendChild(descriptionrow);
-
-	roletable.appendChild(rolelist);
 
     $('#rolemodal').modal('show');
 }
