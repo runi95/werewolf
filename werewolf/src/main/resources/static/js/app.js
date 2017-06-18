@@ -553,6 +553,8 @@ function removeOpenLobby(lobbycode) {
 function setLobby(lobbycode) {
     document.getElementById("gameidfield").value = lobbycode;
     document.getElementById("nicknamefield").focus();
+
+    $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
 
 function removeFromGraveyard(playerid) {
@@ -606,30 +608,6 @@ function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
 	} else {
 		elem.innerHTML = "Ready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 4) + ")";
 	}
-}
-
-function loadProfile() {
-	var profileref = document.getElementById("profileref");
-	var profilediv = document.getElementById("profilediv");
-	var openlobbyref = document.getElementById("openlobbyref");
-	var openlobbydiv = document.getElementById("openlobbydiv");
-	profileref.setAttribute("class", "active");
-	profilediv.setAttribute("class", "show");
-	openlobbyref.setAttribute("class", "");
-	openlobbydiv.setAttribute("class", "hide");
-}
-
-function loadOpenLobby() {
-	var profileref = document.getElementById("profileref");
-	var profilediv = document.getElementById("profilediv");
-	var openlobbyref = document.getElementById("openlobbyref");
-	var openlobbydiv = document.getElementById("openlobbydiv");
-	profileref.setAttribute("class", "");
-	profilediv.setAttribute("class", "hide");
-	openlobbyref.setAttribute("class", "active");
-	openlobbydiv.setAttribute("class", "show");
-
-	document.getElementById("nicknamefield").focus();
 }
 
 function loadLobby() {

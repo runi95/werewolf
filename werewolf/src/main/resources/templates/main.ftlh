@@ -3,16 +3,42 @@
 <div id="menu">
     <nav class="custom-nav">
         <ul>
-            <li id="profileref" class="active"><span onClick="loadProfile()">Profile</span></li>
-            <li id="openlobbyref"><span onClick="loadOpenLobby()">Lobby</span></li>
-            <li class="custom-nav-right custom-nav-text">User: <b>${username}</b></li>
+            <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
         </ul>
     </nav>
-    <div class="container" style="padding-top:20px">
+    <div class="container" style="padding-top:20px;">
         <div class="row">
-            <div class="col-md-4 col-md-offset-8">
-                <div id="profilediv" class="show">
-                    <ul class="list-group list-unstyled" style="text-align: left;color: #aaa;">
+            <div class="col-md-6 col-md-offset-2" style="max-width: 700px">
+                <div class="form-group">
+                    <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
+                        id="joinLobbyForm" name="joinLobbyForm">
+                        <div id="nicknamediv" class="form-group">
+                            <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
+                                class="form-control" maxlength="16" autocomplete="off" autofocus>
+                            <span id="nicknameglyph"></span>
+                        </div>
+                        <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
+                        <div id="gameiddiv" class="form-group">
+                            <input id="gameidfield" name="gameid" type="text" placeholder="Game ID" class="form-control"
+                                autocomplete="off" pattern="[A-Za-z0-9]{5}">
+                            <span id="gameidglyph"></span>
+                        </div>
+                        <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
+                    </form>
+                </div>
+                <table class="table table-condensed custom-table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Lobby Code</th>
+                            <th class="text-center">Players</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lobbytable"></tbody>
+                </table>
+                </div>
+            <div class="col-md-4">
+                <div id="profilediv">
+                    <ul class="list-group list-unstyled" style="text-align: left;">
                         <li class="list-group-item profile-list">
                             <span class="medieval-text">Username: <span id="profilename"></span></span>
                         </li>
@@ -30,40 +56,8 @@
                         </li>
                     </ul>
                     <!-- <div class="profile-border"> </div>-->
-
                 </div>
             </div>
-        </div>
-        <div id="openlobbydiv" class="hide">
-            <div class="form-group">
-                <div class="absolute-center">
-                    <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
-                          id="joinLobbyForm" name="joinLobbyForm">
-                        <div id="nicknamediv" class="form-group">
-                            <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
-                                   class="form-control" maxlength="16" autocomplete="off" autofocus>
-                            <span id="nicknameglyph"></span>
-                        </div>
-                        <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
-                        <div id="gameiddiv" class="form-group">
-                            <input id="gameidfield" name="gameid" type="text" placeholder="Game ID" class="form-control"
-                                   autocomplete="off" pattern="[A-Za-z0-9]{5}">
-                            <span id="gameidglyph"></span>
-                        </div>
-                        <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
-                    </form>
-                </div>
-            </div>
-            <table class="table table-condensed custom-table-striped">
-                <thead>
-                <tr>
-                    <th class="text-center">Lobby Code</th>
-                    <th class="text-center">Players</th>
-                </tr>
-                </thead>
-                <tbody id="lobbytable">
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
@@ -72,6 +66,7 @@
         <ul>
             <li id="lobbyref" class="active"><span onclick="loadLobby()">Lobby</span></li>
             <li id="optionsref"><span onclick="loadOptions()">Options</span></li>
+            <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
         </ul>
     </nav>
     <div id="lobbydiv" class="show">

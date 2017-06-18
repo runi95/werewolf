@@ -2,6 +2,10 @@
  * Globals
  */
 
+#profilediv {
+    max-width: 320px;
+}
+
 .text-roleindicator {
     border-bottom: 2px solid transparent;
     border-bottom-color: #8a6d3b;
@@ -389,7 +393,7 @@ border-bottom: 2px solid transparent;
 html,
 body {
   height: 100%;
-  background-color: #333;
+  background-color: #1e1914;
 }
 
 body {
