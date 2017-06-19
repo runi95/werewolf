@@ -63,8 +63,10 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 						Thread.sleep(5000);
 						if(lobbyMap.containsKey(newgameid)) {
 							LobbyEntity gameLobby = lobbyMap.get(newgameid);
-							lobbyMap.remove(gameLobby);
-                            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("removeopenlobby", newgameid)}));
+							if (gameLobby.getPlayerSize() == 0) {
+								lobbyMap.remove(gameLobby);
+								broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[]{new LobbyMessage("removeopenlobby", newgameid)}));
+							}
 						}
 					} catch (InterruptedException e) {
             			e.printStackTrace();
