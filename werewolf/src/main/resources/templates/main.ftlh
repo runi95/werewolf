@@ -8,7 +8,13 @@
     </nav>
     <div class="container" style="padding-top:20px;">
         <div class="row">
-            <div class="col-md-6 col-md-offset-2" style="max-width: 700px">
+            <div class="col-md-3" style="max-width: 300px">
+                <span style="color: #8a6d3b;">
+                <h3>Gameplay</h3>
+                The game is played in cycles of day and night that can vary on the game mode you're playing, at night every player gets to perform their night action which is <em>usually</em> their strongest ability. During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of the votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and manipulate during this phase as telling them your true identity will most definitely get you lynched by the good town's people.
+                </span>
+            </div>
+            <div class="col-md-5" style="max-width: 700px">
                 <div class="form-group">
                     <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
                         id="joinLobbyForm" name="joinLobbyForm">
