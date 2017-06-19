@@ -293,6 +293,9 @@ function joinLobbyReply(message) {
                 document.getElementById("menu").setAttribute("class", "hide");
                 document.getElementById("lobby").setAttribute("class", "show");
                 break;
+            case "playerreadycount":
+                someoneClickedReady(null, message[i].info, message[i].additionalinfo);
+                break;
             default:
                 break;
         }

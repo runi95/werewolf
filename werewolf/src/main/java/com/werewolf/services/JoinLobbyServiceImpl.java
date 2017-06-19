@@ -98,6 +98,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		messageList.add(new LobbyMessage("join", lobbyPlayer.getId(), nickname));
         privateMessageList.add(new LobbyMessage("gamecode", gameid));
+		privateMessageList.add(new LobbyMessage("playerreadycount", null,
+				Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
 
 		if (!messageList.isEmpty())
 			broadcastMessage(lobbyPlayer.getLobby().getGameId(), JoinLobbyService.convertObjectToJson(messageList));
