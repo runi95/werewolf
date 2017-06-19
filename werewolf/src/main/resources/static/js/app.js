@@ -243,6 +243,35 @@ function submitJoinLobbyForm() {
     }
 }
 
+function submitCreateLobbyForm() {
+    var checkboxfield = document.getElementById("openlobbycheck");
+    var maxplayercountfield = document.getElementById("maxplayercounter");
+    var nicknamefield = document.getElementById("createnicknamefield");
+
+    var gamemode = $('input[name="mode"]:checked').val();
+    var checkboxval = checkboxfield.value;
+    var maxplayerval = maxplayercountfield.value;
+    var nicknameval = nicknamefield.value;
+
+    createLobby(gamemode, checkboxval, maxplayerval, nicknameval);
+}
+
+function createLobby(gamemode, privatelobby, maxplayers, nickname) {
+    $.ajax({
+        url: '/lobby/createlobbyrequest',
+        type: "POST",
+        datatype: 'json',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({"gamemode":gamemode, "privatelobby":privatelobby, "maxplayers":maxplayers, "nickname":nickname}),
+        success: function(data) {
+            joinLobbyReply(data);
+        }
+    });
+}
+
 function joinLobby(nickname, gameid) {
     $.ajax({
         url: '/lobby/joinlobbyrequest',

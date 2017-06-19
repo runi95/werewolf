@@ -1,6 +1,7 @@
 package com.werewolf.services;
 
 import com.werewolf.Messages.LobbyMessage;
+import com.werewolf.data.CreateLobbyForm;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.data.NameDictionaryRepository;
 import com.werewolf.entities.LobbyEntity;
@@ -41,6 +42,54 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	}
 
 	@Override
+    public List<LobbyMessage> join(String username, CreateLobbyForm createLobbyForm) {
+        JoinLobbyForm joinLobbyForm = new JoinLobbyForm();
+
+	    final String gameid = generateNewGameid();
+        LobbyEntity lobbyEntity = new LobbyEntity(gameid, readInt(createLobbyForm.getMaxplayers()));
+        switch(createLobbyForm.getGamemode()) {
+            case "Advanced":
+                lobbyEntity.setGameMode(advancedGameMode);
+                break;
+            case "One Night":
+                /* TODO: Add the One Night game mode */
+                lobbyEntity.setGameMode(advancedGameMode);
+                break;
+            default:
+                lobbyEntity.setGameMode(advancedGameMode);
+                System.out.println("Mode: " + createLobbyForm.getGamemode());
+                break;
+        }
+        lobbyMap.put(gameid, lobbyEntity);
+        joinLobbyForm.setNickname(createLobbyForm.getNickname());
+        joinLobbyForm.setGameid(gameid);
+
+        if(!createLobbyForm.getPrivatelobby().equals("true"))
+            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, "0")}));
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                    if(lobbyMap.containsKey(gameid)) {
+                        LobbyEntity gameLobby = lobbyMap.get(gameid);
+                        if (gameLobby.getPlayerSize() == 0) {
+                            lobbyMap.remove(gameLobby);
+                            if(!createLobbyForm.getPrivatelobby().equals("true"))
+                                broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[]{new LobbyMessage("removeopenlobby", gameid)}));
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+
+        return join(username, joinLobbyForm);
+    }
+
+	@Override
 	public List<LobbyMessage> join(String username, JoinLobbyForm joinLobbyForm) {
 		List<LobbyMessage> messageList = new ArrayList<>();
         List<LobbyMessage> privateMessageList = new ArrayList<>();
@@ -48,32 +97,6 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		User user = accountService.findByUsername(username);
 		String gameid = joinLobbyForm.getGameid().toUpperCase();
 		String nickname = joinLobbyForm.getNickname();
-
-		if(gameid == null || gameid.equals("")) {
-            gameid = generateNewGameid();
-            final String newgameid = gameid;
-            LobbyEntity lobbyEntity = new LobbyEntity(gameid);
-            lobbyMap.put(gameid, lobbyEntity);
-            joinLobbyForm.setGameid(gameid);
-            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, "0")}));
-            new Thread() {
-            	@Override
-				public void run() {
-            		try {
-						Thread.sleep(5000);
-						if(lobbyMap.containsKey(newgameid)) {
-							LobbyEntity gameLobby = lobbyMap.get(newgameid);
-							if (gameLobby.getPlayerSize() == 0) {
-								lobbyMap.remove(gameLobby);
-								broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[]{new LobbyMessage("removeopenlobby", newgameid)}));
-							}
-						}
-					} catch (InterruptedException e) {
-            			e.printStackTrace();
-					}
-				}
-			}.start();
-        }
 
 		LobbyPlayer oldLobby = playerMap.get(user.getId());
 		if (oldLobby != null)
@@ -325,6 +348,18 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 			privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));
 	}
 
+	private int readInt(String integer) {
+	    int retint = -1;
+
+	    try {
+            retint = Integer.parseInt(integer);
+        } catch(NumberFormatException e) {
+	        e.printStackTrace();
+        }
+
+        return retint;
+    }
+
 	// TODO: Possibly make this failsafe
 	private String generateNewGameid() {
 		SecureRandom random = new SecureRandom();
@@ -404,8 +439,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 			return;
 
 		lobbyEntity.getPlayers().forEach((p) -> lobbyEntity.addAlivePlayer(p));
-		
-		lobbyEntity.setGameMode(advancedGameMode);
+
 		createPlayers(lobbyEntity);
 		initializeLobby(lobbyEntity);
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.werewolf.Messages.LobbyMessage;
+import com.werewolf.data.CreateLobbyForm;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
@@ -14,6 +15,7 @@ public interface JoinLobbyService {
 	
 	LobbyPlayer getPlayer(long userid);
     List<LobbyMessage> join(String username, JoinLobbyForm joinLobbyForm);
+    List<LobbyMessage> join(String username, CreateLobbyForm createLobbyForm);
     
     void leave(String username);
     void vote(String username, String voteon, boolean vote);

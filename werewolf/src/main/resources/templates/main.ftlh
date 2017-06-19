@@ -7,7 +7,7 @@
         </ul>
     </nav>
     <div class="container" style="padding-top:20px;">
-        <div id="joinlobbydiv" class="hide">
+        <div id="joinlobbydiv" class="show">
             <div class="col-md-5 col-md-offset-2" style="max-width: 700px">
                 <div class="form-group">
                     <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div id="createlobbydiv" class="show">
+        <div id="createlobbydiv" class="hide">
             <div class="col-md-6 col-md-offset-3">
                 <form role="form" class="form-horizontal" onsubmit="submitCreateLobbyForm(); return false;"
                     id="createLobbyForm" name="createLobbyForm">
@@ -65,13 +65,13 @@
                     </div>
                     <ul class="fancy-radio-ul">
                         <li>
-                            <input id="onenightopt" type="radio" name="game mode" value="One Night" checked>
+                            <input id="onenightopt" type="radio" name="mode" value="One Night" checked>
                             <label class="medieval-text" for="onenightopt">One Night</label>
 
                             <div class="check"></div>
                         </li>
                         <li>
-                            <input id="advancedopt" type="radio" name="game mode" value="Advanced">
+                            <input id="advancedopt" type="radio" name="mode" value="Advanced">
                             <label class="medieval-text" for="advancedopt">Advanced</label>
 
                             <div class="check"></div>
@@ -86,12 +86,16 @@
                     </div>
 
                     <div class="row">
-                    <div class="col-xs-3 col-xs-offset-2">
-                        <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
+                        <div class="col-xs-3 col-xs-offset-2">
+                            <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
+                        </div>
+                        <div class="col-xs-5">
+                            <input type="number" min="4" max="20" value="15" class="form-control" id="maxplayercounter">
+                        </div>
                     </div>
-                    <div class="col-xs-5">
-                        <input type="number" min="4" max="20" value="15" class="form-control" id="maxplayercounter">
-                    </div>
+                    <div class="row">
+                        <input id="createnicknamefield" name="createnickname" type="text" placeholder="Nickname"
+                            class="form-control" maxlength="16" autocomplete="off">
                     </div>
                     <div style="padding-top: 20px">
                     <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>

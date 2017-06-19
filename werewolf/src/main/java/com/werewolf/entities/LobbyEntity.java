@@ -19,6 +19,8 @@ public class LobbyEntity {
 	// How much time is left on this phase?
 	private int phaseTime = 0;
 
+	private final int maxPlayers;
+
 	private Map<String, LobbyPlayer> lobbyplayers = new HashMap<String, LobbyPlayer>();
 	private Map<String, LobbyPlayer> alivePlayers = new HashMap<String, LobbyPlayer>();
 	private Map<String, LobbyPlayer> deadPlayers = new HashMap<String, LobbyPlayer>();
@@ -32,8 +34,9 @@ public class LobbyEntity {
 	
 	private GameModeMasterClass game;
 
-	public LobbyEntity(String gameid) {
+	public LobbyEntity(String gameid, int maxPlayers) {
 		this.gameid = gameid;
+		this.maxPlayers = Math.max(4, Math.min(20, maxPlayers));
 	}
 
 	public boolean getStartedState() {
@@ -139,7 +142,7 @@ public class LobbyEntity {
 	}
 
 	public LobbyPlayer addPlayer(User user, String nickname) {
-		if (lobbyplayers.size() >= 20)
+		if (lobbyplayers.size() >= maxPlayers)
 			return null;
 
 		LobbyPlayer playerAlreadyInLobby = lobbyplayers.get(Long.toString(user.getId()));
