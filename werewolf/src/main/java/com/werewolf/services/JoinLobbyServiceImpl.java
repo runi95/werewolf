@@ -9,6 +9,7 @@ import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.entities.NameDictionary;
 import com.werewolf.entities.User;
 import com.werewolf.gameplay.AdvancedMode;
+import com.werewolf.gameplay.OneNightMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 	@Autowired
 	AdvancedMode advancedGameMode;
+
+    @Autowired
+    OneNightMode oneNightMode;
 
 	@Autowired
 	NameDictionaryRepository nameDictionaryRepository;
@@ -52,8 +56,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
                 lobbyEntity.setGameMode(advancedGameMode);
                 break;
             case "One Night":
-                /* TODO: Add the One Night game mode */
-                lobbyEntity.setGameMode(advancedGameMode);
+                lobbyEntity.setGameMode(oneNightMode);
                 break;
             default:
                 lobbyEntity.setGameMode(advancedGameMode);
