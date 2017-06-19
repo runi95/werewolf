@@ -236,6 +236,7 @@ function submitJoinLobbyForm() {
     if(gameidval === "") {
         document.getElementById("joinlobbydiv").setAttribute("class", "hide");
         document.getElementById("createlobbydiv").setAttribute("class", "show");
+        document.getElementById("createnicknamefield").focus();
     } else {
         nicknamefield.disabled = true;
         gameidfield.disabled = true;
