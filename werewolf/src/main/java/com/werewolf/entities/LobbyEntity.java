@@ -21,6 +21,8 @@ public class LobbyEntity {
 
 	private final int maxPlayers;
 
+	private boolean privateLobby = false;
+
 	private Map<String, LobbyPlayer> lobbyplayers = new HashMap<String, LobbyPlayer>();
 	private Map<String, LobbyPlayer> alivePlayers = new HashMap<String, LobbyPlayer>();
 	private Map<String, LobbyPlayer> deadPlayers = new HashMap<String, LobbyPlayer>();
@@ -38,6 +40,10 @@ public class LobbyEntity {
 		this.gameid = gameid;
 		this.maxPlayers = Math.max(4, Math.min(20, maxPlayers));
 	}
+
+	public boolean getPrivate() { return privateLobby; }
+
+	public void setPrivate(boolean privateLobby) { this.privateLobby = privateLobby; }
 
 	public boolean getStartedState() {
 		return gamestarted;

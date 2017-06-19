@@ -60,11 +60,14 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
                 System.out.println("Mode: " + createLobbyForm.getGamemode());
                 break;
         }
+        if(createLobbyForm.getPrivatelobby().equals("true"))
+            lobbyEntity.setPrivate(true);
+
         lobbyMap.put(gameid, lobbyEntity);
         joinLobbyForm.setNickname(createLobbyForm.getNickname());
         joinLobbyForm.setGameid(gameid);
 
-        if(!createLobbyForm.getPrivatelobby().equals("true"))
+        if(!lobbyEntity.getPrivate())
             broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, "0")}));
 
         new Thread() {
@@ -76,7 +79,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
                         LobbyEntity gameLobby = lobbyMap.get(gameid);
                         if (gameLobby.getPlayerSize() == 0) {
                             lobbyMap.remove(gameLobby);
-                            if(!createLobbyForm.getPrivatelobby().equals("true"))
+                            if(!lobbyEntity.getPrivate())
                                 broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[]{new LobbyMessage("removeopenlobby", gameid)}));
                         }
                     }
@@ -118,7 +121,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 		LobbyPlayer lobbyPlayer = lobbyEntity.addPlayer(user, nickname);
 		playerMap.put(user.getId(), lobbyPlayer);
-		if(!lobbyEntity.getStartedState())
+		if(!lobbyEntity.getStartedState() && !lobbyEntity.getPrivate())
             broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, Integer.toString(lobbyEntity.getPlayerSize()))}));
 
 		messageList.add(new LobbyMessage("join", lobbyPlayer.getId(), nickname));
@@ -308,7 +311,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	public void getOpenLobbies(String username) {
 		List<LobbyMessage> messageList = new ArrayList<LobbyMessage>();
 
-		lobbyMap.values().forEach((lobby) -> { if(!lobby.getStartedState()) messageList.add(new LobbyMessage("openlobby", lobby.getGameId(), Integer.toString(lobby.getPlayerSize()))); });
+		lobbyMap.values().forEach((lobby) -> { if(!lobby.getStartedState() && !lobby.getPrivate()) messageList.add(new LobbyMessage("openlobby", lobby.getGameId(), Integer.toString(lobby.getPlayerSize()))); });
 
         if (!messageList.isEmpty())
             privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));

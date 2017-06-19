@@ -249,7 +249,7 @@ function submitCreateLobbyForm() {
     var nicknamefield = document.getElementById("createnicknamefield");
 
     var gamemode = $('input[name="mode"]:checked').val();
-    var checkboxval = checkboxfield.value;
+    var checkboxval = checkboxfield.checked;
     var maxplayerval = maxplayercountfield.value;
     var nicknameval = nicknamefield.value;
 
