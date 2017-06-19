@@ -6,21 +6,19 @@ hr {
     border-color: #333;
 }
 
-#profilediv {
+.mainlobbydiv {
     border-radius: 25px;
     background: #333;
     padding: 10px;
     color: #8a6d3b;
+}
 
+#profilediv {
     font-family: 'Goudy Medieval Alternate';
     font-size: 2em;
 }
 
 #gameplayrules {
-    border-radius: 25px;
-    background: #333;
-    padding: 10px;
-    color: #8a6d3b;
     font-size: 120%;
 }
 

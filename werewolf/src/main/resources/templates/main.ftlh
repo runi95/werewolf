@@ -26,6 +26,7 @@
                         <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
                     </form>
                 </div>
+                <div class="mainlobbydiv">
                 <table class="table table-condensed custom-table-striped">
                     <thead>
                         <tr>
@@ -36,8 +37,10 @@
                     <tbody id="lobbytable"></tbody>
                 </table>
                 </div>
+                <hr>
+                </div>
             <div class="col-md-4" style="max-width: 400px">
-                <div id="profilediv">
+                <div id="profilediv" class="mainlobbydiv">
                     Username: <span id="profilename"></span><br>
                     Games: <span id="profilegames"></span><br>
                     Wins: <span id="profilewins"></span><br>
@@ -46,7 +49,7 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div id="gameplayrules">
+                    <div id="gameplayrules" class="mainlobbydiv">
                         <h3>Gameplay</h3>
                         The game is played in cycles of day and night that can vary on the game mode you're playing, at night every player gets to perform their night action which is <em>usually</em> their strongest ability. During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of the votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and manipulate during this phase as telling them your true identity will most definitely get you lynched by the good town's people.
                     </div>
