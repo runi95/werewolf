@@ -109,21 +109,16 @@
 <div id="lobby" class="hide">
     <nav class="custom-nav">
         <ul>
-            <li id="lobbyref" class="active"><span onclick="loadLobby()">Lobby</span></li>
-            <li id="optionsref"><span onclick="loadOptions()">Options</span></li>
             <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
         </ul>
     </nav>
-    <div id="lobbydiv" class="show">
-        <div class="container">
-            <div class="page-header">
-                <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
-            </div>
-            <ul id="plist" class="list-group"></ul>
-            <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
+    <div class="container">
+        <div class="page-header">
+            <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
         </div>
+        <ul id="plist" class="list-group"></ul>
+        <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
     </div>
-    <div id="optionsdiv" class="hide"></div>
 </div>
 <div id="game" class="hide">
     <div class="phase-div">

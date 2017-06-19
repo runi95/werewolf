@@ -656,28 +656,6 @@ function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
 	}
 }
 
-function loadLobby() {
-	var lobbyref = document.getElementById("lobbyref");
-	var lobbydiv = document.getElementById("lobbydiv");
-	var optionsref = document.getElementById("optionsref");
-	var optionsdiv = document.getElementById("optionsdiv");
-	lobbyref.setAttribute("class", "active");
-	lobbydiv.setAttribute("class", "show");
-	optionsref.setAttribute("class", "");
-	optionsdiv.setAttribute("class", "hide");
-}
-
-function loadOptions() {
-	var lobbyref = document.getElementById("lobbyref");
-	var lobbydiv = document.getElementById("lobbydiv");
-	var optionsref = document.getElementById("optionsref");
-	var optionsdiv = document.getElementById("optionsdiv");
-	lobbyref.setAttribute("class", "");
-	lobbydiv.setAttribute("class", "hide");
-	optionsref.setAttribute("class", "active");
-	optionsdiv.setAttribute("class", "show");
-}
-
 function loadGame() {
 	var lobby = document.getElementById("lobby");
 	var game = document.getElementById("game");
