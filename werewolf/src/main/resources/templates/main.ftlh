@@ -7,7 +7,7 @@
         </ul>
     </nav>
     <div class="container" style="padding-top:20px;">
-        <div class="row">
+        <div id="joinlobbydiv" class="hide">
             <div class="col-md-5 col-md-offset-2" style="max-width: 700px">
                 <div class="form-group">
                     <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
@@ -40,7 +40,7 @@
                 <hr>
                 </div>
             <div class="col-md-4" style="max-width: 400px">
-                <div id="profilediv" class="mainlobbydiv">
+                <div class="mainlobbydiv medieval-text">
                     Username: <span id="profilename"></span><br>
                     Games: <span id="profilegames"></span><br>
                     Wins: <span id="profilewins"></span><br>
@@ -54,6 +54,50 @@
                         The game is played in cycles of day and night that can vary on the game mode you're playing, at night every player gets to perform their night action which is <em>usually</em> their strongest ability. During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of the votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and manipulate during this phase as telling them your true identity will most definitely get you lynched by the good town's people.
                     </div>
                 </div>
+            </div>
+        </div>
+        <div id="createlobbydiv" class="show">
+            <div class="col-md-6 col-md-offset-3">
+                <form role="form" class="form-horizontal" onsubmit="submitCreateLobbyForm(); return false;"
+                    id="createLobbyForm" name="createLobbyForm">
+                    <div class="mainlobbydiv medieval-text">
+                        Game mode:
+                    </div>
+                    <ul class="fancy-radio-ul">
+                        <li>
+                            <input id="onenightopt" type="radio" name="game mode" value="One Night" checked>
+                            <label class="medieval-text" for="onenightopt">One Night</label>
+
+                            <div class="check"></div>
+                        </li>
+                        <li>
+                            <input id="advancedopt" type="radio" name="game mode" value="Advanced">
+                            <label class="medieval-text" for="advancedopt">Advanced</label>
+
+                            <div class="check"></div>
+                        </li>
+                    </ul>
+                    <div class="mainlobbydiv medieval-text">
+                        Game Settings:
+                    </div>
+                    <div class="fancy-checkbox">
+                        <input id="openlobbycheck" type="checkbox" name="open" value="open">
+                        <label id="openlobbychecklabel" class="medieval-text" for="openlobbycheck"></label>
+                    </div>
+
+                    <div class="row">
+                    <div class="col-xs-3 col-xs-offset-2">
+                        <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
+                    </div>
+                    <div class="col-xs-5">
+                        <input type="number" min="4" max="20" value="15" class="form-control" id="maxplayercounter">
+                    </div>
+                    </div>
+                    <div style="padding-top: 20px">
+                    <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>
+                    <button id="createbutton" name="createbutton" class="btn btn-info">Create</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

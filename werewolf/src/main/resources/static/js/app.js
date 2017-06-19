@@ -221,13 +221,26 @@ function setProfile(username, wins, games) {
     profilewinrate.innerHTML = winrate;
 }
 
+function loadJoinLobby() {
+    document.getElementById("createlobbydiv").setAttribute("class", "hide");
+    document.getElementById("joinlobbydiv").setAttribute("class", "show");
+}
+
 function submitJoinLobbyForm() {
     var nicknamefield = document.getElementById("nicknamefield");
     var gameidfield = document.getElementById("gameidfield");
 
-    nicknamefield.disabled = true;
-    gameidfield.disabled = true;
-    joinLobby(nicknamefield.value, gameidfield.value);
+    var nicknameval = nicknamefield.value;
+    var gameidval = gameidfield.value;
+
+    if(gameidval === "") {
+        document.getElementById("joinlobbydiv").setAttribute("class", "hide");
+        document.getElementById("createlobbydiv").setAttribute("class", "show");
+    } else {
+        nicknamefield.disabled = true;
+        gameidfield.disabled = true;
+        joinLobby(nicknameval, gameidval);
+    }
 }
 
 function joinLobby(nickname, gameid) {

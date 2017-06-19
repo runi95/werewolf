@@ -6,16 +6,99 @@ hr {
     border-color: #333;
 }
 
+#test-div {
+}
+
+.fancy-checkbox {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+.fancy-checkbox input[type=checkbox] {
+    position: absolute;
+    visibility: hidden;
+}
+
+.fancy-checkbox label{
+  display: block;
+  position: relative;
+  font-weight: 300;
+  font-size: 1.35em;
+  padding: 25px 25px;
+  z-index: 9;
+  cursor: pointer;
+  -webkit-transition: all 0.25s linear;
+}
+
+.fancy-checkbox input[type=checkbox]:checked ~ label{
+  color: #0DFF92;
+}
+
+.fancy-checkbox input[type=checkbox] ~ #openlobbychecklabel:after{
+  content: 'Private: False';
+}
+
+.fancy-checkbox input[type=checkbox]:checked ~ #openlobbychecklabel:after{
+  content: 'Private: True';
+}
+
+.fancy-radio-ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+.fancy-radio-ul li{
+    color: #AAAAAA;
+    display: block;
+    position: relative;
+    float: left;
+    width: 100%;
+    min-height: 65px;
+    border-bottom: 1px solid #333;
+}
+
+.fancy-radio-ul li input[type=radio]{
+  position: absolute;
+  visibility: hidden;
+}
+
+.fancy-radio-ul li label{
+  display: block;
+  position: relative;
+  font-weight: 300;
+  font-size: 1.35em;
+  margin: 10px auto;
+  height: 30px;
+  z-index: 9;
+  cursor: pointer;
+  -webkit-transition: all 0.25s linear;
+}
+
+.fancy-radio-ul li:hover label{
+	color: #FFFFFF;
+}
+
+input[type=radio]:checked ~ .check {
+  border: 5px solid #0DFF92;
+}
+
+input[type=radio]:checked ~ .check::before{
+  background: #0DFF92;
+}
+
+input[type=radio]:checked ~ label{
+  color: #0DFF92;
+}
+
 .mainlobbydiv {
     border-radius: 25px;
     background: #333;
     padding: 10px;
     color: #8a6d3b;
-}
-
-#profilediv {
-    font-family: 'Goudy Medieval Alternate';
-    font-size: 2em;
 }
 
 #gameplayrules {
