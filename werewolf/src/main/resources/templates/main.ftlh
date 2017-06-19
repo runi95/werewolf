@@ -8,13 +8,7 @@
     </nav>
     <div class="container" style="padding-top:20px;">
         <div class="row">
-            <div class="col-md-3" style="max-width: 300px">
-                <span style="color: #8a6d3b;">
-                <h3>Gameplay</h3>
-                The game is played in cycles of day and night that can vary on the game mode you're playing, at night every player gets to perform their night action which is <em>usually</em> their strongest ability. During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of the votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and manipulate during this phase as telling them your true identity will most definitely get you lynched by the good town's people.
-                </span>
-            </div>
-            <div class="col-md-5" style="max-width: 700px">
+            <div class="col-md-5 col-md-offset-2" style="max-width: 700px">
                 <div class="form-group">
                     <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
                         id="joinLobbyForm" name="joinLobbyForm">
@@ -42,26 +36,20 @@
                     <tbody id="lobbytable"></tbody>
                 </table>
                 </div>
-            <div class="col-md-4">
+            <div class="col-md-4" style="max-width: 400px">
                 <div id="profilediv">
-                    <ul class="list-group list-unstyled" style="text-align: left;">
-                        <li class="list-group-item profile-list">
-                            <span class="medieval-text">Username: <span id="profilename"></span></span>
-                        </li>
-                        <li class="list-group-item profile-list">
-                            <span class="medieval-text">Games: <span id="profilegames"></span></span>
-                        </li>
-                        <li class="list-group-item profile-list">
-                            <span class="medieval-text">Wins: <span id="profilewins"></span></span>
-                        </li>
-                        <li class="list-group-item profile-list">
-                            <span class="medieval-text">Losses: <span id="profilelosses"></span></span>
-                        </li>
-                        <li class="list-group-item profile-list">
-                            <span class="medieval-text">Win Rate: <span id="profilewinrate"></span></span>
-                        </li>
-                    </ul>
-                    <!-- <div class="profile-border"> </div>-->
+                    Username: <span id="profilename"></span><br>
+                    Games: <span id="profilegames"></span><br>
+                    Wins: <span id="profilewins"></span><br>
+                    Losses: <span id="profilelosses"></span><br>
+                    Win Rate: <span id="profilewinrate"></span><br>
+                </div>
+                <hr>
+                <div class="row">
+                    <div id="gameplayrules">
+                        <h3>Gameplay</h3>
+                        The game is played in cycles of day and night that can vary on the game mode you're playing, at night every player gets to perform their night action which is <em>usually</em> their strongest ability. During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of the votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and manipulate during this phase as telling them your true identity will most definitely get you lynched by the good town's people.
+                    </div>
                 </div>
             </div>
         </div>

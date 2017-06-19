@@ -2,8 +2,26 @@
  * Globals
  */
 
+hr {
+    border-color: #333;
+}
+
 #profilediv {
-    max-width: 320px;
+    border-radius: 25px;
+    background: #333;
+    padding: 10px;
+    color: #8a6d3b;
+
+    font-family: 'Goudy Medieval Alternate';
+    font-size: 2em;
+}
+
+#gameplayrules {
+    border-radius: 25px;
+    background: #333;
+    padding: 10px;
+    color: #8a6d3b;
+    font-size: 120%;
 }
 
 .text-roleindicator {
@@ -65,8 +83,7 @@
 
 .profile-list{
     background-color: #333;
-    border-color: #222222;
-    color: #8a6d3b;
+    border-color: #333;
 }
 .custom-table-striped > tbody > tr:nth-of-type(odd) {
   background-color: #222;
