@@ -4,10 +4,7 @@ import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.data.CreateLobbyForm;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.data.NameDictionaryRepository;
-import com.werewolf.entities.LobbyEntity;
-import com.werewolf.entities.LobbyPlayer;
-import com.werewolf.entities.NameDictionary;
-import com.werewolf.entities.User;
+import com.werewolf.entities.*;
 import com.werewolf.gameplay.AdvancedMode;
 import com.werewolf.gameplay.OneNightMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +36,9 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
 	@Autowired
 	AccountService accountService;
+
+	@Autowired
+    UserStatisticService userStatisticService;
 
 	@Override
 	public LobbyPlayer getPlayer(long userid) {
@@ -142,8 +142,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	public String getProfile(String username) {
 		List<LobbyMessage> messageList = new ArrayList<>();
 
-		User user = accountService.findByUsername(username);
-		messageList.add(new LobbyMessage("profile", user.getUsername(), Integer.toString(user.getWins()), Integer.toString(user.getGames())));
+        UserStatistics userStatistics = userStatisticService.getUserStatistics(username);
+		messageList.add(new LobbyMessage("profile", username, Long.toString(userStatistics.getGameswon()), Long.toString(userStatistics.getGamesplayed())));
 
 		return JoinLobbyService.convertObjectToJson(messageList);
 	}

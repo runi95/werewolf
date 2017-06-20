@@ -1,10 +1,8 @@
 package com.werewolf.services;
 
-import com.werewolf.data.AccountRegisterForm;
-import com.werewolf.data.AccountRepository;
-import com.werewolf.data.UserEditForm;
-import com.werewolf.data.UserRightRepository;
+import com.werewolf.data.*;
 import com.werewolf.entities.User;
+import com.werewolf.entities.UserStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,9 @@ public class AccountServiceImpl implements AccountService {
 	
 	@Autowired
     UserRightRepository userRightRepository;
+
+	@Autowired
+    UserStatisticsRepository userStatisticsRepository;
 	
 	@Override
     public void create(AccountRegisterForm accountRegisterForm) {
@@ -27,6 +28,13 @@ public class AccountServiceImpl implements AccountService {
         user.setUsername(accountRegisterForm.getUsername());
         user.setPasswordHash(new BCryptPasswordEncoder().encode(accountRegisterForm.getPassword()));
         user.setRights(new HashSet<>(userRightRepository.findAll()));
+
+        UserStatistics userStatistics = new UserStatistics();
+        userStatistics.setUsername(user.getUsername());
+        userStatistics.setGamesplayed(0);
+        userStatistics.setGameswon(0);
+
+        userStatisticsRepository.save(userStatistics);
         accountRepository.save(user);
     }
 	

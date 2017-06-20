@@ -22,28 +22,6 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<UserRight> rights;
 
-	@Column(name = "wins", nullable = false)
-	private int wins = 0;
-
-	@Column(name = "games", nullable = false)
-	private int games = 0;
-
-	public int getWins() {
-		return wins;
-	}
-
-	public void setWins(int wins) {
-		this.wins = wins;
-	}
-
-	public int getGames() {
-		return games;
-	}
-
-	public void setGames(int games) {
-		this.games = games;
-	}
-
 	public long getId() {
 		return id;
 	}
