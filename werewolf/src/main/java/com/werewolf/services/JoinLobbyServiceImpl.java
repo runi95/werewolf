@@ -128,7 +128,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
             broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, Integer.toString(lobbyEntity.getPlayerSize()))}));
 
 		messageList.add(new LobbyMessage("join", lobbyPlayer.getId(), nickname));
-        privateMessageList.add(new LobbyMessage("gamecode", gameid));
+        privateMessageList.add(new LobbyMessage("lobbyinfo", gameid, lobbyEntity.getGameMode().getName(), (lobbyEntity.getPrivate() ? "Private" : "Public"), Integer.toString(lobbyEntity.getMaxPlayers())));
 		privateMessageList.add(new LobbyMessage("playerreadycount", null,
 				Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
 
@@ -177,7 +177,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(),
 				Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
 
-		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 2 && lobbyEntity.getPlayerSize() < 20)
+		if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() >= 2 && lobbyEntity.getPlayerSize() <= lobbyEntity.getMaxPlayers())
             loadGame(lobbyEntity);
 
 		if (!messageList.isEmpty())

@@ -113,11 +113,23 @@
         </ul>
     </nav>
     <div class="container">
-        <div class="page-header">
-            <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
+        <div class="col-md-8">
+            <div class="page-header">
+                <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
+            </div>
+            <ul id="plist" class="list-group"></ul>
+            <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
         </div>
-        <ul id="plist" class="list-group"></ul>
-        <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
+        <div class="col-md-4" style="max-width: 400px">
+            <div class="page-header">
+                <h1>Lobby Statistics</h1>
+            </div>
+            <div class="mainlobbydiv medieval-text">
+                Gamemode: <span id="lobbystatsmode"></span><br>
+                Privacy: <span id="lobbystatsprivacy"></span><br>
+                Max Players: <span id="lobbystatsplayers"></span><br>
+            </div>
+        </div>
     </div>
 </div>
 <div id="game" class="hide">

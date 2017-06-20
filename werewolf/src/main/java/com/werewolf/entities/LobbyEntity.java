@@ -147,6 +147,10 @@ public class LobbyEntity {
 			lobbyplayers.remove(player.getId());
 	}
 
+	public int getMaxPlayers() {
+		return maxPlayers;
+	}
+
 	public LobbyPlayer addPlayer(User user, String nickname) {
 		if (lobbyplayers.size() >= maxPlayers)
 			return null;

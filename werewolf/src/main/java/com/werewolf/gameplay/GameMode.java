@@ -59,4 +59,9 @@ public interface GameMode {
 	 */
 	public void nightAction(LobbyEntity lobbyEntity, LobbyPlayer acter, LobbyPlayer oldTarget, LobbyPlayer target, boolean act);
 
+	/**
+	 * This is the name that is sent to the clients when requesting the game mode.
+	 * @return name
+	 */
+	public String getName();
 }

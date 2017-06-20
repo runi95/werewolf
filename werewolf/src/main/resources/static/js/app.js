@@ -329,12 +329,16 @@ function joinLobbyReply(message) {
                     nicknameglyph.setAttribute("class", "glyphicon glyphicon-remove form-control-feedback");
                 }
                 break;
-            case "gamecode":
-                gamecode = message[i].info;
+            case "lobbyinfo":
+                gamecode = message[i].playerid;
                 subscribeToBroadcast();
                 document.getElementById("gamecodenode").innerHTML = gamecode;
                 document.getElementById("menu").setAttribute("class", "hide");
                 document.getElementById("lobby").setAttribute("class", "show");
+
+                document.getElementById("lobbystatsmode").innerHTML = message[i].info;
+                document.getElementById("lobbystatsprivacy").innerHTML = message[i].additionalinfo;
+                document.getElementById("lobbystatsplayers").innerHTML = message[i].variable;
                 break;
             case "playerreadycount":
                 someoneClickedReady(null, message[i].info, message[i].additionalinfo);

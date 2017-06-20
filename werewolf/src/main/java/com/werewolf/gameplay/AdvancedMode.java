@@ -10,6 +10,11 @@ import java.util.*;
 
 @Service
 public class AdvancedMode extends GameModeMasterClass {
+
+	@Override
+	public String getName() {
+		return "Advanced";
+	}
 	
 	@Override
 	public void initalizeGame(LobbyEntity lobbyEntity) {

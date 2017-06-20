@@ -10,7 +10,12 @@ import java.util.*;
 
 @Service
 public class OneNightMode extends GameModeMasterClass {
-	
+
+	@Override
+	public String getName() {
+		return "One Night";
+	}
+
 	@Override
 	public void initalizeGame(LobbyEntity lobbyEntity) {
 		if(lobbyEntity.getStartedState())
