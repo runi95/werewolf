@@ -122,7 +122,7 @@
         </div>
         <div class="col-md-4" style="max-width: 400px">
             <div class="page-header">
-                <h1>Lobby Statistics</h1>
+                <h1>Lobby Settings</h1>
             </div>
             <div class="mainlobbydiv medieval-text">
                 Gamemode: <span id="lobbystatsmode"></span><br>
