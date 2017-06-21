@@ -159,7 +159,7 @@ public class OneNightMode extends GameModeMasterClass {
             messageList.add(new LobbyMessage("lynch", latestVotedOn.getId(), latestVotedOn.getNickname(),
                     latestVotedOn.getRole().getName(), latestVotedOn.getAlignment()));
 
-            checkWinCondition(lobbyEntity);
+            checkDayWinCondition(lobbyEntity);
 		} else if (voter.getRole() == Roles.King) {
 			lobby.addDeadPlayer(latestVotedOn);
 
@@ -228,11 +228,12 @@ public class OneNightMode extends GameModeMasterClass {
 		
 		if(!messageList.isEmpty())
 			broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
-		
-		startWaitingPhase(lobbyEntity, nextPhase);
+
+		if(!checkWinCondition(lobbyEntity))
+		    startWaitingPhase(lobbyEntity, nextPhase);
 	}
 	
-	private boolean checkWinCondition(LobbyEntity lobbyEntity) {
+	private boolean checkDayWinCondition(LobbyEntity lobbyEntity) {
 		LinkedList<LobbyPlayer> goodList = new LinkedList<>(), evilList = new LinkedList<>(), neutralEvilList = new LinkedList<>(), neutralList = new LinkedList<>();
 		for(LobbyPlayer lp : lobbyEntity.getAlivePlayers()) {
 			switch(lp.getRole().getAlignment()) {
@@ -261,6 +262,40 @@ public class OneNightMode extends GameModeMasterClass {
 			return true;
 		}
 	}
+
+    private boolean checkWinCondition(LobbyEntity lobbyEntity) {
+        LinkedList<LobbyPlayer> goodList = new LinkedList<>(), evilList = new LinkedList<>(), neutralEvilList = new LinkedList<>(), neutralList = new LinkedList<>();
+        for(LobbyPlayer lp : lobbyEntity.getAlivePlayers()) {
+            switch(lp.getRole().getAlignment()) {
+                case Good:
+                case ChaoticGood:
+                    goodList.add(lp);
+                    break;
+                case Evil:
+                case ChaoticEvil:
+                    evilList.add(lp);
+                    break;
+                case NeutralEvil:
+                    neutralEvilList.add(lp);
+                    break;
+                case Neutral:
+                    neutralList.add(lp);
+                    break;
+            }
+        }
+
+        if(!goodList.isEmpty() && evilList.isEmpty() && neutralEvilList.isEmpty()) {
+            goodWins(goodList, evilList, neutralList, neutralEvilList, lobbyEntity);
+            return true;
+        } else if (!evilList.isEmpty() && goodList.isEmpty() && neutralEvilList.isEmpty()) {
+            evilWins(goodList, evilList, neutralList, neutralEvilList, lobbyEntity);
+            return true;
+        } else if (goodList.isEmpty() && evilList.isEmpty()){
+            neutralWins(goodList, evilList, neutralList, neutralEvilList, lobbyEntity);
+            return true;
+        } else
+            return false;
+    }
 	
 	private void neutralWins(LinkedList<LobbyPlayer> goodPlayers, LinkedList<LobbyPlayer> evilPlayers, LinkedList<LobbyPlayer> neutralPlayers, LinkedList<LobbyPlayer> neutralEvilPlayers, LobbyEntity lobbyEntity) {
 		goodPlayers.forEach((p) -> privateMessage(p.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("lost")})))));
