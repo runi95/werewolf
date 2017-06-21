@@ -90,12 +90,12 @@
                             <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
                         </div>
                         <div class="col-xs-5">
-                            <input type="number" min="4" max="20" value="15" class="form-control" id="maxplayercounter">
+                            <input type="number" min="4" max="20" value="15" class="form-control fancy-input" id="maxplayercounter">
                         </div>
                     </div>
                     <div class="row">
                         <input id="createnicknamefield" name="createnickname" type="text" placeholder="Nickname"
-                            class="form-control" maxlength="16" autocomplete="off">
+                            class="form-control fancy-input" maxlength="16" autocomplete="off">
                     </div>
                     <div style="padding-top: 20px">
                     <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>
@@ -178,7 +178,14 @@
         <div id="noactiondiv" class="show"></div>
     </div>
     <div id="logdiv" class="hide">
-        <div id="loglist" class="container"></div>
+        <div class="container">
+            <div class="col-md-6">
+                <div id="loglist"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="chatlist"></div>
+            </div>
+        </div>
     </div>
     <div id="gravediv" class="hide">
         <div class="container">

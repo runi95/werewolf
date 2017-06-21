@@ -6,7 +6,20 @@ hr {
     border-color: #333;
 }
 
-#test-div {
+.fancy-input {
+    color: #000000;
+    background-color: #8a6d3b;
+    border-color: #2a2a2a;
+}
+
+.fancy-input:focus {
+    color: #000000;
+    background-color: #8a6d3b;
+    border-color: #2a2a2a;
+}
+
+.fancy-input::placeholder {
+  color: #2a2a2a;
 }
 
 .fancy-checkbox {
