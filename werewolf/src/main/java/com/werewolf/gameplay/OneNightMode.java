@@ -229,8 +229,7 @@ public class OneNightMode extends GameModeMasterClass {
 		if(!messageList.isEmpty())
 			broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
 		
-		if(!checkWinCondition(lobbyEntity))
-			startWaitingPhase(lobbyEntity, nextPhase);
+		startWaitingPhase(lobbyEntity, nextPhase);
 	}
 	
 	private boolean checkWinCondition(LobbyEntity lobbyEntity) {
