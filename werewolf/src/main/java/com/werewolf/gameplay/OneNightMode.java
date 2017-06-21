@@ -222,7 +222,7 @@ public class OneNightMode extends GameModeMasterClass {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		
 		lobbyEntity.setPhase("waitphase");
-		lobbyEntity.setPhaseTime(3);
+		lobbyEntity.setPhaseTime(15);
 		
 		messageList.add(new LobbyMessage("waitphase"));
 		
