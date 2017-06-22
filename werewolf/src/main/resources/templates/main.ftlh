@@ -61,6 +61,13 @@
                 <form role="form" class="form-horizontal" onsubmit="submitCreateLobbyForm(); return false;"
                     id="createLobbyForm" name="createLobbyForm">
                     <div class="mainlobbydiv medieval-text">
+                        User Preferences:
+                    </div>
+                    <div class="row" style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; max-width: 300px;">
+                        <input id="createnicknamefield" name="createnickname" type="text" placeholder="Nickname"
+                            class="form-control fancy-input" maxlength="16" autocomplete="off">
+                    </div>
+                    <div class="mainlobbydiv medieval-text">
                         Game mode:
                     </div>
                     <ul class="fancy-radio-ul">
@@ -85,21 +92,13 @@
                         <label id="openlobbychecklabel" class="medieval-text" for="openlobbycheck"></label>
                     </div>
 
-                    <div class="row">
-                        <div class="col-xs-3 col-xs-offset-2">
-                            <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
-                        </div>
-                        <div class="col-xs-5">
-                            <input type="number" min="4" max="20" value="15" class="form-control fancy-input" id="maxplayercounter">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <input id="createnicknamefield" name="createnickname" type="text" placeholder="Nickname"
-                            class="form-control fancy-input" maxlength="16" autocomplete="off">
+                    <div class="row" style="margin-left: auto; margin-right: auto; max-width: 200px;">
+                        <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
+                        <input type="number" min="4" max="20" value="15" class="form-control fancy-input" id="maxplayercounter">
                     </div>
                     <div style="padding-top: 20px">
-                    <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>
-                    <button id="createbutton" name="createbutton" class="btn btn-info">Create</button>
+                        <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>
+                        <button id="createbutton" name="createbutton" class="btn btn-info">Create</button>
                     </div>
                 </form>
             </div>
