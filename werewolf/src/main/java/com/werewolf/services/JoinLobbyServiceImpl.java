@@ -71,7 +71,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
         joinLobbyForm.setGameid(gameid);
 
         if(!lobbyEntity.getPrivate())
-            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, "0")}));
+            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, lobbyEntity.getGameMode().getName(),"0")}));
 
         new Thread() {
             @Override
@@ -125,7 +125,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		LobbyPlayer lobbyPlayer = lobbyEntity.addPlayer(user, nickname);
 		playerMap.put(user.getId(), lobbyPlayer);
 		if(!lobbyEntity.getStartedState() && !lobbyEntity.getPrivate())
-            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, Integer.toString(lobbyEntity.getPlayerSize()))}));
+            broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", gameid, lobbyEntity.getGameMode().getName(), Integer.toString(lobbyEntity.getPlayerSize()))}));
 
 		messageList.add(new LobbyMessage("join", lobbyPlayer.getId(), nickname));
         privateMessageList.add(new LobbyMessage("lobbyinfo", gameid, lobbyEntity.getGameMode().getName(), (lobbyEntity.getPrivate() ? "Private" : "Public"), Integer.toString(lobbyEntity.getMaxPlayers())));
@@ -314,7 +314,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	public void getOpenLobbies(String username) {
 		List<LobbyMessage> messageList = new ArrayList<LobbyMessage>();
 
-		lobbyMap.values().forEach((lobby) -> { if(!lobby.getStartedState() && !lobby.getPrivate()) messageList.add(new LobbyMessage("openlobby", lobby.getGameId(), Integer.toString(lobby.getPlayerSize()))); });
+		lobbyMap.values().forEach((lobby) -> { if(!lobby.getStartedState() && !lobby.getPrivate()) messageList.add(new LobbyMessage("openlobby", lobby.getGameId(), lobby.getGameMode().getName(), Integer.toString(lobby.getPlayerSize()))); });
 
         if (!messageList.isEmpty())
             privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));

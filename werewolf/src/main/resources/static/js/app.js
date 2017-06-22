@@ -104,6 +104,9 @@ function receiveBroadcastMessage(message) {
                 case "join":
                     addPlayer(message[i].playerid, message[i].info);
                     break;
+                case "openlobby":
+                    addToOpenLobby(message[i].playerid, message[i].info, message[i].additionalinfo);
+                    break;
                 case "updatevotestatus":
                 	someoneVoted(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
                 	break;
@@ -167,7 +170,7 @@ function receivePrivateMessage(message) {
                 	prepareLobby();
                 	break;
                 case "openlobby":
-                    addToOpenLobby(message[i].playerid, message[i].info);
+                    addToOpenLobby(message[i].playerid, message[i].info, message[i].additionalinfo);
                     break;
                 case "removeopenlobby":
                     removeOpenLobby(message[i].info);
@@ -570,7 +573,7 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
 	}
 }
 
-function addToOpenLobby(lobbycode, players) {
+function addToOpenLobby(lobbycode, mode, players) {
 	if(openlobbies.hasOwnProperty(lobbycode)) {
         var lobbyplayersfield = document.getElementById("olp" + lobbycode);
         lobbyplayersfield.innerHTML = players + '/20';
@@ -579,15 +582,19 @@ function addToOpenLobby(lobbycode, players) {
 		var lobbytable = document.getElementById("lobbytable");
 		var row = document.createElement("tr");
 		var lobbycodefield = document.createElement("th");
+		var lobbymodefield = document.createElement("th");
 		var lobbyplayersfield = document.createElement("th");
 		lobbyplayersfield.setAttribute("id", "olp" + lobbycode);
 		lobbycodefield.setAttribute("class", "text-center");
+		lobbymodefield.setAttribute("class", "text-center");
         lobbyplayersfield.setAttribute("class", "text-center");
 		lobbycodefield.innerHTML = lobbycode;
+		lobbymodefield.innerHTML = mode;
 		lobbyplayersfield.innerHTML = players + '/20';
 		row.setAttribute("id", "l" + lobbycode);
 		row.setAttribute("onClick", "setLobby(" + "'" + lobbycode + "'" + ")");
     	row.appendChild(lobbycodefield);
+    	row.appendChild(lobbymodefield);
     	row.appendChild(lobbyplayersfield);
     	lobbytable.appendChild(row);
 	}

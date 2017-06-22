@@ -31,6 +31,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">Lobby Code</th>
+                            <th class="text-center">Gamemode</th>
                             <th class="text-center">Players</th>
                         </tr>
                     </thead>
