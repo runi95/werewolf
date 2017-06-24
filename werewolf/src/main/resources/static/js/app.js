@@ -92,6 +92,9 @@ function receiveBroadcastMessage(message) {
             var action = message[i].action;
             
             switch(action) {
+                case "chat":
+                    addToChat(message[i].playerid, message[i].info);
+                break;
             	case "waitphase":
             		waitPhase();
             	break;
@@ -854,6 +857,35 @@ function loadRole() {
 	gravediv.setAttribute("class", "hide");
 	roleref.setAttribute("class", "active");
 	rolediv.setAttribute("class", "show");
+}
+
+function addToChat(username, message) {
+    var chatdiv = document.getElementById("chatlist");
+
+    var msg = document.createTextNode(username + ": " + message);
+    var brk = document.createElement("br");
+
+    chatdiv.appendChild(msg);
+    chatdiv.appendChild(brk);
+}
+
+function sendChatMessageForm() {
+    var chatinputfield = document.getElementById("chatinputfield");
+    var chatinputfieldval = chatinputfield.value;
+
+    $.ajax({
+            url: '/lobby/chat',
+            type: "POST",
+            datatype: 'json',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({"message":chatinputfieldval}),
+            success: function(data) {
+                document.getElementById("chatinputfield").value = "";
+            }
+        });
 }
 
 function addToRoleList(name, alignment, goal, description) {

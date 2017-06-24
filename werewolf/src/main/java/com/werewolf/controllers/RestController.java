@@ -1,6 +1,7 @@
 package com.werewolf.controllers;
 
 import com.werewolf.Messages.LobbyMessage;
+import com.werewolf.data.ChatMessageForm;
 import com.werewolf.data.CreateLobbyForm;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.services.AccountService;
@@ -39,5 +40,11 @@ public class RestController {
 	public List<LobbyMessage> createlobbyrequest(@RequestBody CreateLobbyForm createLobbyForm, Principal principal) {
 		String username = principal.getName();
 		return lobbyPlayerService.join(username, createLobbyForm);
+	}
+
+	@PostMapping(value = "/lobby/chat")
+	public void sendChatMessage(@RequestBody ChatMessageForm chatMessageForm, Principal principal) {
+        String username = principal.getName();
+        lobbyPlayerService.sendChatMessage(username, chatMessageForm.getMessage());
 	}
 }

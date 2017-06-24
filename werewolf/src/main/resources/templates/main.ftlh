@@ -206,8 +206,19 @@
             <div class="col-md-6">
                 <div id="loglist"></div>
             </div>
+
+            <!-- Start of chat div -->
+
             <div class="col-md-6">
                 <div id="chatlist"></div>
+                <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
+                    id="createLobbyForm" name="createLobbyForm">
+                    <div class="row" style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;">
+                        <input id="chatinputfield" name="chatinput" type="text"
+                            class="form-control fancy-input" autocomplete="off">
+                        <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

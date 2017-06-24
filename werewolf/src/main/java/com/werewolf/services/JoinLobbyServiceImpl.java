@@ -46,6 +46,25 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	}
 
 	@Override
+    public void sendChatMessage(String username, String message) {
+        LobbyPlayer chatSourcePlayer = getPlayerFromUsername(username);
+
+        if(chatSourcePlayer == null)
+            return;
+
+        LobbyEntity lobbyEntity = chatSourcePlayer.getLobby();
+
+        if(lobbyEntity == null || !lobbyEntity.getPhase().equals("day"))
+            return;
+
+        List<LobbyMessage> lobbyMessages = new ArrayList<>();
+
+        lobbyMessages.add(new LobbyMessage("chat", chatSourcePlayer.getNickname(), message));
+
+        broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(lobbyMessages));
+    }
+
+	@Override
     public List<LobbyMessage> join(String username, CreateLobbyForm createLobbyForm) {
         JoinLobbyForm joinLobbyForm = new JoinLobbyForm();
 
