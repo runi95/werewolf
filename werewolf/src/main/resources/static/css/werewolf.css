@@ -6,6 +6,10 @@ hr {
     border-color: #333;
 }
 
+.nav-pills > li {
+    cursor: pointer;
+}
+
 .fancy-input {
     color: #000000;
     background-color: #8a6d3b;
