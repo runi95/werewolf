@@ -6,67 +6,89 @@
             <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
         </ul>
     </nav>
-    <div class="container" style="padding-top:20px;">
+    <div class="container">
+
         <div id="joinlobbydiv" class="show">
-            <div class="col-md-5 col-md-offset-2" style="max-width: 700px">
-                <div class="form-group">
-                    <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
-                        id="joinLobbyForm" name="joinLobbyForm">
-                        <div id="nicknamediv" class="form-group">
-                            <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
-                                class="form-control" maxlength="16" autocomplete="off" autofocus>
-                            <span id="nicknameglyph"></span>
-                        </div>
-                        <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
-                        <div id="gameiddiv" class="form-group">
-                            <input id="gameidfield" name="gameid" type="text" placeholder="Game ID" class="form-control"
-                                autocomplete="off" pattern="[A-Za-z0-9]{5}">
-                            <span id="gameidglyph"></span>
-                        </div>
-                        <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
-                    </form>
+            <div class="row">
+                <div class="col-md-5 col-md-offset-1" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
+                              id="joinLobbyForm" name="joinLobbyForm">
+                            <div id="nicknamediv" class="form-group">
+                                <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
+                                       class="form-control" maxlength="16" autocomplete="off" autofocus>
+                                <span id="nicknameglyph"></span>
+                            </div>
+                            <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
+                            <div id="gameiddiv" class="form-group">
+                                <input id="gameidfield" name="gameid" type="text" placeholder="Game ID"
+                                       class="form-control"
+                                       autocomplete="off" pattern="[A-Za-z0-9]{5}">
+                                <span id="gameidglyph"></span>
+                            </div>
+                            <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
+                        </form>
+                    </div>
+                    <div class="mainlobbydiv">
+                        <table class="table table-condensed custom-table-striped">
+                            <thead>
+                            <tr>
+                                <th class="text-center">Lobby Code</th>
+                                <th class="text-center">Gamemode</th>
+                                <th class="text-center">Players</th>
+                            </tr>
+                            </thead>
+                            <tbody id="lobbytable"></tbody>
+                        </table>
+                    </div>
+
                 </div>
-                <div class="mainlobbydiv">
-                <table class="table table-condensed custom-table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Lobby Code</th>
-                            <th class="text-center">Gamemode</th>
-                            <th class="text-center">Players</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lobbytable"></tbody>
-                </table>
-                </div>
-                <hr>
-                </div>
-            <div class="col-md-4" style="max-width: 400px">
-                <div class="mainlobbydiv medieval-text">
-                    Username: <span id="profilename"></span><br>
-                    Games: <span id="profilegames"></span><br>
-                    Wins: <span id="profilewins"></span><br>
-                    Losses: <span id="profilelosses"></span><br>
-                    Win Rate: <span id="profilewinrate"></span><br>
-                </div>
-                <hr>
-                <div class="row">
-                    <div id="gameplayrules" class="mainlobbydiv">
-                        <h3>Gameplay</h3>
-                        The game is played in cycles of day and night that can vary on the game mode you're playing, at night every player gets to perform their night action which is <em>usually</em> their strongest ability. During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of the votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and manipulate during this phase as telling them your true identity will most definitely get you lynched by the good town's people.
+
+                <div class="col-md-4 col-md-offset-1" style="margin-top: 20px;">
+                    <div class="mainlobbydiv medieval-text">
+                        Username: <span id="profilename"></span><br>
+                        Games: <span id="profilegames"></span><br>
+                        Wins: <span id="profilewins"></span><br>
+                        Losses: <span id="profilelosses"></span><br>
+                        Win Rate: <span id="profilewinrate"></span><br>
                     </div>
                 </div>
+                <!-- End: User Stats -->
+
             </div>
+
+            <!-- Start: Gameplay -->
+            <div class="row">
+                <hr>
+                <div id="gameplayrules" class="mainlobbydiv">
+                    <h3>Gameplay</h3>
+                    The game is played in cycles of day and night that can vary on the game mode you're playing, at
+                    night
+                    every player gets to perform their night action which is <em>usually</em> their strongest ability.
+                    During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of
+                    the
+                    votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and
+                    manipulate during this phase as telling them your true identity will most definitely get you lynched
+                    by
+                    the good town's people.
+                </div>
+            </div>
+
+            <!-- End: Gameplay -->
         </div>
+
+
         <div id="createlobbydiv" class="hide">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-md-6 col-md-offset-3" style="margin-top: 20px">
                 <form role="form" class="form-horizontal" onsubmit="submitCreateLobbyForm(); return false;"
-                    id="createLobbyForm" name="createLobbyForm">
+                      id="createLobbyForm" name="createLobbyForm">
                     <div class="mainlobbydiv medieval-text">
                         User Preferences:
                     </div>
-                    <div class="row" style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; max-width: 300px;">
+                    <div class="row"
+                         style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px; max-width: 300px;">
                         <input id="createnicknamefield" name="createnickname" type="text" placeholder="Nickname"
-                            class="form-control fancy-input" maxlength="16" autocomplete="off">
+                               class="form-control fancy-input" maxlength="16" autocomplete="off">
                     </div>
                     <div class="mainlobbydiv medieval-text">
                         Game mode:
@@ -95,7 +117,8 @@
 
                     <div class="row" style="margin-left: auto; margin-right: auto; max-width: 200px;">
                         <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
-                        <input type="number" min="4" max="20" value="15" class="form-control fancy-input" id="maxplayercounter">
+                        <input type="number" min="4" max="20" value="15" class="form-control fancy-input"
+                               id="maxplayercounter">
                     </div>
                     <div style="padding-top: 20px">
                         <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>
@@ -104,6 +127,7 @@
                 </form>
             </div>
         </div>
+
     </div>
 </div>
 <div id="lobby" class="hide">
