@@ -196,7 +196,7 @@ input[type=radio]:checked ~ label{
    display: block;
    padding: 10px 15px;
 }
- 
+
  .custom-nav > ul {
     list-style-type: none;
     margin: 0;
@@ -204,11 +204,11 @@ input[type=radio]:checked ~ label{
     overflow: hidden;
     background-color: #000;
 }
- 
+
  .custom-nav > ul > li {
  	float: left;
  }
- 
+
  .custom-nav > ul > li > span {
  	position: relative;
  	display: block;
@@ -216,7 +216,7 @@ input[type=radio]:checked ~ label{
     padding: 14px 10px;
     border-bottom: 2px solid transparent;
  }
- 
+
 .custom-nav > ul > li > span:hover,
 .custom-nav > ul > li > span:focus {
   background-color: transparent;
@@ -251,13 +251,13 @@ input[type=radio]:checked ~ label{
  	border-bottom: 2px solid transparent;
 }
 
-/* 
+/*
  .navbar-nav > li > p {
   padding-top: 10px;
   padding-bottom: 10px;
   line-height: 20px;
 }
- 
+
  .nav > li > p {
   position: relative;
   display: block;
@@ -306,7 +306,7 @@ input[type=radio]:checked ~ label{
   color: #ccc;
   background-color: transparent;
 }
- 
+
  .navbar-inverse .navbar-nav > li > p {
   color: #9d9d9d;
 }
@@ -327,7 +327,7 @@ input[type=radio]:checked ~ label{
   color: #444;
   background-color: transparent;
 }
- 
+
  .navbar-nav > li > p{
   color: #fff;
   color: rgba(255,255,255,.75);
@@ -383,8 +383,8 @@ border-bottom: 2px solid transparent;
 }
 
 /*
-.countdown { 
-   position: relative; 
+.countdown {
+   position: relative;
    width: 100%;
 }
 
@@ -412,7 +412,7 @@ border-bottom: 2px solid transparent;
 .countdown-text {
    text-align: center;
    margin: auto;
-   position: absolute; 
+   position: absolute;
    font-size: 200%;
    color: rgb(50, 122, 180);
    width: 50%;
@@ -422,7 +422,7 @@ border-bottom: 2px solid transparent;
 
 .countdown-text-old {
    margin: auto;
-   position: absolute; 
+   position: absolute;
    font-size: 200%;
    color: rgb(50, 122, 180);
    width: 50%;
@@ -494,7 +494,7 @@ border-bottom: 2px solid transparent;
 }
 
 .list-group-item {
-	text-shadow: none;	
+	text-shadow: none;
 }
 
 .list-group-item-default {
