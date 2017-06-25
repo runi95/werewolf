@@ -183,9 +183,9 @@
     </div>
     <nav class="custom-nav">
         <ul>
-            <li><span id="actionref" onclick="loadAction()">Action</span></li>
-            <li><span id="logref" onclick="loadLog()">Log</span></li>
-            <li><span id="graveref" onclick="loadGraveyard()">Graveyard</span></li>
+            <li><span id="actionref" onclick="loadSpecificGameDiv(0)">Action</span></li>
+            <li><span id="logref" onclick="loadSpecificGameDiv(1)">Log</span></li>
+            <li><span id="graveref" onclick="loadSpecificGameDiv(2)">Graveyard</span></li>
             <li><span id="roleref" onclick="showRole()">Role</span></li>
         </ul>
     </nav>
