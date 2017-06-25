@@ -372,7 +372,7 @@ function addToInvalidTargets(playerid, rolename, alignment) {
 
 function waitPhase() {
 	phase = "wait";
-	loadNoAction();
+	loadSpecificAction(2);
 }
 
 function dayPhase() {
