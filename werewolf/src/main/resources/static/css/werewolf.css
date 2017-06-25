@@ -6,6 +6,13 @@ hr {
     border-color: #333;
 }
 
+.chat {
+    height: 30vh;
+    overflow-y: auto;
+    background: #333;
+    text-align: left;
+}
+
 .nav-pills > li {
     cursor: pointer;
 }

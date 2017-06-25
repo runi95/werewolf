@@ -46,7 +46,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 	}
 
 	@Override
-    public void sendChatMessage(String username, String message) {
+    public void sendChatMessage(String actionName, String username, String message) {
         LobbyPlayer chatSourcePlayer = getPlayerFromUsername(username);
 
         if(chatSourcePlayer == null)
@@ -54,12 +54,12 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
         LobbyEntity lobbyEntity = chatSourcePlayer.getLobby();
 
-        if(lobbyEntity == null || !lobbyEntity.getPhase().equals("day"))
+        if(lobbyEntity == null || (!lobbyEntity.getPhase().equals("day") && !lobbyEntity.getPhase().equals("lobby")))
             return;
 
         List<LobbyMessage> lobbyMessages = new ArrayList<>();
 
-        lobbyMessages.add(new LobbyMessage("chat", chatSourcePlayer.getNickname(), message));
+        lobbyMessages.add(new LobbyMessage(actionName, chatSourcePlayer.getNickname(), message));
 
         broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(lobbyMessages));
     }

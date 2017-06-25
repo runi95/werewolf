@@ -93,8 +93,11 @@ function receiveBroadcastMessage(message) {
             
             switch(action) {
                 case "chat":
-                    addToChat(message[i].playerid, message[i].info);
+                    addToChat("chatlist", message[i].playerid, message[i].info);
                 break;
+                case "lobbychat":
+                    addToChat("lobbychatlist", message[i].playerid, message[i].info);
+                    break;
             	case "waitphase":
             		waitPhase();
             	break;
@@ -859,8 +862,8 @@ function loadRole() {
 	rolediv.setAttribute("class", "show");
 }
 
-function addToChat(username, message) {
-    var chatdiv = document.getElementById("chatlist");
+function addToChat(chatdivname, username, message) {
+    var chatdiv = document.getElementById(chatdivname);
 
     var msg = document.createTextNode(username + ": " + message);
     var brk = document.createElement("br");
@@ -886,6 +889,25 @@ function sendChatMessageForm() {
                 document.getElementById("chatinputfield").value = "";
             }
         });
+}
+
+function sendLobbyChatMessageForm() {
+    var chatinputfield = document.getElementById("lobbychatinputfield");
+    var chatinputfieldval = chatinputfield.value;
+
+    $.ajax({
+        url: '/lobby/lobbychat',
+        type: "POST",
+        datatype: 'json',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({"message":chatinputfieldval}),
+        success: function(data) {
+            document.getElementById("lobbychatinputfield").value = "";
+        }
+    });
 }
 
 function addToRoleList(name, alignment, goal, description) {

@@ -137,21 +137,38 @@
         </ul>
     </nav>
     <div class="container">
-        <div class="col-md-8">
-            <div class="page-header">
-                <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
+        <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="page-header">
+                    <h1>Players</h1>
+                </div>
+                <ul id="plist" class="list-group"></ul>
+                <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
             </div>
-            <ul id="plist" class="list-group"></ul>
-            <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
-        </div>
-        <div class="col-md-4" style="max-width: 400px">
-            <div class="page-header">
-                <h1>Lobby Settings</h1>
-            </div>
-            <div class="mainlobbydiv medieval-text">
-                Gamemode: <span id="lobbystatsmode"></span><br>
-                Privacy: <span id="lobbystatsprivacy"></span><br>
-                Max Players: <span id="lobbystatsplayers"></span><br>
+            <div class="col-md-5">
+                <div class="page-header">
+                    <h1>Chat</h1>
+                </div>
+                <div id="lobbychatlist" class="chat"></div>
+                    <form role="form" class="form-horizontal" onsubmit="sendLobbyChatMessageForm(); return false;"
+                        id="createLobbyForm" name="createLobbyForm">
+                        <div class="row" style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;">
+                            <input id="lobbychatinputfield" name="lobbychatinput" type="text"
+                                class="form-control fancy-input" autocomplete="off">
+                            <button id="sendbuttonlobby" name="sendbuttonlobby" class="btn btn-info">Send</button>
+                        </div>
+                    </form>
+                </div>
+            <div class="col-md-3" style="max-width: 400px">
+                <div class="page-header">
+                    <h1>Settings</h1>
+                </div>
+                <div class="mainlobbydiv medieval-text">
+                    Gamemode: <span id="lobbystatsmode"></span><br>
+                    Privacy: <span id="lobbystatsprivacy"></span><br>
+                    Max Players: <span id="lobbystatsplayers"></span><br>
+                </div>
             </div>
         </div>
     </div>
