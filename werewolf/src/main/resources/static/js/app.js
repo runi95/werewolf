@@ -753,11 +753,11 @@ function someoneVoted(playerid, votedon, votes, status) {
 
 function loadAction() {
 	if(phase === "night") {
-		loadNightAction();
+		loadSpecificAction(0);
 	}else if(phase === "day") {
-		loadDayAction();
+		loadSpecificAction(1);
 	}else {
-		loadNoAction();
+		loadSpecificAction(2);
 	}
 	
 	var actionref = document.getElementById("actionref");
@@ -778,88 +778,31 @@ function loadAction() {
 	rolediv.setAttribute("class", "hide");
 }
 
-function loadNightAction() {
-	var nightdiv = document.getElementById("nightactiondiv");
-	var daydiv = document.getElementById("dayactiondiv");
-	var nodiv = document.getElementById("noactiondiv");
-	nightdiv.setAttribute("class", "show");
-	daydiv.setAttribute("class", "hide");
-	nodiv.setAttribute("class", "hide");
+var actiondivlist = ["nightactiondiv", "dayactiondiv", "noactiondiv"];
+
+function loadSpecificAction(n) {
+    for (var i = 0; i < actiondivlist.length; i++) {
+        if(i == n) {
+            document.getElementById(actiondivlist[i]).setAttribute("class", "show");
+        } else {
+            document.getElementById(actiondivlist[i]).setAttribute("class", "hide");
+        }
+    }
 }
 
-function loadDayAction() {
-	var nightdiv = document.getElementById("nightactiondiv");
-	var daydiv = document.getElementById("dayactiondiv");
-	var nodiv = document.getElementById("noactiondiv");
-	nightdiv.setAttribute("class", "hide");
-	daydiv.setAttribute("class", "show");
-	nodiv.setAttribute("class", "hide");
-}
+var gamedivlist = ["actiondiv", "logdiv", "gravediv"];
+var gamereflist = ["actionref", "logref", "graveref"];
 
-function loadNoAction() {
-	var nightdiv = document.getElementById("nightactiondiv");
-	var daydiv = document.getElementById("dayactiondiv");
-	var nodiv = document.getElementById("noactiondiv");
-	nightdiv.setAttribute("class", "hide");
-	daydiv.setAttribute("class", "hide");
-	nodiv.setAttribute("class", "show");
-}
-
-function loadLog() {
-	var actionref = document.getElementById("actionref");
-	var actiondiv = document.getElementById("actiondiv");
-	var logref = document.getElementById("logref");
-	var logdiv = document.getElementById("logdiv");
-	var graveref = document.getElementById("graveref");
-	var gravediv = document.getElementById("gravediv");
-	var roleref = document.getElementById("roleref");
-	var rolediv = document.getElementById("rolediv");
-	actionref.setAttribute("class", "");
-	actiondiv.setAttribute("class", "hide");
-	logref.setAttribute("class", "active");
-	logdiv.setAttribute("class", "show");
-	graveref.setAttribute("class", "");
-	gravediv.setAttribute("class", "hide");
-	roleref.setAttribute("class", "");
-	rolediv.setAttribute("class", "hide");
-}
-
-function loadGraveyard() {
-	var actionref = document.getElementById("actionref");
-	var actiondiv = document.getElementById("actiondiv");
-	var logref = document.getElementById("logref");
-	var logdiv = document.getElementById("logdiv");
-	var graveref = document.getElementById("graveref");
-	var gravediv = document.getElementById("gravediv");
-	var roleref = document.getElementById("roleref");
-	var rolediv = document.getElementById("rolediv");
-	actionref.setAttribute("class", "");
-	actiondiv.setAttribute("class", "hide");
-	logref.setAttribute("class", "");
-	logdiv.setAttribute("class", "hide");
-	graveref.setAttribute("class", "active");
-	gravediv.setAttribute("class", "show");
-	roleref.setAttribute("class", "");
-	rolediv.setAttribute("class", "hide");
-}
-
-function loadRole() {
-	var actionref = document.getElementById("actionref");
-	var actiondiv = document.getElementById("actiondiv");
-	var logref = document.getElementById("logref");
-	var logdiv = document.getElementById("logdiv");
-	var graveref = document.getElementById("graveref");
-	var gravediv = document.getElementById("gravediv");
-	var roleref = document.getElementById("roleref");
-	var rolediv = document.getElementById("rolediv");
-	actionref.setAttribute("class", "");
-	actiondiv.setAttribute("class", "hide");
-	logref.setAttribute("class", "");
-	logdiv.setAttribute("class", "hide");
-	graveref.setAttribute("class", "");
-	gravediv.setAttribute("class", "hide");
-	roleref.setAttribute("class", "active");
-	rolediv.setAttribute("class", "show");
+function loadSpecificGameDiv(n) {
+    for (var i = 0; i < gamedivlist.length; i++) {
+        if(i == n) {
+            document.getElementById(gamedivlist[i]).setAttribute("class", "show");
+            document.getElementById(gamereflist[i]).setAttribute("class", "active");
+        } else {
+            document.getElementById(gamedivlist[i]).setAttribute("class", "hide");
+            document.getElementById(gamereflist[i]).setAttribute("class", "");
+        }
+    }
 }
 
 function addToChat(chatdivname, username, message) {
