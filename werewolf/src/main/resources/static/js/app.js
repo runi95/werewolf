@@ -384,7 +384,7 @@ function dayPhase() {
 	var elem = document.getElementById("dayphase");
 	elem.setAttribute("class", "phase phase-in");
 	phaseout(elem, 2);
-	loadDayAction();
+	loadSpecificAction(1);
 }
 
 function lynchPlayer(playerid, playername, playerrole, alignment, kinged) {
@@ -427,7 +427,7 @@ function nightPhase() {
 	var elem = document.getElementById("nightphase");
 	elem.setAttribute("class", "phase phase-in");
 	phaseout(elem, 2);
-	loadNightAction();
+	loadSpecificAction(0);
 }
 
 function phaseout(elem, delay) {
