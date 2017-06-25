@@ -45,6 +45,12 @@ public class RestController {
 	@PostMapping(value = "/lobby/chat")
 	public void sendChatMessage(@RequestBody ChatMessageForm chatMessageForm, Principal principal) {
         String username = principal.getName();
-        lobbyPlayerService.sendChatMessage(username, chatMessageForm.getMessage());
+        lobbyPlayerService.sendChatMessage("chat", username, chatMessageForm.getMessage());
+	}
+
+	@PostMapping(value = "/lobby/lobbychat")
+	public void sendLobbyChatMessage(@RequestBody ChatMessageForm chatMessageForm, Principal principal) {
+		String username = principal.getName();
+		lobbyPlayerService.sendChatMessage("lobbychat", username, chatMessageForm.getMessage());
 	}
 }

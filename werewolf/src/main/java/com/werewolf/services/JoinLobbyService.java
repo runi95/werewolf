@@ -18,7 +18,7 @@ public interface JoinLobbyService {
     List<LobbyMessage> join(String username, JoinLobbyForm joinLobbyForm);
     List<LobbyMessage> join(String username, CreateLobbyForm createLobbyForm);
 
-    void sendChatMessage(String username, String message);
+    void sendChatMessage(String actionName, String username, String message);
 
     void leave(String username);
     void vote(String username, String voteon, boolean vote);
