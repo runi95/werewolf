@@ -4,10 +4,12 @@ import com.werewolf.components.JoinLobbyFormValidator;
 import com.werewolf.services.AccountService;
 import com.werewolf.services.JoinLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.Device;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,21 +31,14 @@ public class PreGameController {
     @Autowired
     JoinLobbyService joinLobbyService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView getMainPage(Authentication auth, Principal principal) {
-        if(!(auth instanceof AnonymousAuthenticationToken) && auth != null) {
-            return new ModelAndView("redirect:/home");
+    @GetMapping(value = "/")
+    public String getMainPage(Authentication auth, Principal principal, Device device) {
+        if(device.isMobile()) {
+            return "main-mobile";
+        } else if(device.isTablet()) {
+            return "main";
+        } else {
+            return "main";
         }
-        return new ModelAndView("main", "username", principal.getName());
-    }
-
-    @RequestMapping(value = "/home")
-    public ModelAndView getHomePage(@RequestParam Optional<String> error, Principal principal) {
-        return new ModelAndView("main", "username", principal.getName());
-    }
-
-    @RequestMapping(value = "/lobby", method = RequestMethod.GET)
-    public String getLobby() {
-        return "redirect:/home";
     }
 }
