@@ -1,6 +1,7 @@
 package com.werewolf.gameplay;
 
 import com.werewolf.Messages.LobbyMessage;
+import com.werewolf.entities.GamePhase;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 import com.werewolf.services.JoinLobbyService;
@@ -183,7 +184,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	
 	private void dayPhase(LobbyEntity lobbyEntity) {
 		List<LobbyMessage> messageList = new ArrayList<>();
-		lobbyEntity.setPhase("dayphase");
+		lobbyEntity.setPhase(GamePhase.DAY);
 		
 		messageList.add(new LobbyMessage("dayphase"));
 		
@@ -195,7 +196,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	
 	private void nightPhase(LobbyEntity lobbyEntity) {
 		List<LobbyMessage> messageList = new ArrayList<>();
-		lobbyEntity.setPhase("nightphase");
+		lobbyEntity.setPhase(GamePhase.NIGHT);
 		
 		messageList.add(new LobbyMessage("nightphase"));
 		
@@ -208,7 +209,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	private void waitPhase(LobbyEntity lobbyEntity, String nextPhase) {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		
-		lobbyEntity.setPhase("waitphase");
+		lobbyEntity.setPhase(GamePhase.WAIT);
 		lobbyEntity.setPhaseTime(3);
 		
 		messageList.add(new LobbyMessage("waitphase"));
@@ -223,7 +224,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	private void initializeGameWait(LobbyEntity lobbyEntity, String nextPhase) {
 		List<LobbyMessage> messageList = new ArrayList<>();
 		
-		lobbyEntity.setPhase("waitphase");
+		lobbyEntity.setPhase(GamePhase.WAIT);
 		lobbyEntity.setPhaseTime(15);
 		
 		messageList.add(new LobbyMessage("waitphase"));

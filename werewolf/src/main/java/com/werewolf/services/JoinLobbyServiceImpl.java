@@ -54,7 +54,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
         LobbyEntity lobbyEntity = chatSourcePlayer.getLobby();
 
-        if(lobbyEntity == null || (!lobbyEntity.getPhase().equals("dayphase") && !lobbyEntity.getPhase().equals("lobby")))
+        if(lobbyEntity == null || (lobbyEntity.getPhase() != GamePhase.DAY && lobbyEntity.getPhase() != GamePhase.LOBBY))
             return;
 
         List<LobbyMessage> lobbyMessages = new ArrayList<>();
@@ -346,7 +346,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		if (lobbyPlayer == null)
 			return;
 
-		messageList.add(new LobbyMessage("gamephase", lobbyPlayer.getLobby().getPhase()));
+		messageList.add(new LobbyMessage("gamephase", lobbyPlayer.getLobby().getPhase().getName()));
 
 		if (!messageList.isEmpty())
 			privateMessage(username, JoinLobbyService.convertObjectToJson(messageList));

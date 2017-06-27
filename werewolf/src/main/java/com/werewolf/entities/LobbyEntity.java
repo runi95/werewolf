@@ -14,7 +14,7 @@ public class LobbyEntity {
 	// How many rounds have this lobby been through?
 	private int rounds = 0;
 
-	private String gamePhase = "lobby";
+	private GamePhase gamePhase = GamePhase.LOBBY;
 
 	// How much time is left on this phase?
 	private int phaseTime = 0;
@@ -57,11 +57,11 @@ public class LobbyEntity {
 		this.rounds = rounds;
 	}
 
-	public String getPhase() {
+	public GamePhase getPhase() {
 		return gamePhase;
 	}
 
-	public synchronized void setPhase(String gamePhase) {
+	public synchronized void setPhase(GamePhase gamePhase) {
 		this.gamePhase = gamePhase;
 	}
 
