@@ -242,15 +242,15 @@ function submitJoinLobbyForm() {
     var nicknameval = nicknamefield.value;
     var gameidval = gameidfield.value;
 
-    if(gameidval === "") {
-        document.getElementById("joinlobbydiv").setAttribute("class", "hide");
-        document.getElementById("createlobbydiv").setAttribute("class", "show");
-        document.getElementById("createnicknamefield").focus();
-    } else {
-        nicknamefield.disabled = true;
-        gameidfield.disabled = true;
-        joinLobby(nicknameval, gameidval);
-    }
+    nicknamefield.disabled = true;
+    gameidfield.disabled = true;
+    joinLobby(nicknameval, gameidval);
+}
+
+function createLobbyButton() {
+    document.getElementById("joinlobbydiv").setAttribute("class", "hide");
+    document.getElementById("createlobbydiv").setAttribute("class", "show");
+    document.getElementById("createnicknamefield").focus();
 }
 
 function submitCreateLobbyForm() {

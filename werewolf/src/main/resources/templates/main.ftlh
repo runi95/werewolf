@@ -26,8 +26,9 @@
                                        autocomplete="off" pattern="[A-Za-z0-9]{5}">
                                 <span id="gameidglyph"></span>
                             </div>
-                            <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
                         </form>
+                        <button id="createbutton" onclick="createLobbyButton()" name="createbutton" class="btn btn-default">Create</button>
+                        <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
                     </div>
                     <div class="mainlobbydiv">
                         <table class="table table-condensed custom-table-striped">

@@ -6,29 +6,27 @@
             <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
         </ul>
     </nav>
-    <div class="container">
+    <div class="container" style="margin-top: 20px;">
 
         <div id="joinlobbydiv" class="show">
             <div class="row">
-                <div class="col-md-5 col-md-offset-1" style="margin-top: 20px;">
-                    <div class="form-group">
-                        <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
-                              id="joinLobbyForm" name="joinLobbyForm">
-                            <div id="nicknamediv" class="form-group">
-                                <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
-                                       class="form-control" maxlength="16" autocomplete="off" autofocus>
-                                <span id="nicknameglyph"></span>
-                            </div>
-                            <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
-                            <div id="gameiddiv" class="form-group">
-                                <input id="gameidfield" name="gameid" type="text" placeholder="Game ID"
-                                       class="form-control"
-                                       autocomplete="off" pattern="[A-Za-z0-9]{5}">
-                                <span id="gameidglyph"></span>
-                            </div>
-                            <button id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
-                        </form>
-                    </div>
+                <div class="form-group">
+                    <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
+                        id="joinLobbyForm" name="joinLobbyForm">
+                        <div id="nicknamediv" class="form-group col-xs-12">
+                            <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
+                                class="form-control" maxlength="16" autocomplete="off" autofocus>
+                            <span id="nicknameglyph"></span>
+                        </div>
+                        <div id="gameiddiv" class="form-group col-xs-12">
+                            <input id="gameidfield" name="gameid" type="text" placeholder="Game ID"
+                                class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
+                            <span id="gameidglyph"></span>
+                        </div>
+                    </form>
+                    <button id="createbutton" onclick="createLobbyButton()" name="createbutton" class="btn btn-default">Create</button>
+                    <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
+                </div>
                     <div class="mainlobbydiv">
                         <table class="table table-condensed custom-table-striped">
                             <thead>
