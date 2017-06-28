@@ -6,19 +6,19 @@
             <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
         </ul>
     </nav>
-    <div class="container" style="margin-top: 20px;">
+    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
 
         <div id="joinlobbydiv" class="show">
             <div class="row">
                 <div class="form-group">
                     <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
                         id="joinLobbyForm" name="joinLobbyForm">
-                        <div id="nicknamediv" class="form-group col-xs-12">
+                        <div id="nicknamediv" class="form-group container">
                             <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
                                 class="form-control" maxlength="16" autocomplete="off" autofocus>
                             <span id="nicknameglyph"></span>
                         </div>
-                        <div id="gameiddiv" class="form-group col-xs-12">
+                        <div id="gameiddiv" class="form-group container">
                             <input id="gameidfield" name="gameid" type="text" placeholder="Game ID"
                                 class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
                             <span id="gameidglyph"></span>
@@ -27,19 +27,17 @@
                     <button id="createbutton" onclick="createLobbyButton()" name="createbutton" class="btn btn-default">Create</button>
                     <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
                 </div>
-                    <div class="mainlobbydiv">
-                        <table class="table table-condensed custom-table-striped">
-                            <thead>
+                <div class="mainlobbydiv">
+                    <table class="table table-condensed custom-table-striped">
+                        <thead>
                             <tr>
                                 <th class="text-center">Lobby Code</th>
                                 <th class="text-center">Gamemode</th>
                                 <th class="text-center">Players</th>
                             </tr>
-                            </thead>
-                            <tbody id="lobbytable"></tbody>
-                        </table>
-                    </div>
-
+                        </thead>
+                        <tbody id="lobbytable"></tbody>
+                    </table>
                 </div>
 
                 <div class="col-md-4 col-md-offset-1" style="margin-top: 20px;">
@@ -77,7 +75,7 @@
 
 
         <div id="createlobbydiv" class="hide">
-            <div class="col-md-6 col-md-offset-3" style="margin-top: 20px">
+            <div class="col-md-6 col-md-offset-3">
                 <form role="form" class="form-horizontal" onsubmit="submitCreateLobbyForm(); return false;"
                       id="createLobbyForm" name="createLobbyForm">
                     <div class="mainlobbydiv medieval-text">
@@ -113,10 +111,12 @@
                         <label id="openlobbychecklabel" class="medieval-text" for="openlobbycheck"></label>
                     </div>
 
-                    <div class="row" style="margin-left: auto; margin-right: auto; max-width: 200px;">
-                        <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
-                        <input type="number" min="4" max="20" value="15" class="form-control fancy-input"
-                               id="maxplayercounter">
+                    <div class="container">
+                        <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text control-label col-xs-8" for="maxplayercount">Max Players:</label>
+                        <div class="col-xs-4">
+                            <input type="number" min="4" max="20" value="15" class="form-control fancy-input"
+                                id="maxplayercounter">
+                        </div>
                     </div>
                     <div style="padding-top: 20px">
                         <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>
