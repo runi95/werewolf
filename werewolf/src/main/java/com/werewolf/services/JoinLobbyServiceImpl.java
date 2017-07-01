@@ -59,7 +59,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
         List<LobbyMessage> lobbyMessages = new ArrayList<>();
 
-        lobbyMessages.add(new LobbyMessage(actionName, chatSourcePlayer.getNickname(), message));
+        lobbyMessages.add(new LobbyMessage(actionName, chatSourcePlayer.getId(), chatSourcePlayer.getNickname(), message));
 
         broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(lobbyMessages));
     }

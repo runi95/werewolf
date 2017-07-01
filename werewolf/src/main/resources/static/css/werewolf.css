@@ -7,7 +7,7 @@ hr {
 }
 
 .chat {
-    height: 30vh;
+    height: 15em;
     overflow-y: auto;
     background: #333;
     text-align: left;

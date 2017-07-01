@@ -93,10 +93,10 @@ function receiveBroadcastMessage(message) {
             
             switch(action) {
                 case "chat":
-                    addToChat("chatlist", message[i].playerid, message[i].info);
+                    addToChat("chatlist", message[i].playerid, message[i].info, message[i].additionalinfo, 1);
                 break;
                 case "lobbychat":
-                    addToChat("lobbychatlist", message[i].playerid, message[i].info);
+                    addToChat("lobbychatlist", message[i].playerid, message[i].info, message[i].additionalinfo, 0);
                     break;
             	case "waitphase":
             		waitPhase();
@@ -809,14 +809,38 @@ function loadSpecificGameDiv(n) {
     }
 }
 
-function addToChat(chatdivname, username, message) {
+function addToChat(chatdivname, playerid, username, message, chatid) {
     var chatdiv = document.getElementById(chatdivname);
 
-    var msg = document.createTextNode(username + ": " + message);
-    var brk = document.createElement("br");
+    var messagediv = document.createElement("div");
+    var usernamespan = document.createElement("span");
+    var messagespan = document.createElement("span");
 
-    chatdiv.appendChild(msg);
-    chatdiv.appendChild(brk);
+    var usernamecolor = "text-info";
+    if(playerid == owner) {
+        usernamecolor = "text-primary";
+    } else {
+        usernamecolor = "text-warning";
+    }
+
+    usernamespan.setAttribute("class", usernamecolor);
+
+    usernamespan.innerHTML = username;
+    messagespan.innerHTML = ": " + message;
+
+    messagediv.appendChild(usernamespan);
+    messagediv.appendChild(messagespan);
+    chatdiv.appendChild(messagediv);
+
+    if(chatid === 1 && $('#chatlist').scrollTop() + 1.5*$('#chatlist').height() >= $('#chatlist').prop('scrollHeight') ) {
+        if(!$('#chatlist').is(':animated')) {
+            $('#chatlist').animate({ scrollTop: $('#chatlist').prop('scrollHeight')}, 'fast');
+        }
+    } else if (chatid === 0 && $('#lobbychatlist').scrollTop() + 1.5*$('#lobbychatlist').height() >= $('#lobbychatlist').prop('scrollHeight') ) {
+        if(!$('#lobbychatlist').is(':animated')) {
+            $('#lobbychatlist').animate({ scrollTop: $('#lobbychatlist').prop('scrollHeight')}, 'fast');
+        }
+    }
 }
 
 function sendChatMessageForm() {
