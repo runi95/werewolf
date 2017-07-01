@@ -1,11 +1,15 @@
 # werewolf
 
 ### TODO:
-- Friends list
-- Private message support
-- Game Summaries
-- Achievements
-- Custom Colors
-- Point System
-- More Roles
-- More Game Modes
+
+- Game changes
+  - More Roles
+  - More Game Modes
+  - Point System
+  - Game Summaries
+- Lobby changes
+- Other changes
+  - Custom Colors
+  - Friends list
+  - Private messages
+  - Achievements
