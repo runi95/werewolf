@@ -252,7 +252,7 @@
 
     <div id="actiondiv" class="container-fluid mainlobbydiv">
         <h3>Actions</h3>
-        <div id="dayactiondiv" class="hide">
+        <div id="dayactiondiv">
             <div class="container">
                 <table class="table table-condensed">
                     <thead>
@@ -261,24 +261,10 @@
                         <th class="text-center col-xs-3">Lynch</th>
                     </tr>
                     </thead>
-                    <tbody id="votelist"></tbody>
+                    <tbody id="actionlist"></tbody>
                 </table>
             </div>
         </div>
-        <div id="nightactiondiv" class="hide">
-            <div class="container">
-                <table class="table table-condensed">
-                    <thead>
-                    <tr>
-                        <th class="text-center col-xs-6">Name</th>
-                        <th class="text-center col-xs-3">Action</th>
-                    </tr>
-                    </thead>
-                    <tbody id="nightactionlist"></tbody>
-                </table>
-            </div>
-        </div>
-        <div id="noactiondiv" class="show"></div>
     </div>
 
     <!-- End of Log div -->

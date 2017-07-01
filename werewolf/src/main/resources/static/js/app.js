@@ -255,7 +255,7 @@ function createLobbyButton() {
 
 function submitCreateLobbyForm() {
     var checkboxfield = document.getElementById("openlobbycheck");
-    var maxplayercountfield = document.getElementById("maxplayercounter");
+    var maxplayercountfield = document.getElementById("maxplayercount");
     var nicknamefield = document.getElementById("createnicknamefield");
 
     var gamemode = $('input[name="mode"]:checked').val();
@@ -454,63 +454,38 @@ function addToActionList(playerid, playername, votes) {
 		
 		aliveplayers[playerid] = {"name":playername, "votes":votes};
 		
-		var votelist = document.getElementById("votelist");
-		var voterow = document.createElement("tr");
-		var votename = document.createElement("th");
-		var vote = document.createElement("th");
-		var votebtn;
-		votename.innerHTML = playername;
-		votename.setAttribute("class", "text-center");
-		voterow.setAttribute("id", "av" + playerid);
-		if(playerid == owner) {
-			votebtn = document.createElement("b");
-			votebtn.innerHTML = votes;
-			votebtn.setAttribute("id", "vb" + playerid);
-			votebtn.setAttribute("class", "text-center center-block");
-		} else {
-			votebtn = document.createElement("button");
-			votebtn.innerHTML = "Vote(" + votes + ")";
-			votebtn.setAttribute("id", "vb" + playerid);
-			votebtn.setAttribute("class", "btn btn-info btn-block");
-			votebtn.setAttribute("onclick", "voteon(" + playerid + ")");
-		}
-		vote.appendChild(votebtn);
-		voterow.appendChild(votename);
-		voterow.appendChild(vote);
-		votelist.appendChild(voterow);
-		
-		var nightlist = document.getElementById("nightactionlist");
-		var nightrow = document.createElement("tr");
-		var nightname = document.createElement("th");
-		var night = document.createElement("th");
-		var nightbtn;
-		nightname.innerHTML = playername;
-		nightname.setAttribute("class", "text-center");
-		nightrow.setAttribute("id", "an" + playerid);
+		var actionlist = document.getElementById("actionlist");
+		var actionrow = document.createElement("tr");
+		var actionname = document.createElement("th");
+		var action = document.createElement("th");
+		var btn;
+        actionname.innerHTML = playername;
+        actionname.setAttribute("class", "text-center");
+        actionrow.setAttribute("id", "an" + playerid);
 		if(playerid != owner) {
 			if (!invalidtargets.hasOwnProperty(playerid)) {
-				nightbtn = document.createElement("button");
-				nightbtn.setAttribute("id", "ab" + playerid);
-				nightbtn.setAttribute("class", "btn btn-night btn-nightact btn-block");
-				nightbtn.setAttribute("onclick", "nightaction(" + playerid + ")");
-				night.appendChild(nightbtn);
+				btn = document.createElement("button");
+				btn.setAttribute("id", "ab" + playerid);
+				btn.setAttribute("class", "hide");
+				btn.setAttribute("onclick", "performaction(" + playerid + ")");
+                action.appendChild(btn);
 			} else {
-				nightbtn = document.createElement("b");
-				nightbtn.setAttribute("id", "ab" + playerid);
-				nightbtn.setAttribute("class", "text-center center-block text-info");
-				nightbtn.innerHTML = "Ally";
-				night.appendChild(nightbtn);
+				btn = document.createElement("b");
+				btn.setAttribute("id", "ab" + playerid);
+				btn.setAttribute("class", "text-center center-block text-info");
+				btn.innerHTML = "Ally";
+                action.appendChild(btn);
 			}
 		} else {
-			nightbtn = document.createElement("b");
-			nightbtn.setAttribute("id", "ab" + playerid);
-			nightbtn.setAttribute("class", "text-center center-block text-success");
-			nightbtn.innerHTML = "Yourself";
-			night.appendChild(nightbtn);
+			btn = document.createElement("b");
+			btn.setAttribute("id", "ab" + playerid);
+			btn.setAttribute("class", "text-center center-block text-success");
+			btn.innerHTML = "Yourself";
+            action.appendChild(btn);
 		}
-		nightrow.appendChild(nightname);
-		nightrow.appendChild(night);
-		nightlist.appendChild(nightrow);
+        actionrow.appendChild(actionname);
+        actionrow.appendChild(action);
+		actionlist.appendChild(actionrow);
 	}
 }
 
@@ -692,14 +667,29 @@ function voteon(playerid) {
 	}
 }
 
-function nightaction(playerid) {
-	var nightbtn = document.getElementById("ab" + playerid).disabled = true;
-	
-	if(nightact == playerid) {
-		sendPrivateMessage({"action":"unnightaction", "playerid":playerid});
-	} else {
-		sendPrivateMessage({"action":"nightaction", "playerid":playerid});
-	}
+function performaction(playerid) {
+    var button = document.getElementById("ab" + playerid).disabled = true;
+
+    switch(phase) {
+        case "day":
+            if(voted == playerid) {
+                broadcastMessage({"action":"unvote", "playerid":playerid});
+                voted = null;
+            } else {
+                broadcastMessage({"action":"vote", "playerid":playerid});
+            }
+            break;
+        case "night":
+            if(nightact == playerid) {
+                sendPrivateMessage({"action":"unnightaction", "playerid":playerid});
+            } else {
+                sendPrivateMessage({"action":"nightaction", "playerid":playerid});
+            }
+            break;
+        case "wait":
+            button.disabled = false;
+            break;
+    }
 }
 
 function updateNightAction(target, act) {
@@ -783,14 +773,12 @@ function loadAction() {
 }
 
 var actiondivlist = ["nightactiondiv", "dayactiondiv", "noactiondiv"];
+var actionlists = [{"button":"show btn btn-night btn-nightact btn-block"}, {"button":"show btn btn-info btn-block"}, {"button":"hide"}];
 
 function loadSpecificAction(n) {
-    for (var i = 0; i < actiondivlist.length; i++) {
-        if(i == n) {
-            document.getElementById(actiondivlist[i]).setAttribute("class", "show");
-        } else {
-            document.getElementById(actiondivlist[i]).setAttribute("class", "hide");
-        }
+    for (key in playerlist) {
+        var elem = document.getElementById("ab" + key);
+        elem.setAttribute("class", actionlists[n].button);
     }
 }
 
@@ -832,11 +820,11 @@ function addToChat(chatdivname, playerid, username, message, chatid) {
     messagediv.appendChild(messagespan);
     chatdiv.appendChild(messagediv);
 
-    if(chatid === 1 && $('#chatlist').scrollTop() + 1.5*$('#chatlist').height() >= $('#chatlist').prop('scrollHeight') ) {
+    if(chatid === 1 && ($('#chatlist').scrollTop() + 1.5*$('#chatlist').height() >= $('#chatlist').prop('scrollHeight') || playerid == owner) ) {
         if(!$('#chatlist').is(':animated')) {
             $('#chatlist').animate({ scrollTop: $('#chatlist').prop('scrollHeight')}, 'fast');
         }
-    } else if (chatid === 0 && $('#lobbychatlist').scrollTop() + 1.5*$('#lobbychatlist').height() >= $('#lobbychatlist').prop('scrollHeight') ) {
+    } else if (chatid === 0 && ($('#lobbychatlist').scrollTop() + 1.5*$('#lobbychatlist').height() >= $('#lobbychatlist').prop('scrollHeight') || playerid == owner) ) {
         if(!$('#lobbychatlist').is(':animated')) {
             $('#lobbychatlist').animate({ scrollTop: $('#lobbychatlist').prop('scrollHeight')}, 'fast');
         }
