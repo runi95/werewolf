@@ -18,5 +18,9 @@ The game is played in cycles of day and night that can vary on the game mode you
 
 
 ### Colour list:
-- ![#04305d](https://placehold.it/15/04305d/000000?text=+) `#04305d`
-- ![#053a70](https://placehold.it/15/053a70/000000?text=+) `#053a70`
+- Blues
+  + ![#04305d](https://placehold.it/15/04305d/000000?text=+) `#04305d`
+  + ![#053a70](https://placehold.it/15/053a70/000000?text=+) `#053a70`
+  + ![#04478b](https://placehold.it/15/04478b/000000?text=+) `#04478b`
+  + ![#0755a0](https://placehold.it/15/0755a0/000000?text=+) `#0755a0`
+
