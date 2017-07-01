@@ -15,3 +15,7 @@ The game is played in cycles of day and night that can vary on the game mode you
   + Friends list
   + Private messages
   + Achievements
+
+
+### Colour list:
+Some Markdown text with <span style="color:blue">some *blue* text</span>.
