@@ -29,3 +29,21 @@ The game is played in cycles of day and night that can vary on the game mode you
   + ![#334350](https://placehold.it/15/334350/000000?text=+) `#334350`
   + ![#51626a](https://placehold.it/15/51626a/000000?text=+) `#51626a`
   + ![#586671](https://placehold.it/15/586671/000000?text=+) `#586671`
+
+- Skintones
+  + ![#3d2c12](https://placehold.it/15/3d2c12/000000?text=+) `#3d2c12`
+  + ![#968664](https://placehold.it/15/968664/000000?text=+) `#968664`
+  + ![#ccbea3](https://placehold.it/15/ccbea3/000000?text=+) `#ccbea3`
+  + ![#d3c8b4](https://placehold.it/15/d3c8b4/000000?text=+) `#d3c8b4`
+
+- Yellows
+  + ![#9f6422](https://placehold.it/15/9f6422/000000?text=+) `#9f6422`
+  + ![#d3b14d](https://placehold.it/15/d3b14d/000000?text=+) `#d3b14d`
+  + ![#d1b77a](https://placehold.it/15/d1b77a/000000?text=+) `#d1b77a`
+  + ![#d3bb8d](https://placehold.it/15/d3bb8d/000000?text=+) `#d3bb8d`
+
+- Reds
+  + ![#a86e63](https://placehold.it/15/a86e63/000000?text=+) `#a86e63`
+  + ![#c95140](https://placehold.it/15/c95140/000000?text=+) `#c95140`
+  + ![#ad3f26](https://placehold.it/15/ad3f26/000000?text=+) `#ad3f26`
+  + ![#d3230c](https://placehold.it/15/d3230c/000000?text=+) `#d3230c`
