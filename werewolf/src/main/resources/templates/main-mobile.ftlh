@@ -156,10 +156,22 @@
     </div>
 </div>
 <div id="lobby" class="hide">
-    <nav class="custom-nav">
-        <ul>
-            <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
-        </ul>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainnavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Werewolf</a>
+            </div>
+            <div id="mainnavbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div class="container">
         <h1>Lobby code: <b id="gamecodenode" class="text-primary"></b></h1>
@@ -198,6 +210,9 @@
         </div>
     </div>
 </div>
+
+<!-- Start of Game -->
+
 <div id="game" class="hide">
     <div class="phase-div">
         <img id="dayphase" src="css/img/Werewolf-Day.png" class="phase phase-out">
@@ -206,13 +221,25 @@
         <img id="wonphase" src="css/img/Werewolf-Won.png" class="phase phase-out">
         <img id="lostphase" src="css/img/Werewolf-Lost.png" class="phase phase-out">
     </div>
-    <nav class="custom-nav">
-        <ul>
-            <li><span id="actionref" onclick="loadSpecificGameDiv(0)">Action</span></li>
-            <li><span id="logref" onclick="loadSpecificGameDiv(1)">Log</span></li>
-            <li><span id="graveref" onclick="loadSpecificGameDiv(2)">Graveyard</span></li>
-            <li><span id="roleref" onclick="showRole()">Role</span></li>
-        </ul>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#gamenavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="javascript:void(0)" onclick="loadHome()">Werewolf</a>
+            </div>
+            <div id="gamenavbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a id="actionref" href="javascript:void(0)" onclick="loadSpecificGameDiv(0)">Action</a></li>
+                    <li><a id="logref" href="javascript:void(0)" onclick="loadSpecificGameDiv(1)">Log</a></li>
+                    <li><a id="graveref" href="javascript:void(0)" onclick="loadSpecificGameDiv(2)">Graveyard</a></li>
+                    <li><a id="roleref" href="javascript:void(0)" onclick="showRole()">Role</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div id="actiondiv" class="show">
         <div id="dayactiondiv" class="hide">

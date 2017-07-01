@@ -751,6 +751,10 @@ function someoneVoted(playerid, votedon, votes, status) {
 	}
 }
 
+function loadHome() {
+    $('html, body').animate({ scrollTop: 0 }, 'fast');
+}
+
 function loadAction() {
 	if(phase === "night") {
 		loadSpecificAction(0);
