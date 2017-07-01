@@ -440,7 +440,12 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 			if(!lobbyEntity.getStartedState()) {
                 broadcastPublicMessage(JoinLobbyService.convertObjectToJson(new LobbyMessage[] {new LobbyMessage("openlobby", lobbyEntity.getGameId(), Integer.toString(lobbyEntity.getPlayerSize()))}));
                 messageList.add(new LobbyMessage("leave", lobbyPlayer.getId(), lobbyPlayer.getNickname()));
-            }
+            	if(lobbyPlayer.ready()) {
+            	    lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() - 1);
+                    messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(),
+                            Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
+                }
+			}
 		}
 
 		if (!messageList.isEmpty())
