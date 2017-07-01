@@ -19,84 +19,88 @@
         </div>
     </nav>
 
-        <!-- Main Page, before joining a lobby -->
-        <div id="joinlobbydiv" class="show">
-            <div class="form-group">
-                <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
-                    id="joinLobbyForm" name="joinLobbyForm">
-                    <div class="row">
-                        <div id="nicknamediv" class="form-group col-xs-12">
+    <!-- Main Page, before joining a lobby -->
+    <div id="joinlobbydiv" class="show">
+        <div class="col-md-6 col-md-offset-3">
+        <div class="form-group">
+            <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
+                id="joinLobbyForm" name="joinLobbyForm">
+                <div class="row">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <div id="nicknamediv" class="form-group">
                             <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
                                 class="form-control" maxlength="16" autocomplete="off" autofocus>
                             <span id="nicknameglyph"></span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div id="gameiddiv" class="form-group col-xs-12">
+                </div>
+                <div class="row">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <div id="gameiddiv" class="form-group">
                             <input id="gameidfield" name="gameid" type="text" placeholder="Game ID"
                                 class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
                             <span id="gameidglyph"></span>
                         </div>
                     </div>
-                </form>
-                <div class="row">
-                    <button id="createbutton" onclick="createLobbyButton()" name="createbutton" class="btn btn-default">Create</button>
-                    <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
                 </div>
-            </div>
-
-            <!-- Start of Open Lobby table -->
-            <div class="mainlobbydiv row">
-                <table class="table table-condensed custom-table-striped">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Lobby Code</th>
-                            <th class="text-center">Gamemode</th>
-                            <th class="text-center">Players</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lobbytable"></tbody>
-                </table>
-            </div>
-            <!-- End of Open Lobby table -->
-
-            <hr>
-
-            <!-- Start of User Stats -->
+            </form>
             <div class="row">
-                <div class="mainlobbydiv medieval-text">
-                    Username: <span id="profilename"></span><br>
-                    Games: <span id="profilegames"></span><br>
-                    Wins: <span id="profilewins"></span><br>
-                    Losses: <span id="profilelosses"></span><br>
-                    Win Rate: <span id="profilewinrate"></span><br>
+                <div class="col-xs-10 col-xs-offset-1">
+                    <div class="col-xs-6">
+                        <button id="createbutton" onclick="createLobbyButton()" name="createbutton" class="btn btn-default btn-block">Create</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton" class="btn btn-info btn-block">Join</button>
+                    </div>
                 </div>
             </div>
-            <!-- End: User Stats -->
+        </div>
 
-            <hr>
+        <!-- Start of Open Lobby table -->
+        <div class="mainlobbydiv row">
+            <table class="table table-condensed custom-table-striped">
+                <thead>
+                    <tr>
+                        <th class="text-center">Lobby Code</th>
+                        <th class="text-center">Gamemode</th>
+                        <th class="text-center">Players</th>
+                    </tr>
+                </thead>
+                <tbody id="lobbytable"></tbody>
+            </table>
+        </div>
+        <!-- End of Open Lobby table -->
 
-            <!-- Start: Rules -->
-            <div class="row">
-                <div id="gameplayrules" class="mainlobbydiv">
-                    <h3>Gameplay</h3>
-                    The game is played in cycles of day and night that can vary on the game mode you're playing, at
-                    night
-                    every player gets to perform their night action which is <em>usually</em> their strongest ability.
-                    During the day phase everyone can vote on whom to lynch and if anyone at any time get above 50% of
-                    the
-                    votes they'll get executed and have their role revealed. The evil roles are encouraged to lie and
-                    manipulate during this phase as telling them your true identity will most definitely get you lynched
-                    by
-                    the good town's people.
-                </div>
+        <hr>
+
+        <!-- Start of User Stats -->
+        <div class="row">
+            <div class="mainlobbydiv medieval-text">
+                Username: <span id="profilename"></span><br>
+                Games: <span id="profilegames"></span><br>
+                Wins: <span id="profilewins"></span><br>
+                Losses: <span id="profilelosses"></span><br>
+                Win Rate: <span id="profilewinrate"></span><br>
             </div>
-            <!-- End: Rules -->
+        </div>
+        <!-- End: User Stats -->
 
+        <hr>
+
+        <!-- Start: Rules -->
+        <div class="row">
+            <div id="gameplayrules" class="mainlobbydiv">
+                <h3>Gameplay</h3>
+                ${gameplaytext}
+            </div>
+        </div>
+        <!-- End: Rules -->
+
+        </div>
         </div>
         <!-- End: Main Page -->
 
-        <!-- Start of Lobby before Game -->
+        <!-- Start of Create Lobby -->
         <div id="createlobbydiv" class="hide">
             <div class="col-md-6 col-md-offset-3">
                 <form role="form" class="form-horizontal" onsubmit="submitCreateLobbyForm(); return false;"
