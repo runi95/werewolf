@@ -213,7 +213,7 @@
 
 <!-- Start of Game -->
 
-<div id="game" class="hide">
+<div id="game" class="hide" data-spy="scroll" data-target=".navbar" data-offset="60">
     <div class="phase-div">
         <img id="dayphase" src="css/img/Werewolf-Day.png" class="phase phase-out">
         <img id="nightphase" src="css/img/Werewolf-Night.png" class="phase phase-out">
@@ -233,15 +233,19 @@
             </div>
             <div id="gamenavbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a id="actionref" href="javascript:void(0)" onclick="loadSpecificGameDiv(0)">Action</a></li>
-                    <li><a id="logref" href="javascript:void(0)" onclick="loadSpecificGameDiv(1)">Log</a></li>
-                    <li><a id="graveref" href="javascript:void(0)" onclick="loadSpecificGameDiv(2)">Graveyard</a></li>
+                    <li><a id="actionref" href="#actiondiv">Action</a></li>
+                    <li><a id="logref" href="#logdiv">Log</a></li>
+                    <li><a id="graveref" href="#gravediv">Graveyard</a></li>
                     <li><a id="roleref" href="javascript:void(0)" onclick="showRole()">Role</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <div id="actiondiv" class="show">
+
+    <!-- Start of Action div -->
+
+    <div id="actiondiv" class="container-fluid mainlobbydiv">
+        <h3>Actions</h3>
         <div id="dayactiondiv" class="hide">
             <div class="container">
                 <table class="table table-condensed">
@@ -270,7 +274,15 @@
         </div>
         <div id="noactiondiv" class="show"></div>
     </div>
-    <div id="logdiv" class="hide">
+
+    <!-- End of Log div -->
+
+    <hr>
+
+    <!-- Start of Log div -->
+
+    <div id="logdiv" class="container-fluid mainlobbydiv">
+        <h3>Log</h3>
         <div class="container">
             <div class="col-md-6">
                 <div id="loglist"></div>
@@ -279,7 +291,7 @@
             <!-- Start of chat div -->
 
             <div class="col-md-6">
-                <div id="chatlist"></div>
+                <div id="chatlist" class="chat"></div>
                 <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
                     id="createLobbyForm" name="createLobbyForm">
                     <div class="row" style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;">
@@ -291,7 +303,15 @@
             </div>
         </div>
     </div>
-    <div id="gravediv" class="hide">
+
+    <!-- End of Log div -->
+
+    <hr>
+
+    <!-- Start of Grave div -->
+
+    <div id="gravediv" class="container-fluid mainlobbydiv">
+        <h3>Graveyard</h3>
         <div class="container">
             <table class="table table-condensed">
                 <thead>
@@ -304,12 +324,9 @@
             </table>
         </div>
     </div>
-    <div id="rolediv" class="hide">
-        <div class="container">
-            <h1 class="panel-title"><b id="rolename"></b></h1>
-            <table id="roletable" class="table table-condensed"></table>
-        </div>
-    </div>
+
+    <!-- End of Log div -->
+
     <!-- Modal -->
     <div id="rolemodal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
