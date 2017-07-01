@@ -1,61 +1,83 @@
-<#import "websocketmaster.ftlh" as m/>
+<#import "websocketmaster-mobile.ftlh" as m/>
 <@m.master>
 <div id="menu">
-    <nav class="custom-nav">
-        <ul>
-            <li class="custom-nav-right custom-nav-text"><a href="/logout">Logout</a></li>
-        </ul>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainnavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Werewolf</a>
+            </div>
+            <div id="mainnavbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <div class="container" style="margin-top: 20px; margin-bottom: 20px;">
 
+        <!-- Main Page, before joining a lobby -->
         <div id="joinlobbydiv" class="show">
-            <div class="row">
-                <div class="form-group">
-                    <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
-                        id="joinLobbyForm" name="joinLobbyForm">
-                        <div id="nicknamediv" class="form-group container">
+            <div class="form-group">
+                <form role="form" class="form-horizontal" onsubmit="submitJoinLobbyForm(); return false;"
+                    id="joinLobbyForm" name="joinLobbyForm">
+                    <div class="row">
+                        <div id="nicknamediv" class="form-group col-xs-12">
                             <input id="nicknamefield" name="nickname" type="text" placeholder="Nickname"
                                 class="form-control" maxlength="16" autocomplete="off" autofocus>
                             <span id="nicknameglyph"></span>
                         </div>
-                        <div id="gameiddiv" class="form-group container">
+                    </div>
+                    <div class="row">
+                        <div id="gameiddiv" class="form-group col-xs-12">
                             <input id="gameidfield" name="gameid" type="text" placeholder="Game ID"
                                 class="form-control" autocomplete="off" pattern="[A-Za-z0-9]{5}">
                             <span id="gameidglyph"></span>
                         </div>
-                    </form>
+                    </div>
+                </form>
+                <div class="row">
                     <button id="createbutton" onclick="createLobbyButton()" name="createbutton" class="btn btn-default">Create</button>
                     <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
                 </div>
-                <div class="mainlobbydiv">
-                    <table class="table table-condensed custom-table-striped">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Lobby Code</th>
-                                <th class="text-center">Gamemode</th>
-                                <th class="text-center">Players</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lobbytable"></tbody>
-                    </table>
-                </div>
-
-                <div class="col-md-4 col-md-offset-1" style="margin-top: 20px;">
-                    <div class="mainlobbydiv medieval-text">
-                        Username: <span id="profilename"></span><br>
-                        Games: <span id="profilegames"></span><br>
-                        Wins: <span id="profilewins"></span><br>
-                        Losses: <span id="profilelosses"></span><br>
-                        Win Rate: <span id="profilewinrate"></span><br>
-                    </div>
-                </div>
-                <!-- End: User Stats -->
-
             </div>
 
-            <!-- Start: Gameplay -->
+            <!-- Start of Open Lobby table -->
+            <div class="mainlobbydiv row">
+                <table class="table table-condensed custom-table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Lobby Code</th>
+                            <th class="text-center">Gamemode</th>
+                            <th class="text-center">Players</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lobbytable"></tbody>
+                </table>
+            </div>
+            <!-- End of Open Lobby table -->
+
+            <hr>
+
+            <!-- Start of User Stats -->
             <div class="row">
-                <hr>
+                <div class="mainlobbydiv medieval-text">
+                    Username: <span id="profilename"></span><br>
+                    Games: <span id="profilegames"></span><br>
+                    Wins: <span id="profilewins"></span><br>
+                    Losses: <span id="profilelosses"></span><br>
+                    Win Rate: <span id="profilewinrate"></span><br>
+                </div>
+            </div>
+            <!-- End: User Stats -->
+
+            <hr>
+
+            <!-- Start: Rules -->
+            <div class="row">
                 <div id="gameplayrules" class="mainlobbydiv">
                     <h3>Gameplay</h3>
                     The game is played in cycles of day and night that can vary on the game mode you're playing, at
@@ -69,11 +91,12 @@
                     the good town's people.
                 </div>
             </div>
+            <!-- End: Rules -->
 
-            <!-- End: Gameplay -->
         </div>
+        <!-- End: Main Page -->
 
-
+        <!-- Start of Lobby before Game -->
         <div id="createlobbydiv" class="hide">
             <div class="col-md-6 col-md-offset-3">
                 <form role="form" class="form-horizontal" onsubmit="submitCreateLobbyForm(); return false;"
