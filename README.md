@@ -18,4 +18,5 @@ The game is played in cycles of day and night that can vary on the game mode you
 
 
 ### Colour list:
-Some Markdown text with <span style="color:blue">some *blue* text</span>.
+- ![#04305d](https://placehold.it/15/f03c15/000000?text=+) `#04305d`
+- ![#053a70](https://placehold.it/15/f03c15/000000?text=+) `#053a70`
