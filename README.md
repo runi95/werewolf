@@ -24,3 +24,8 @@ The game is played in cycles of day and night that can vary on the game mode you
   + ![#04478b](https://placehold.it/15/04478b/000000?text=+) `#04478b`
   + ![#0755a0](https://placehold.it/15/0755a0/000000?text=+) `#0755a0`
 
+- Grays
+  + ![#28313a](https://placehold.it/15/28313a/000000?text=+) `#28313a`
+  + ![#334350](https://placehold.it/15/334350/000000?text=+) `#334350`
+  + ![#51626a](https://placehold.it/15/51626a/000000?text=+) `#51626a`
+  + ![#586671](https://placehold.it/15/586671/000000?text=+) `#586671`
