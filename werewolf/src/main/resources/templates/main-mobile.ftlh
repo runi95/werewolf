@@ -1,5 +1,6 @@
 <#import "websocketmaster.ftlh" as m/>
 <@m.master>
+<div style="margin-top: 60px; margin-bottom: 20px;"></div>
 <div id="menu">
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
@@ -190,7 +191,7 @@
                   id="lobbychat" name="Lobby Chat">
                 <div class="input-group">
                     <input id="lobbychatinputfield" name="lobbychatinput" title="Chat" type="text"
-                           class="form-control fancy-input" autocomplete="off">
+                           class="form-control fancy-input" autocomplete="off" required="">
                     <div class="input-group-btn">
                         <button id="sendbuttonlobby" name="sendbuttonlobby" class="btn btn-info">Send</button>
                     </div>
@@ -258,7 +259,7 @@
         </div>
     </div>
 
-    <!-- End of Log div -->
+    <!-- End of Action div -->
 
     <hr>
 
@@ -276,7 +277,7 @@
                   id="ingamechat" name="In Game Chat">
                 <div class="input-group">
                     <input id="chatinputfield" name="chatinput" title="Chat" type="text"
-                           class="form-control fancy-input" autocomplete="off">
+                           class="form-control fancy-input" autocomplete="off" required="">
                     <div class="input-group-btn">
                         <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
                     </div>
