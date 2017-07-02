@@ -287,8 +287,7 @@
                 <div id="chatlist" class="chat"></div>
                 <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
                       id="createLobbyForm" name="createLobbyForm">
-                    <div class="row"
-                         style="margin: 20px 20px auto auto">
+                    <div class="input-group">
                         <input id="chatinputfield" name="chatinput" title="Chat" type="text"
                                class="form-control fancy-input" autocomplete="off">
                         <div class="input-group-btn">
