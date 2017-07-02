@@ -466,7 +466,7 @@ function addToActionList(playerid, playername, votes) {
 			if (!invalidtargets.hasOwnProperty(playerid)) {
 				btn = document.createElement("button");
 				btn.setAttribute("id", "ab" + playerid);
-				btn.setAttribute("class", "hide");
+				btn.setAttribute("class", actionlists[2].button);
 				btn.setAttribute("onclick", "performaction(" + playerid + ")");
                 action.appendChild(btn);
 			} else {
@@ -773,12 +773,15 @@ function loadAction() {
 }
 
 var actiondivlist = ["nightactiondiv", "dayactiondiv", "noactiondiv"];
-var actionlists = [{"button":"show btn btn-night btn-nightact btn-block"}, {"button":"show btn btn-info btn-block"}, {"button":"hide"}];
+var actionlists = [{"button":"show btn btn-night btn-act btn-block"}, {"button":"show btn btn-info btn-act btn-block"}, {"button":"hide"}];
 
 function loadSpecificAction(n) {
     for (key in playerlist) {
         var elem = document.getElementById("ab" + key);
-        elem.setAttribute("class", actionlists[n].button);
+        var type = elem.nodeName.toLowerCase();
+        if(type === "button") {
+            elem.setAttribute("class", actionlists[n].button);
+        }
     }
 }
 
