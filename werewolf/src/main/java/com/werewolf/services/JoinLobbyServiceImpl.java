@@ -298,6 +298,8 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 		if (lobbyEntity != null) {
 			if(lobbyPlayer.getAlignment().equals("Evil"))
 				lobbyEntity.getEvilTeam().forEach((p) -> messageList.add(new LobbyMessage("addinvalidtarget", p.getId(), p.getRole().getName(), p.getRole().getAlignment().getAlignmentName())));
+
+            messageList.add(new LobbyMessage("addinvalidtarget", lobbyPlayer.getId(), lobbyPlayer.getRole().getName(), lobbyPlayer.getRole().getAlignment().getAlignmentName()));
 			
 			lobbyEntity.getAlivePlayers().forEach((lp) -> messageList
 					.add(new LobbyMessage("joinalive", lp.getId(), lp.getNickname(), Integer.toString(lp.getVotes()))));

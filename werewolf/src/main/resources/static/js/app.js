@@ -461,27 +461,13 @@ function addToActionList(playerid, playername, votes) {
         actionname.innerHTML = playername;
         actionname.setAttribute("class", "text-center");
         actionrow.setAttribute("id", "ar" + playerid);
-		if(playerid != owner) {
-			if (!invalidtargets.hasOwnProperty(playerid)) {
-				btn = document.createElement("button");
-				btn.setAttribute("id", "ab" + playerid);
-				btn.setAttribute("class", actionlists[2].button);
-				btn.setAttribute("onclick", "performaction(" + playerid + ")");
-                action.appendChild(btn);
-			} else {
-				btn = document.createElement("b");
-				btn.setAttribute("id", "ab" + playerid);
-				btn.setAttribute("class", "text-center center-block text-info");
-				btn.innerHTML = "Ally";
-                action.appendChild(btn);
-			}
-		} else {
-			btn = document.createElement("b");
-			btn.setAttribute("id", "ab" + playerid);
-			btn.setAttribute("class", "text-center center-block text-success");
-			btn.innerHTML = "Yourself";
-            action.appendChild(btn);
-		}
+
+        btn = document.createElement("button");
+        btn.setAttribute("id", "ab" + playerid);
+        btn.setAttribute("class", actionlists[2].button);
+        btn.setAttribute("onclick", "performaction(" + playerid + ")");
+        action.appendChild(btn);
+
         actionrow.appendChild(actionname);
         actionrow.appendChild(action);
 		actionlist.appendChild(actionrow);
@@ -703,7 +689,7 @@ function someoneVoted(playerid, votedon, votes, status) {
 			voted = votedon;
 			elem.setAttribute("class", actionlists[1].active);
 			addToLog("You voted on " + playerlist[votedon]);
-		} else if(status === "-") { // Means they removed their vote from this player			
+		} else if(status === "-") { // Means they removed their vote from this player
 			elem.setAttribute("class", actionlists[1].button);
 			addToLog("You removed your vote from " + playerlist[votedon]);
 		} else if(status === "x") {
@@ -717,14 +703,9 @@ function someoneVoted(playerid, votedon, votes, status) {
 			addToLog(playerlist[playerid] + " has removed thier vote from " + playerlist[votedon]);
 		}
 	}
-	
-	if (votedon == owner) {
-		elem.innerHTML = votes;
-	} else if(votedon == voted) {
-		elem.innerHTML = "Remove Vote(" + votes + ")";
-	} else {
-		elem.innerHTML = "Vote(" + votes + ")";
-	}
+
+	elem.innerHTML = "(" + votes + ")";
+
 	}
 }
 
@@ -760,14 +741,22 @@ function loadAction() {
 }
 
 var actiondivlist = ["nightactiondiv", "dayactiondiv", "noactiondiv"];
-var actionlists = [{"button":"show btn btn-night btn-act btn-block", "active":"show btn btn-default btn-act btn-block"}, {"button":"show btn btn-info btn-act btn-block", "active":"show btn btn-default btn-act btn-block"}, {"button":"hide", "active":"hide"}];
+var actionlists = [{"button":"show btn btn-night btn-act btn-block", "active":"show btn btn-default btn-act btn-block", "ally":"hide", "owner":"hide"}, {"button":"show btn btn-info btn-act btn-block", "active":"show btn btn-default btn-act btn-block", "ally":"show btn btn-info btn-act btn-block", "owner":"hide"}, {"button":"hide", "active":"hide", "ally":"hide", "owner":"hide"}];
 
 function loadSpecificAction(n) {
     for (key in playerlist) {
         var elem = document.getElementById("ab" + key);
         var type = elem.nodeName.toLowerCase();
         if(type === "button") {
-            elem.setAttribute("class", actionlists[n].button);
+            if(invalidtargets.hasOwnProperty(key)) {
+                if(key == owner) {
+                    elem.setAttribute("class", actionlists[n].owner);
+                } else {
+                    elem.setAttribute("class", actionlists[n].ally)
+                }
+            } else {
+                elem.setAttribute("class", actionlists[n].button);
+            }
         }
     }
 }
