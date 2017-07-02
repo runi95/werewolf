@@ -20,13 +20,13 @@ hr {
 .fancy-input {
     color: #000000;
     background-color: #8a6d3b;
-    border-color: #2a2a2a;
+    border-color: #8a6d3b;
 }
 
 .fancy-input:focus {
     color: #000000;
     background-color: #8a6d3b;
-    border-color: #2a2a2a;
+    border-color: #8a6d3b;
 }
 
 .fancy-input::placeholder {
