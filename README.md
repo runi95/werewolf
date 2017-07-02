@@ -30,7 +30,7 @@ The game is played in cycles of day and night that can vary on the game mode you
   + ![#51626a](https://placehold.it/15/51626a/000000?text=+) `#51626a`
   + ![#586671](https://placehold.it/15/586671/000000?text=+) `#586671`
 
-- Skintones
+- Browns
   + ![#3d2c12](https://placehold.it/15/3d2c12/000000?text=+) `#3d2c12`
   + ![#968664](https://placehold.it/15/968664/000000?text=+) `#968664`
   + ![#ccbea3](https://placehold.it/15/ccbea3/000000?text=+) `#ccbea3`
