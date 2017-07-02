@@ -459,7 +459,11 @@ function addToActionList(playerid, playername, votes) {
 		var action = document.createElement("th");
 		var btn;
         actionname.innerHTML = playername;
-        actionname.setAttribute("class", "text-center");
+        if(playerid == owner) {
+            actionname.setAttribute("class", "text-center text-info");
+        } else {
+            actionname.setAttribute("class", "text-center");
+        }
         actionrow.setAttribute("id", "ar" + playerid);
 
         btn = document.createElement("button");
