@@ -87,7 +87,7 @@ function sendPrivateMessage(message) {
 }
 
 function receiveBroadcastMessage(message) {
-    for(var i = 0; i < message.length; i++) {
+    for(i in message) {
             var action = message[i].action;
             
             switch(action) {
@@ -146,7 +146,7 @@ function receiveBroadcastMessage(message) {
 }
 
 function receivePrivateMessage(message) {
-    for(var i = 0; i < message.length; i++) {
+    for(i in message) {
             var action = message[i].action;
             
             switch(action) {
@@ -325,7 +325,7 @@ function joinLobbyReply(message) {
     gameidglyph.setAttribute("class", "");
     nicknamediv.setAttribute("class", "form-group");
     nicknameglyph.setAttribute("class", "");
-    for(var i = 0; i < message.length; i++) {
+    for(i in message) {
         switch(message[i].action) {
             case "error":
                 if(message[i].info === "404") {
@@ -741,7 +741,7 @@ var actiondivlist = ["nightactiondiv", "dayactiondiv", "noactiondiv"];
 var actionlists = [{"button":"show btn btn-night btn-act btn-block", "active":"show btn btn-default btn-act btn-block", "ally":"hide", "owner":"hide"}, {"button":"show btn btn-info btn-act btn-block", "active":"show btn btn-default btn-act btn-block", "ally":"show btn btn-info btn-act btn-block", "owner":"hide"}, {"button":"hide", "active":"hide", "ally":"hide", "owner":"hide"}];
 
 function loadSpecificAction(n) {
-    for (key in playerlist) {
+    for(key in playerlist) {
         var elem = document.getElementById("ab" + key);
         var type = elem.nodeName.toLowerCase();
         if(type === "button") {
@@ -762,7 +762,7 @@ var gamedivlist = ["actiondiv", "logdiv", "gravediv"];
 var gamereflist = ["actionref", "logref", "graveref"];
 
 function loadSpecificGameDiv(n) {
-    for (var i = 0; i < gamedivlist.length; i++) {
+    for(i in gamedivlist) {
         if(i == n) {
             document.getElementById(gamedivlist[i]).setAttribute("class", "show");
             document.getElementById(gamereflist[i]).setAttribute("class", "active");
