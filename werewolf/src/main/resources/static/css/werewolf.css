@@ -439,6 +439,7 @@ border-bottom: 2px solid transparent;
 */
 
 .phase-div {
+    z-index: 10000;
 	position: fixed;
 	top: 50%;
 	width: 100%;
