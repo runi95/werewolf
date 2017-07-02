@@ -229,7 +229,7 @@
 
     <div id="actiondiv">
         <div class="col-md-4">
-            <div class="page-header">
+            <div class="row">
                 <h3>Actions</h3>
             </div>
             <div id="dayactiondiv">
@@ -252,7 +252,7 @@
 
     <div id="logdiv">
         <div class="col-md-4">
-            <div class="page-header">
+            <div class="row">
                 <h3>Chat</h3>
             </div>
             <div id="chatlist" class="chat"></div>
@@ -273,7 +273,7 @@
 
     <div id="gravediv">
         <div class="col-md-4">
-            <div class="page-header">
+            <div class="row">
                 <h3>Graveyard</h3>
             </div>
             <table class="table table-condensed">
