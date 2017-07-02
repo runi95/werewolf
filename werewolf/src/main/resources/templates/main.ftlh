@@ -27,8 +27,12 @@
                                 <span id="gameidglyph"></span>
                             </div>
                         </form>
-                        <button id="createbutton" onclick="createLobbyButton()" name="createbutton" class="btn btn-default">Create</button>
-                        <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton" class="btn btn-info">Join</button>
+                        <button id="createbutton" onclick="createLobbyButton()" name="createbutton"
+                                class="btn btn-default">Create
+                        </button>
+                        <button type="submit" form="joinLobbyForm" id="joinbutton" name="joinbutton"
+                                class="btn btn-info">Join
+                        </button>
                     </div>
                     <div class="mainlobbydiv">
                         <table class="table table-condensed custom-table-striped">
@@ -119,7 +123,7 @@
                     <div class="row" style="margin-left: auto; margin-right: auto; max-width: 200px;">
                         <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
                         <input type="number" min="4" max="20" value="15" class="form-control fancy-input"
-                               id="maxplayercounter">
+                               id="maxplayercount">
                     </div>
                     <div style="padding-top: 20px">
                         <a href="javascript:loadJoinLobby();" class="btn btn-default">Back</a>
@@ -145,22 +149,24 @@
                     <h1>Players</h1>
                 </div>
                 <ul id="plist" class="list-group"></ul>
-                <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)</button>
+                <button id="btnready" class="btn btn-success btn-block" onclick="changeReadyState()">Ready (0/4)
+                </button>
             </div>
             <div class="col-md-5">
                 <div class="page-header">
                     <h1>Chat</h1>
                 </div>
                 <div id="lobbychatlist" class="chat"></div>
-                    <form role="form" class="form-horizontal" onsubmit="sendLobbyChatMessageForm(); return false;"
-                        id="createLobbyForm" name="createLobbyForm">
-                        <div class="row" style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;">
-                            <input id="lobbychatinputfield" name="lobbychatinput" type="text"
-                                class="form-control fancy-input" autocomplete="off">
-                            <button id="sendbuttonlobby" name="sendbuttonlobby" class="btn btn-info">Send</button>
-                        </div>
-                    </form>
-                </div>
+                <form role="form" class="form-horizontal" onsubmit="sendLobbyChatMessageForm(); return false;"
+                      id="createLobbyForm" name="createLobbyForm">
+                    <div class="row"
+                         style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;">
+                        <input id="lobbychatinputfield" name="lobbychatinput" type="text"
+                               class="form-control fancy-input" autocomplete="off">
+                        <button id="sendbuttonlobby" name="sendbuttonlobby" class="btn btn-info">Send</button>
+                    </div>
+                </form>
+            </div>
             <div class="col-md-3" style="max-width: 400px">
                 <div class="page-header">
                     <h1>Settings</h1>
@@ -230,10 +236,11 @@
             <div class="col-md-6">
                 <div id="chatlist"></div>
                 <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
-                    id="createLobbyForm" name="createLobbyForm">
-                    <div class="row" style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;">
+                      id="createLobbyForm" name="createLobbyForm">
+                    <div class="row"
+                         style="margin-left: auto; margin-right: auto; margin-top: 20px; margin-bottom: 20px;">
                         <input id="chatinputfield" name="chatinput" type="text"
-                            class="form-control fancy-input" autocomplete="off">
+                               class="form-control fancy-input" autocomplete="off">
                         <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
                     </div>
                 </form>
