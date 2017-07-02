@@ -685,24 +685,21 @@ function someoneVoted(playerid, votedon, votes, status) {
 		if(status === "+") { // Means they voted on this player
 			voted = votedon;
 			elem.setAttribute("class", actionlists[1].active);
-			addToLog("You voted on " + playerlist[votedon], 0);
+			addToLog("You voted on " + playerlist[votedon] + " (" + votes + ")", 0);
 		} else if(status === "-") { // Means they removed their vote from this player
 			elem.setAttribute("class", actionlists[1].button);
-			addToLog("You removed your vote from " + playerlist[votedon], 0);
+			addToLog("You removed your vote from " + playerlist[votedon] + " (" + votes + ")", 0);
 		} else if(status === "x") {
 			voted = null;
 			elem.setAttribute("class", actionlists[1].button);
 		}
 	} else {
 		if(status === "+") {
-			addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon], 0);
+			addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon] + " (" + votes + ")", 0);
 		} else if(status === "-") {
-			addToLog(playerlist[playerid] + " has removed thier vote from " + playerlist[votedon], 0);
+			addToLog(playerlist[playerid] + " has removed thier vote from " + playerlist[votedon] + " (" + votes + ")", 0);
 		}
 	}
-
-	elem.innerHTML = "(" + votes + ")";
-
 	}
 }
 
