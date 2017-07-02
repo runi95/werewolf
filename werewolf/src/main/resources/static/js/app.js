@@ -982,7 +982,7 @@ function viewRole(name) {
 function setRole(name) {
     if(role != null) {
         var oldrole = document.getElementById("role." + role);
-        if(viewerole == role) {
+        if(viewrole == role) {
             oldrole.setAttribute("class", "active");
         } else {
             oldrole.setAttribute("class", "");
