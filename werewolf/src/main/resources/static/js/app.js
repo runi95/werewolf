@@ -694,7 +694,7 @@ function updateNightAction(target, act) {
 
 function someoneVoted(playerid, votedon, votes, status) {
 	if(aliveplayers.hasOwnProperty(playerid)) {
-	var elem = document.getElementById("vb" + votedon);
+	var elem = document.getElementById("ab" + votedon);
 	
 	if(playerid === owner) {
 		elem.disabled = false;
