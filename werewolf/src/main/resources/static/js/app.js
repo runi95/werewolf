@@ -37,7 +37,6 @@ function initializeWebsocket() {
 
 function connectoAndSubscribeToPrivate() {
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/user/action/private', function (messageOutput) {
             receivePrivateMessage(JSON.parse(messageOutput.body));
         });
@@ -656,17 +655,6 @@ function loadGame() {
 	sendPrivateMessage({"action":"initializegame"});
 }
 
-function voteon(playerid) {
-	var votebtn = document.getElementById("vb" + playerid).disabled = true;
-	
-	if(voted == playerid) {
-		broadcastMessage({"action":"unvote", "playerid":playerid});
-		voted = null;
-	} else {
-		broadcastMessage({"action":"vote", "playerid":playerid});
-	}
-}
-
 function performaction(playerid) {
     var button = document.getElementById("ab" + playerid).disabled = true;
 
@@ -698,10 +686,10 @@ function updateNightAction(target, act) {
 	
 	if(act) {
 		nightact = target;
-		elem.setAttribute("class", "btn btn-night btn-default");
+		elem.setAttribute("class", actionlists[0].active);
 	} else {
 		nightact = null;
-		elem.setAttribute("class", "btn btn-night btn-nightact");
+		elem.setAttribute("class", actionlists[0].button);
 	}
 }
 
@@ -714,14 +702,14 @@ function someoneVoted(playerid, votedon, votes, status) {
 		
 		if(status === "+") { // Means they voted on this player
 			voted = votedon;
-			elem.setAttribute("class", "btn btn-default btn-block");
+			elem.setAttribute("class", actionlists[1].active);
 			addToLog("You voted on " + playerlist[votedon]);
 		} else if(status === "-") { // Means they removed their vote from this player			
-			elem.setAttribute("class", "btn btn-info btn-block");
+			elem.setAttribute("class", actionlists[1].button);
 			addToLog("You removed your vote from " + playerlist[votedon]);
 		} else if(status === "x") {
 			voted = null;
-			elem.setAttribute("class", "btn btn-info btn-block");
+			elem.setAttribute("class", actionlists[1].button);
 		}
 	} else {
 		if(status === "+") {
@@ -773,7 +761,7 @@ function loadAction() {
 }
 
 var actiondivlist = ["nightactiondiv", "dayactiondiv", "noactiondiv"];
-var actionlists = [{"button":"show btn btn-night btn-act btn-block"}, {"button":"show btn btn-info btn-act btn-block"}, {"button":"hide"}];
+var actionlists = [{"button":"show btn btn-night btn-act btn-block", "active":"show btn btn-default btn-act btn-block"}, {"button":"show btn btn-info btn-act btn-block", "active":"show btn btn-default btn-act btn-block"}, {"button":"hide", "active":"hide"}];
 
 function loadSpecificAction(n) {
     for (key in playerlist) {
