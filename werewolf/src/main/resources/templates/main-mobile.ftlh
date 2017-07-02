@@ -194,7 +194,7 @@
                 </div>
                 <div id="lobbychatlist" class="chat"></div>
                 <form role="form" class="form-horizontal" onsubmit="sendLobbyChatMessageForm(); return false;"
-                      id="createLobbyForm" name="createLobbyForm">
+                      id="lobbychat" name="Lobby Chat">
                     <div class="input-group">
                         <input id="lobbychatinputfield" name="lobbychatinput" title="Chat" type="text"
                                class="form-control fancy-input" autocomplete="off">
@@ -286,7 +286,7 @@
             <div class="col-md-6">
                 <div id="chatlist" class="chat"></div>
                 <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
-                      id="createLobbyForm" name="createLobbyForm">
+                      id="ingamechat" name="In Game Chat">
                     <div class="input-group">
                         <input id="chatinputfield" name="chatinput" title="Chat" type="text"
                                class="form-control fancy-input" autocomplete="off">
