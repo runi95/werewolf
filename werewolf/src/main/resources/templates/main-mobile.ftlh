@@ -1,4 +1,4 @@
-<#import "websocketmaster-mobile.ftlh" as m/>
+<#import "websocketmaster.ftlh" as m/>
 <@m.master>
 <div id="menu">
     <nav class="navbar navbar-inverse navbar-fixed-top">

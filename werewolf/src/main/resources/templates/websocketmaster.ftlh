@@ -23,19 +23,13 @@
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/webjars/jquery/jquery.min.js"></script>
+
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/app.js"></script>
 </head>
-<body>
+<body class="container" style="margin-top: 60px; margin-bottom: 20px;">
 <noscript><h2 style="color: #ff0000">Javascript is required to view this webpage, please enable Javascript and refresh the page</h2></noscript>
     <#nested/>
-<!-- /container -->
-
-<!-- jQuery -->
-<script src="js/jquery.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script></body>
-
-<!-- Custom js -->
-<script src="js/app.js"></script>
+</body>
 </html>
 </#macro>
