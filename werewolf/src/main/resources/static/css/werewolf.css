@@ -3,30 +3,47 @@
  */
 
 hr {
-    border-color: #333;
+    border-color: #334350;
+}
+
+.nav > li > span {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+
+.nav > li > span:hover,
+.nav > li > span:focus {
+    text-decoration: none;
+    background-color: #eee;
+}
+
+.nav-pills > li {
+    cursor: pointer;
+}
+
+.nav-pills > li > span {
+    border-radius: 4px;
+}
+
+.nav-pills > li.active > span,
+.nav-pills > li.active > span:hover,
+.nav-pills > li.active > span:focus {
+    color: #fff;
+    background-color: #337ab7;
 }
 
 .chat {
     height: 15em;
     overflow-y: auto;
-    background: #333;
+    background: #334350;
     text-align: left;
 }
 
 .fancy-input {
-    color: #000000;
-    background-color: #8a6d3b;
-    border-color: #8a6d3b;
-}
-
-.fancy-input:focus {
-    color: #000000;
-    background-color: #8a6d3b;
-    border-color: #8a6d3b;
-}
-
-.fancy-input::placeholder {
-  color: #2a2a2a;
+    color: #968664;
+    background-color: #51626a;
+    border-color: #51626a;
 }
 
 .fancy-checkbox {
@@ -78,7 +95,7 @@ hr {
     float: left;
     width: 100%;
     min-height: 65px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #04305d;
 }
 
 .fancy-radio-ul li input[type=radio]{
@@ -116,9 +133,9 @@ input[type=radio]:checked ~ label{
 
 .mainlobbydiv {
     border-radius: 5px;
-    background: #333;
+    background: #334350;
     padding: 10px;
-    color: #8a6d3b;
+    color: #968664;
 }
 
 #gameplayrules {
@@ -131,7 +148,7 @@ input[type=radio]:checked ~ label{
 }
 
  .modal-content {
-    background-color: #333;
+    background-color: #28313a;
 }
 
 .close {
@@ -210,7 +227,7 @@ input[type=radio]:checked ~ label{
 .btn-default,
 .btn-default:hover,
 .btn-default:focus {
-  color: #333;
+  color: #04305d;
   text-shadow: none; /* Prevent inheritance from `body` */
   background-color: #fff;
   border: 1px solid #fff;
@@ -231,7 +248,7 @@ input[type=radio]:checked ~ label{
 html,
 body {
   height: 100%;
-  background-color: #1e1914;
+  background-color: #28313a;
 }
 
 body {
