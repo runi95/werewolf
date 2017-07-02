@@ -460,7 +460,7 @@ function addToActionList(playerid, playername, votes) {
 		var btn;
         actionname.innerHTML = playername;
         actionname.setAttribute("class", "text-center");
-        actionrow.setAttribute("id", "an" + playerid);
+        actionrow.setAttribute("id", "ar" + playerid);
 		if(playerid != owner) {
 			if (!invalidtargets.hasOwnProperty(playerid)) {
 				btn = document.createElement("button");
@@ -491,8 +491,7 @@ function addToActionList(playerid, playername, votes) {
 function removeFromActionList(playerid) {
 	if (aliveplayers.hasOwnProperty(playerid)) {
 		delete aliveplayers[playerid];
-		document.getElementById("av" + playerid).remove();
-		document.getElementById("an" + playerid).remove();
+		document.getElementById("ar" + playerid).remove();
 	}
 }
 
