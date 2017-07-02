@@ -96,7 +96,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	
 	@Override
 	public void nightAction(LobbyEntity lobbyEntity, LobbyPlayer acter, LobbyPlayer oldTarget, LobbyPlayer target, boolean act) {
-		if(!lobbyEntity.getPhase().equals("nightphase"))
+		if(lobbyEntity.getPhase() != GamePhase.NIGHT)
 			return;
 		
 		List<LobbyMessage> messageList = new ArrayList<>();
@@ -119,7 +119,7 @@ public class AdvancedMode extends GameModeMasterClass {
 	
 	@Override
 	public void vote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer voteTarget, LobbyPlayer oldVoteTarget, boolean status) {
-		if(!lobbyEntity.getPhase().equals("dayphase"))
+		if(lobbyEntity.getPhase() != GamePhase.DAY)
 			return;
 		
 		List<LobbyMessage> messageList = new ArrayList<>();
