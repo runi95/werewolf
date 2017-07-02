@@ -379,13 +379,13 @@ border-bottom: 2px solid transparent;
 	min-height: 34px;
 }
 
-.btn-nightact {
+.btn-night {
 	background-color: #4800ff;
 }
 
-.btn-nightact:active,
-.btn-nightact:hover:enabled,
-.btn-nightact:focus {
+.btn-night:active,
+.btn-night:hover:enabled,
+.btn-night:focus {
 	background-color: #4200eb;
 }
 
