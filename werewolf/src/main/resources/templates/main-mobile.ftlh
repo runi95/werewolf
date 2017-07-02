@@ -232,7 +232,7 @@
             <div id="gamenavbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a id="actionref" href="#actiondiv">Action</a></li>
-                    <li><a id="logref" href="#logdiv">Log</a></li>
+                    <li><a id="logref" href="#chatdiv">Log</a></li>
                     <li><a id="graveref" href="#gravediv">Graveyard</a></li>
                     <li><a id="roleref" href="javascript:void(0)" onclick="showRole()">Role</a></li>
                 </ul>
@@ -242,7 +242,7 @@
 
     <!-- Start of Action div -->
 
-    <div id="actiondiv" class="container-fluid mainlobbydiv">
+    <div id="actiondiv" class="container-fluid">
         <h3>Actions</h3>
         <div id="dayactiondiv">
             <div class="container">
@@ -263,36 +263,31 @@
 
     <hr>
 
-    <!-- Start of Log div -->
+    <!-- Start of Chat div -->
 
-    <div id="logdiv" class="container-fluid mainlobbydiv">
-        <h3>Log</h3>
-        <div class="container">
-            <div id="loglist"></div>
+    <div id="chatdiv" class="container-fluid">
+        <h3>Chat</h3>
 
-            <!-- Start of chat div -->
-
-            <div id="chatlist" class="chat"></div>
-            <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
-                  id="ingamechat" name="In Game Chat">
-                <div class="input-group">
-                    <input id="chatinputfield" name="chatinput" title="Chat" type="text"
-                           class="form-control fancy-input" autocomplete="off" required="">
-                    <div class="input-group-btn">
-                        <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
-                    </div>
+        <div id="chatlist" class="chat"></div>
+        <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
+              id="ingamechat" name="In Game Chat">
+            <div class="input-group">
+                <input id="chatinputfield" name="chatinput" title="Chat" type="text"
+                       class="form-control fancy-input" autocomplete="off" required="">
+                <div class="input-group-btn">
+                    <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 
-    <!-- End of Log div -->
+    <!-- End of Chat div -->
 
     <hr>
 
     <!-- Start of Grave div -->
 
-    <div id="gravediv" class="container-fluid mainlobbydiv">
+    <div id="gravediv" class="container-fluid">
         <h3>Graveyard</h3>
         <div class="container">
             <table class="table table-condensed">
@@ -307,7 +302,7 @@
         </div>
     </div>
 
-    <!-- End of Log div -->
+    <!-- End of Grave div -->
 
     <!-- Modal -->
     <div id="rolemodal" class="modal fade" tabindex="-1" role="dialog">

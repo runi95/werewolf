@@ -248,34 +248,29 @@
 
     <!-- End of Action div -->
 
-    <!-- Start of Log div -->
+    <!-- Start of chat div -->
 
     <div id="logdiv">
         <div class="col-md-4">
-            <div class="row">
-                <div id="loglist"></div>
+            <div class="page-header">
+                <h3>Chat</h3>
             </div>
-
-            <!-- Start of chat div -->
-
-            <div class="row">
-                <div class="page-header">
-                    <h3>Chat</h3>
-                </div>
-                <div id="chatlist" class="chat"></div>
-                <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
-                      id="createLobbyForm" name="createLobbyForm">
-                    <div class="input-group">
-                        <input id="chatinputfield" name="chatinput" type="text"
-                               class="form-control fancy-input" autocomplete="off" required="">
-                        <div class="input-group-btn">
-                            <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
-                        </div>
+            <div id="chatlist" class="chat"></div>
+            <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
+                  id="createLobbyForm" name="createLobbyForm">
+                <div class="input-group">
+                    <input id="chatinputfield" name="chatinput" type="text"
+                           class="form-control fancy-input" autocomplete="off" required="">
+                    <div class="input-group-btn">
+                        <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
+
+    <!-- Start of Grave div -->
+
     <div id="gravediv">
         <div class="col-md-4">
             <div class="page-header">

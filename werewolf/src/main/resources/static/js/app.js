@@ -157,7 +157,7 @@ function receivePrivateMessage(message) {
             		updateNightAction(message[i].info, false);
             		break;
             	case "nightmessage":
-                 	addToLog(message[i].info);
+                 	addToLog(message[i].info, 3);
                  	break;
                 case "join":
                     addPlayer(message[i].playerid, message[i].info);
@@ -388,9 +388,9 @@ function dayPhase() {
 
 function lynchPlayer(playerid, playername, playerrole, alignment, kinged) {
 	if(kinged) {
-		addToLog(playerlist[playerid] + " executed by the king himself!");
+		addToLog(playerlist[playerid] + " executed by the king himself!", 4);
 	} else {
-		addToLog(playerlist[playerid] + " was lynched by an angry mob!");
+		addToLog(playerlist[playerid] + " was lynched by an angry mob!", 3);
 	}
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
@@ -438,9 +438,9 @@ function killPlayer(playerid, playername, playerrole, alignment, jester) {
 		dead();
 	
 	if(jester) {
-		addToLog(playername + " was haunted to death by a jester.");
+		addToLog(playername + " was haunted to death by a jester.", 3);
 	} else {
-		addToLog(playername + " was murdered during the deepest, darkest hours of the night.");
+		addToLog(playername + " was murdered during the deepest, darkest hours of the night.", 1);
 	}
 	addToGraveyard(playerid, playername, playerrole, alignment);
 }
@@ -483,13 +483,6 @@ function removeFromActionList(playerid) {
 		delete aliveplayers[playerid];
 		document.getElementById("ar" + playerid).remove();
 	}
-}
-
-function addToLog(message) {
-	var loglist = document.getElementById("loglist");
-	var msg = document.createElement("div");
-	msg.innerHTML = message;
-	loglist.appendChild(msg);
 }
 
 function addToGraveyard(playerid, playername, playerrole, alignment) {
@@ -692,19 +685,19 @@ function someoneVoted(playerid, votedon, votes, status) {
 		if(status === "+") { // Means they voted on this player
 			voted = votedon;
 			elem.setAttribute("class", actionlists[1].active);
-			addToLog("You voted on " + playerlist[votedon]);
+			addToLog("You voted on " + playerlist[votedon], 0);
 		} else if(status === "-") { // Means they removed their vote from this player
 			elem.setAttribute("class", actionlists[1].button);
-			addToLog("You removed your vote from " + playerlist[votedon]);
+			addToLog("You removed your vote from " + playerlist[votedon], 0);
 		} else if(status === "x") {
 			voted = null;
 			elem.setAttribute("class", actionlists[1].button);
 		}
 	} else {
 		if(status === "+") {
-			addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon]);
+			addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon], 0);
 		} else if(status === "-") {
-			addToLog(playerlist[playerid] + " has removed thier vote from " + playerlist[votedon]);
+			addToLog(playerlist[playerid] + " has removed thier vote from " + playerlist[votedon], 0);
 		}
 	}
 
@@ -777,6 +770,25 @@ function loadSpecificGameDiv(n) {
             document.getElementById(gamedivlist[i]).setAttribute("class", "hide");
             document.getElementById(gamereflist[i]).setAttribute("class", "");
         }
+    }
+}
+
+var importancelist = ["text-muted", "text-info", "text-success", "text-warning", "text-danger"];
+
+function addToLog(message, importance) {
+    var chatdiv = document.getElementById("chatlist");
+
+    var messagediv = document.createElement("div");
+    var messagespan = document.createElement("span");
+
+    messagespan.setAttribute("class", importancelist[importance]);
+    messagespan.innerHTML = message;
+
+    messagediv.appendChild(messagespan);
+    chatdiv.appendChild(messagediv);
+
+    if(!$('#chatlist').is(':animated')) {
+        $('#chatlist').animate({ scrollTop: $('#chatlist').prop('scrollHeight')}, 'fast');
     }
 }
 
