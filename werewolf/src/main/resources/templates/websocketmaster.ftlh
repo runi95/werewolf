@@ -27,7 +27,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/app.js"></script>
 </head>
-<body class="container">
+<body>
 <noscript><h2 style="color: #ff0000">Javascript is required to view this webpage, please enable Javascript and refresh the page</h2></noscript>
     <#nested/>
 </body>
