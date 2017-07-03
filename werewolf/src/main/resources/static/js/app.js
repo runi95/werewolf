@@ -198,8 +198,7 @@ function receivePrivateMessage(message) {
                 lost();
                 break;
             case "initrole":
-                viewRole(message[i].info);
-                showRole();
+                viewAndShowRole(message[i].info);
             case "role":
                 setRole(message[i].info);
                 break;
@@ -508,35 +507,36 @@ function addToGraveyard(playerid, playername, playerrole, alignment) {
         var role = document.createElement("th");
         name.innerHTML = playername;
         row.setAttribute("id", "g" + playerid);
+        role.setAttribute("onclick", "viewAndShowRole('" + playerrole + "')");
         role.innerHTML = playerrole;
         switch (alignment) {
             case "Good":
                 name.setAttribute("class", "text-center label-success");
-                role.setAttribute("class", "text-center label-success");
+                role.setAttribute("class", "text-center label-success clickable");
                 break;
             case "Chaotic Good":
                 name.setAttribute("class", "text-center label-success");
-                role.setAttribute("class", "text-center label-success");
+                role.setAttribute("class", "text-center label-success clickable");
                 break;
             case "Evil":
                 name.setAttribute("class", "text-center label-danger");
-                role.setAttribute("class", "text-center label-danger");
+                role.setAttribute("class", "text-center label-danger clickable");
                 break;
             case "Chaotic Evil":
                 name.setAttribute("class", "text-center label-danger");
-                role.setAttribute("class", "text-center label-danger");
+                role.setAttribute("class", "text-center label-danger clickable");
                 break;
             case "Neutral":
                 name.setAttribute("class", "text-center");
-                role.setAttribute("class", "text-center");
+                role.setAttribute("class", "text-center clickable");
                 break;
             case "Neutral Evil":
                 name.setAttribute("class", "text-center label-warning");
-                role.setAttribute("class", "text-center label-warning");
+                role.setAttribute("class", "text-center label-warning clickable");
                 break;
             default:
                 name.setAttribute("class", "text-center");
-                role.setAttribute("class", "text-center");
+                role.setAttribute("class", "text-center clickable");
                 break;
         }
         row.appendChild(name);
@@ -717,33 +717,6 @@ function loadHome() {
     $('html, body').animate({scrollTop: 0}, 'fast');
 }
 
-function loadAction() {
-    if (phase === "night") {
-        loadSpecificAction(0);
-    } else if (phase === "day") {
-        loadSpecificAction(1);
-    } else {
-        loadSpecificAction(2);
-    }
-
-    var actionref = document.getElementById("actionref");
-    var actiondiv = document.getElementById("actiondiv");
-    var logref = document.getElementById("logref");
-    var logdiv = document.getElementById("logdiv");
-    var graveref = document.getElementById("graveref");
-    var gravediv = document.getElementById("gravediv");
-    var roleref = document.getElementById("roleref");
-    var rolediv = document.getElementById("rolediv");
-    actionref.setAttribute("class", "active");
-    actiondiv.setAttribute("class", "show");
-    logref.setAttribute("class", "");
-    logdiv.setAttribute("class", "hide");
-    graveref.setAttribute("class", "");
-    gravediv.setAttribute("class", "hide");
-    roleref.setAttribute("class", "");
-    rolediv.setAttribute("class", "hide");
-}
-
 var actiondivlist = ["nightactiondiv", "dayactiondiv", "noactiondiv"];
 var actionlists = [{
     "button": "show btn btn-night btn-act btn-block",
@@ -759,17 +732,19 @@ var actionlists = [{
 
 function loadSpecificAction(n) {
     for (key in playerlist) {
-        var elem = document.getElementById("ab" + key);
-        var type = elem.nodeName.toLowerCase();
-        if (type === "button") {
-            if (invalidtargets.hasOwnProperty(key)) {
-                if (key == owner) {
-                    elem.setAttribute("class", actionlists[n].owner);
+        if (!deadplayers.hasOwnProperty(key)) {
+            var elem = document.getElementById("ab" + key);
+            var type = elem.nodeName.toLowerCase();
+            if (type === "button") {
+                if (invalidtargets.hasOwnProperty(key)) {
+                    if (key == owner) {
+                        elem.setAttribute("class", actionlists[n].owner);
+                    } else {
+                        elem.setAttribute("class", actionlists[n].ally)
+                    }
                 } else {
-                    elem.setAttribute("class", actionlists[n].ally)
+                    elem.setAttribute("class", actionlists[n].button);
                 }
-            } else {
-                elem.setAttribute("class", actionlists[n].button);
             }
         }
     }
@@ -847,11 +822,11 @@ function sendChatMessageForm() {
     var chatinputfield = document.getElementById("chat");
     var chatinputfieldval = chatinputfield.value;
 
-    broadcastMessage({"action":"chat", "info":chatinputfieldval});
+    broadcastMessage({"action": "chat", "info": chatinputfieldval});
 }
 
 function chatResponse(response, fieldid) {
-    if(response === "200") {
+    if (response === "200") {
         document.getElementById(fieldid).value = "";
     }
 }
@@ -860,7 +835,7 @@ function sendLobbyChatMessageForm() {
     var chatinputfield = document.getElementById("lobbychat");
     var chatinputfieldval = chatinputfield.value;
 
-    broadcastMessage({"action":"lobbychat", "info":chatinputfieldval});
+    broadcastMessage({"action": "lobbychat", "info": chatinputfieldval});
 }
 
 function addToRoleList(name, alignment, goal, description) {
@@ -910,6 +885,11 @@ function addToRoleList(name, alignment, goal, description) {
         listelement.appendChild(listelementspan);
         rlist.appendChild(listelement);
     }
+}
+
+function viewAndShowRole(name) {
+    viewRole(name);
+    showRole();
 }
 
 function showRole() {

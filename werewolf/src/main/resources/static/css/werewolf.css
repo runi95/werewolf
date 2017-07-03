@@ -6,6 +6,10 @@ hr {
     border-color: #334350;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
 .nav > li > span {
     position: relative;
     display: block;
