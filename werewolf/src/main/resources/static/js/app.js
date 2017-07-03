@@ -150,6 +150,9 @@ function receivePrivateMessage(message) {
         var action = message[i].action;
 
         switch (action) {
+            case "chat":
+                chatResponse(message[i].playerid, message[i].info);
+                break;
             case "nightaction":
                 updateNightAction(message[i].info, true);
                 break;
@@ -841,41 +844,23 @@ function addToChat(chatdivname, playerid, username, message, chatid) {
 }
 
 function sendChatMessageForm() {
-    var chatinputfield = document.getElementById("chatinputfield");
+    var chatinputfield = document.getElementById("chat");
     var chatinputfieldval = chatinputfield.value;
 
-    $.ajax({
-        url: '/lobby/chat',
-        type: "POST",
-        datatype: 'json',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify({"message": chatinputfieldval}),
-        success: function (data) {
-            document.getElementById("chatinputfield").value = "";
-        }
-    });
+    broadcastMessage({"action":"chat", "info":chatinputfieldval});
+}
+
+function chatResponse(response, fieldid) {
+    if(response === "200") {
+        document.getElementById(fieldid).value = "";
+    }
 }
 
 function sendLobbyChatMessageForm() {
-    var chatinputfield = document.getElementById("lobbychatinputfield");
+    var chatinputfield = document.getElementById("lobbychat");
     var chatinputfieldval = chatinputfield.value;
 
-    $.ajax({
-        url: '/lobby/lobbychat',
-        type: "POST",
-        datatype: 'json',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify({"message": chatinputfieldval}),
-        success: function (data) {
-            document.getElementById("lobbychatinputfield").value = "";
-        }
-    });
+    broadcastMessage({"action":"lobbychat", "info":chatinputfieldval});
 }
 
 function addToRoleList(name, alignment, goal, description) {

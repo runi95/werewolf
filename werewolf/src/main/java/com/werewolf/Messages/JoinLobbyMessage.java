@@ -2,7 +2,7 @@ package com.werewolf.Messages;
 
 public class JoinLobbyMessage {
 
-	private String action, playerid;
+	private String action, playerid, info;
 	
 	public void setPlayerid(String playerid) {
 		this.playerid = playerid;
@@ -19,4 +19,12 @@ public class JoinLobbyMessage {
 	public String getAction() {
 		return action;
 	}
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

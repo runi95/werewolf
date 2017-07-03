@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,14 +59,24 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
 
         LobbyEntity lobbyEntity = chatSourcePlayer.getLobby();
 
-        if(lobbyEntity == null || (lobbyEntity.getPhase() != GamePhase.DAY && lobbyEntity.getPhase() != GamePhase.LOBBY))
+        if(lobbyEntity == null)
             return;
 
-        List<LobbyMessage> lobbyMessages = new ArrayList<>();
+        if(lobbyEntity.getPhase() == GamePhase.NIGHT && lobbyEntity.getEvilTeam().contains(chatSourcePlayer.getId())) {
+            lobbyEntity.getEvilTeam().forEach((lp) -> privateMessage(lp.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[] {new LobbyMessage("nightmessage", chatSourcePlayer.getNickname() + ": " + message)})))));
 
-        lobbyMessages.add(new LobbyMessage(actionName, chatSourcePlayer.getId(), chatSourcePlayer.getNickname(), message));
+            privateMessage(chatSourcePlayer.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[] {new LobbyMessage("chat", "200", actionName)}))));
+        } else if(lobbyEntity.getPhase() != GamePhase.NIGHT) {
+            List<LobbyMessage> lobbyMessages = new ArrayList<>();
 
-        broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(lobbyMessages));
+            lobbyMessages.add(new LobbyMessage(actionName, chatSourcePlayer.getId(), chatSourcePlayer.getNickname(), message));
+
+            broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(lobbyMessages));
+
+            privateMessage(chatSourcePlayer.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[] {new LobbyMessage("chat", "200", actionName)}))));
+        } else {
+            privateMessage(chatSourcePlayer.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[] {new LobbyMessage("chat", "400", actionName)}))));
+        }
     }
 
 	@Override

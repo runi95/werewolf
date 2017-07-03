@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 
@@ -20,6 +22,12 @@ public class StompMessageController {
 		String username = principal.getName();
 
 		switch(message.getAction()) {
+        case "lobbychat":
+            joinLobbyService.sendChatMessage("lobbychat", username, message.getInfo());
+            break;
+        case "chat":
+            joinLobbyService.sendChatMessage("chat", username, message.getInfo());
+            break;
 		case "leave":
 			joinLobbyService.leave(username);
 			break;

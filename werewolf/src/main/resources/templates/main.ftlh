@@ -182,7 +182,7 @@
                     <form role="form" class="form-horizontal" onsubmit="sendLobbyChatMessageForm(); return false;"
                           id="createLobbyForm" name="createLobbyForm">
                         <div class="input-group">
-                            <input title="Chat" id="lobbychatinputfield" name="lobbychatinput" type="text"
+                            <input title="Chat" id="lobbychat" name="lobbychatinput" type="text"
                                    class="form-control fancy-input" autocomplete="off" required="">
                             <div class="input-group-btn">
                                 <button id="sendbuttonlobby" name="sendbuttonlobby" class="btn btn-info">Send</button>
@@ -265,7 +265,7 @@
                 <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
                       id="createLobbyForm" name="createLobbyForm">
                     <div class="input-group">
-                        <input title="Chat" id="chatinputfield" name="chatinput" type="text"
+                        <input title="Chat" id="chat" name="chatinput" type="text"
                                class="form-control fancy-input" autocomplete="off" required="">
                         <div class="input-group-btn">
                             <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
