@@ -866,7 +866,7 @@ function addToRoleList(name, alignment, goal, description) {
                 alignmentcolor = "text-danger";
                 break;
             case "Neutral Evil":
-                simplealignment = "netrual";
+                simplealignment = "neutral";
                 alignmentcolor = "";
                 break;
             case "Neutral":
