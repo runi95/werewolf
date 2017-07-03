@@ -236,14 +236,14 @@
         <div id="actiondiv">
             <div class="col-md-4">
                 <div class="row">
-                    <h3>Actions</h3>
+                    <h3>Day/Night</h3>
                 </div>
                 <div id="dayactiondiv">
                     <table class="table table-condensed">
                         <thead>
                         <tr>
                             <th class="text-center col-xs-6">Name</th>
-                            <th class="text-center col-xs-3">Lynch</th>
+                            <th class="text-center col-xs-3">Action</th>
                         </tr>
                         </thead>
                         <tbody id="actionlist"></tbody>
