@@ -127,6 +127,12 @@
                         <div class="check"></div>
                     </li>
                     <li>
+                        <input id="basicopt" type="radio" name="mode" value="Basic">
+                        <label class="medieval-text" for="basicopt">Basic</label>
+
+                        <div class="check"></div>
+                    </li>
+                    <li>
                         <input id="advancedopt" type="radio" name="mode" value="Advanced">
                         <label class="medieval-text" for="advancedopt">Advanced</label>
 
