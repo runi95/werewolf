@@ -128,7 +128,7 @@
 
                     <div class="row" style="margin-left: auto; margin-right: auto; max-width: 200px;">
                         <label style="font-weight: 300; font-size: 1.35em;" class="medieval-text">Max Players:</label>
-                        <input type="number" min="4" max="20" value="15" class="form-control fancy-input"
+                        <input title="Max Players" type="number" min="4" max="20" value="15" class="form-control fancy-input"
                                id="maxplayercount">
                     </div>
                     <div style="padding-top: 20px">
@@ -176,7 +176,7 @@
                     <form role="form" class="form-horizontal" onsubmit="sendLobbyChatMessageForm(); return false;"
                           id="createLobbyForm" name="createLobbyForm">
                         <div class="input-group">
-                            <input id="lobbychatinputfield" name="lobbychatinput" type="text"
+                            <input title="Chat" id="lobbychatinputfield" name="lobbychatinput" type="text"
                                    class="form-control fancy-input" autocomplete="off" required="">
                             <div class="input-group-btn">
                                 <button id="sendbuttonlobby" name="sendbuttonlobby" class="btn btn-info">Send</button>
@@ -259,7 +259,7 @@
                 <form role="form" class="form-horizontal" onsubmit="sendChatMessageForm(); return false;"
                       id="createLobbyForm" name="createLobbyForm">
                     <div class="input-group">
-                        <input id="chatinputfield" name="chatinput" type="text"
+                        <input title="Chat" id="chatinputfield" name="chatinput" type="text"
                                class="form-control fancy-input" autocomplete="off" required="">
                         <div class="input-group-btn">
                             <button id="sendbutton" name="sendbutton" class="btn btn-info">Send</button>
