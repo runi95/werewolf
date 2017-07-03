@@ -686,7 +686,7 @@ function updateNightAction(target, act) {
 }
 
 function someoneVoted(playerid, votedon, votes, status) {
-    if (aliveplayers.hasOwnProperty(playerid)) {
+    if (aliveplayers.hasOwnProperty(playerid) && aliveplayers.hasOwnProperty(votedon)) {
         var elem = document.getElementById("ab" + votedon);
 
         if (playerid === owner) {
