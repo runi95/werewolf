@@ -73,7 +73,7 @@ public class BasicMode extends GameModeMasterClass {
                 lottery.add(Roles.Bard);
                 break;
             case 3:
-                lottery.add(Roles.Bard);
+                lottery.add(Roles.Bandit);
             case 2:
                 lottery.add(Roles.Amnesiac);
             case 1:
