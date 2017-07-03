@@ -33,7 +33,6 @@
                                        class="form-control" maxlength="16" autocomplete="off" autofocus>
                                 <span id="nicknameglyph"></span>
                             </div>
-                            <dd class="text-muted">- leave game ID empty to create a new lobby -</dd>
                             <div id="gameiddiv" class="form-group">
                                 <input id="gameidfield" name="gameid" type="text" placeholder="Game ID"
                                        class="form-control"
