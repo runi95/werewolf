@@ -62,7 +62,7 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
         if(lobbyEntity == null)
             return;
 
-        if(lobbyEntity.getPhase() == GamePhase.NIGHT && lobbyEntity.getEvilTeam().contains(chatSourcePlayer.getId())) {
+        if(lobbyEntity.getPhase() == GamePhase.NIGHT && lobbyEntity.evilTeamContains(chatSourcePlayer.getId())) {
             lobbyEntity.getEvilTeam().forEach((lp) -> privateMessage(lp.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[] {new LobbyMessage("nightmessage", chatSourcePlayer.getNickname() + ": " + message)})))));
 
             privateMessage(chatSourcePlayer.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[] {new LobbyMessage("chat", "200", actionName)}))));

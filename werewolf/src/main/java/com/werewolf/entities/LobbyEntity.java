@@ -102,7 +102,10 @@ public class LobbyEntity {
 		
 		teamEvil.put(lobbyPlayer.getId(), lobbyPlayer);
 	}
-	
+
+	public boolean evilTeamContains(String id) { return teamEvil.containsKey(id); }
+	public LobbyPlayer getEvilPlayer(String id) { return teamEvil.get(id); }
+
 	public Collection<LobbyPlayer> getEvilTeam() {
 		return teamEvil.values();
 	}
