@@ -736,16 +736,18 @@ function loadSpecificAction(n) {
     for (key in playerlist) {
         if (!deadplayers.hasOwnProperty(key)) {
             var elem = document.getElementById("ab" + key);
-            var type = elem.nodeName.toLowerCase();
-            if (type === "button") {
-                if (invalidtargets.hasOwnProperty(key)) {
-                    if (key == owner) {
-                        elem.setAttribute("class", actionlists[n].owner);
+            if (elem != null) {
+                var type = elem.nodeName.toLowerCase();
+                if (type === "button") {
+                    if (invalidtargets.hasOwnProperty(key)) {
+                        if (key == owner) {
+                            elem.setAttribute("class", actionlists[n].owner);
+                        } else {
+                            elem.setAttribute("class", actionlists[n].ally)
+                        }
                     } else {
-                        elem.setAttribute("class", actionlists[n].ally)
+                        elem.setAttribute("class", actionlists[n].button);
                     }
-                } else {
-                    elem.setAttribute("class", actionlists[n].button);
                 }
             }
         }
@@ -953,7 +955,7 @@ function viewRole(name) {
 }
 
 function setRole(name, alignment, goal, description) {
-    if(!rolelist.hasOwnProperty(name)) {
+    if (!rolelist.hasOwnProperty(name)) {
         addToRoleList(name, alignment, goal, description);
     }
 
