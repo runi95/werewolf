@@ -12,6 +12,8 @@ public class GameEmulator {
 	
 	private HashMap<EmulationCharacter, EmulationCharacter> knights = new HashMap<>();
 
+    private HashMap<EmulationCharacter, EmulationCharacter> sirens = new HashMap<>();
+
 	private HashMap<EmulationCharacter, EmulationCharacter> healers = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> guards = new HashMap<>();
@@ -55,8 +57,13 @@ public class GameEmulator {
 	}
 	
 	public void knightKill(EmulationCharacter knight, EmulationCharacter target) {
-		
+		knights.put(knight, target);
 	}
+
+	public void sirenKill(EmulationCharacter siren, EmulationCharacter target) {
+        sirens.put(siren, target);
+        killers.put(siren, target);
+    }
 
 	public void heal(EmulationCharacter healer, EmulationCharacter target) {
 		healers.put(healer, target);
@@ -78,6 +85,7 @@ public class GameEmulator {
 		prepareEvilTargets();
 		emulateBlockers();
 		emulateKillersGuardsHealers();
+		emulateSirens();
 		emulateKnights();
 		emulateAmnesiacs();
 		emulateInquisitors();
@@ -162,6 +170,13 @@ public class GameEmulator {
 			}
 		}
 	}
+
+	private void emulateSirens() {
+	    for(EmulationCharacter siren : sirens.keySet()) {
+	        if(deadPlayers.contains(sirens.get(siren)))
+	            sirens.get(siren).getLobbyPlayer().setRoleMask(RoleMasks.Drowned);
+        }
+    }
 	
 	private void emulateKnights() {
 		for(EmulationCharacter knight : knights.keySet()) {

@@ -20,6 +20,8 @@ public class LobbyPlayer {
     private boolean ready = false;
     
     private RoleInterface role;
+
+    private RoleInterface roleMask = null;
     
     private String alignment;
     
@@ -52,6 +54,8 @@ public class LobbyPlayer {
     public void setRole(RoleInterface role) {
     	this.role = role;
     }
+
+    public void setRoleMask(RoleInterface roleMask) { this.roleMask = roleMask; }
     
     public void setAlignment(String alignment) {
     	this.alignment = alignment;
@@ -86,8 +90,15 @@ public class LobbyPlayer {
     }
     
     public RoleInterface getRole() {
-    	return role;
+    	if(roleMask != null)
+    	    return roleMask;
+    	else
+    	    return role;
     }
+
+    public RoleInterface getRealRole() { return role; }
+
+    public RoleInterface getRoleMask() { return roleMask; }
     
     public String getAlignment() {
     	return alignment;

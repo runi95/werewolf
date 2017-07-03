@@ -104,6 +104,24 @@ public enum Roles implements RoleInterface {
             }
     },
 
+    Siren {
+        public String getName() {
+            return "Siren"; }
+
+        public String getDescription() {
+            return "A siren"; }
+
+        public String getInquestMessage() {
+            return "Your target seems to be a lunatic. (Amnesiac, Jester)"; }
+
+        public Alignments getAlignment() {
+            return Alignments.NeutralEvil; }
+
+        public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
+            game.sirenKill(self, target);
+        }
+    },
+
     King {
         public String getName() {
             return "King"; }
