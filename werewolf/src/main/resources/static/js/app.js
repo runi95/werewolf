@@ -197,10 +197,12 @@ function receivePrivateMessage(message) {
             case "lost":
                 lost();
                 break;
-            case "initrole":
-                viewAndShowRole(message[i].info);
             case "role":
-                setRole(message[i].info);
+                setRole(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
+                break;
+            case "initrole":
+                setRole(message[i].playerid, message[i].info, message[i].additionalinfo, message[i].variable);
+                viewAndShowRole(message[i].playerid);
                 break;
             case "profile":
                 setProfile(message[i].playerid, message[i].info, message[i].additionalinfo);
@@ -950,7 +952,11 @@ function viewRole(name) {
     }
 }
 
-function setRole(name) {
+function setRole(name, alignment, goal, description) {
+    if(!rolelist.hasOwnProperty(name)) {
+        addToRoleList(name, alignment, goal, description);
+    }
+
     if (role != null) {
         var oldrole = document.getElementById("role." + role);
         if (viewrole == role) {
