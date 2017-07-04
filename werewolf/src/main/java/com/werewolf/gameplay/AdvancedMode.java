@@ -75,7 +75,7 @@ public class AdvancedMode extends GameModeMasterClass {
 		case 3:
 			lottery.add(Roles.Bard);
 		case 2:
-			lottery.add(Roles.Siren);
+			lottery.add(Roles.Mermaid);
 		case 1:
 			lottery.add(Roles.Marauder);
 		}
