@@ -104,12 +104,12 @@ public enum Roles implements RoleInterface {
             }
     },
 
-    Siren {
+    Mermaid {
         public String getName() {
-            return "Siren"; }
+            return "Mermaid"; }
 
         public String getDescription() {
-            return "A siren"; }
+            return "Drown people at night and try to survive until the end-game. Drowned won't have their job revealed during the day phase."; }
 
         public String getInquestMessage() {
             return "Your target seems to be a lunatic. (Amnesiac, Jester)"; }
