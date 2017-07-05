@@ -34,7 +34,7 @@ public class PreGameController {
     JoinLobbyService joinLobbyService;
 
     @GetMapping(value = "/")
-    public ModelAndView getMainPage(Authentication auth, Principal principal, Device device) {
+    public ModelAndView getMainPage(Device device) {
         if(device.isMobile()) {
             return new ModelAndView("main-mobile", "gameplaytext", gameplaytext);
         } else if(device.isTablet()) {
