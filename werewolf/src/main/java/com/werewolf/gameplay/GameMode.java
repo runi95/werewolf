@@ -3,6 +3,8 @@ package com.werewolf.gameplay;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 
+import java.util.List;
+
 /**
  * This is the interface for any GameMode, every public method
  * is going to be used by the JoinLobbyServiceImpl
@@ -25,7 +27,7 @@ public interface GameMode {
 	
 	/** This method is responsible for setting a role and alignment for every player in the lobby
 	 */
-	public void setRoles(LobbyEntity lobbyEntity);
+	public List<RoleInterface> setRoles(LobbyEntity lobbyEntity);
 	
 	/** 
 	 * Runs whenever someone votes, this method should update voteTarget's vote counter

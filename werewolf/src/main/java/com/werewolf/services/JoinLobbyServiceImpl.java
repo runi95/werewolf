@@ -5,17 +5,13 @@ import com.werewolf.data.CreateLobbyForm;
 import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.data.NameDictionaryRepository;
 import com.werewolf.entities.*;
-import com.werewolf.gameplay.AdvancedMode;
-import com.werewolf.gameplay.BasicMode;
-import com.werewolf.gameplay.OneNightMode;
+import com.werewolf.gameplay.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -444,7 +440,21 @@ public class JoinLobbyServiceImpl implements JoinLobbyService {
     }
 
     private void createPlayers(LobbyEntity lobbyEntity) {
-        lobbyEntity.getGameMode().setRoles(lobbyEntity);
+        Collection<LobbyPlayer> lobbyPlayers = lobbyEntity.getPlayers();
+        List<RoleInterface> lottery = lobbyEntity.getGameMode().setRoles(lobbyEntity);
+
+        for (LobbyPlayer lobbyPlayer : lobbyPlayers) {
+            Random random = new Random();
+            int sz = lottery.size();
+            int rng = random.nextInt(sz);
+            RoleInterface role = lottery.get(rng);
+            lottery.remove(rng);
+
+            lobbyPlayer.setRole(role);
+            lobbyPlayer.setAlignment(role.getAlignment().getAlignmentName());
+            if (role.getAlignment() == Alignments.Evil)
+                lobbyEntity.addToTeamEvil(lobbyPlayer);
+        }
     }
 
     private void leave(LobbyPlayer lobbyPlayer) {
