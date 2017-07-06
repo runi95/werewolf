@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,13 +35,14 @@ public class PreGameController {
     JoinLobbyService joinLobbyService;
 
     @GetMapping(value = "/")
-    public ModelAndView getMainPage(Device device) {
-        if(device.isMobile()) {
-            return new ModelAndView("main-mobile", "gameplaytext", gameplaytext);
-        } else if(device.isTablet()) {
-            return new ModelAndView("main", "gameplaytext", gameplaytext);
-        } else {
-            return new ModelAndView("main", "gameplaytext", gameplaytext);
-        }
+    public String getMainPage(Device device, Model model) {
+        model.addAttribute("gameplaytext", gameplaytext);
+
+        if (device.isMobile())
+            return "main-mobile";
+        else if (device.isTablet())
+            return "main";
+        else
+            return "main";
     }
 }
