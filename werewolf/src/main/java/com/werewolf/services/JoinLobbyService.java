@@ -26,14 +26,17 @@ public class JoinLobbyService {
     @Autowired
     SimpMessagingTemplate simpTemplate;
 
-    @Autowired
-    AdvancedMode advancedGameMode;
+    /* All game modes needs to be autowired */
+    @Autowired OneNightMode oneNightMode;@Autowired BasicMode basicMode;@Autowired AdvancedMode advancedGameMode;
 
-    @Autowired
-    OneNightMode oneNightMode;
+    public String[] getGameModesAsStrings() {
+        String[] arr = new String[3];
+        arr[0] = oneNightMode.getName();
+        arr[1] = basicMode.getName();
+        arr[2] = advancedGameMode.getName();
 
-    @Autowired
-    BasicMode basicMode;
+        return arr;
+    }
 
     @Autowired
     NameDictionaryRepository nameDictionaryRepository;

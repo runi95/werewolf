@@ -105,24 +105,14 @@
                         Game mode:
                     </div>
                     <ul class="fancy-radio-ul">
-                        <li>
-                            <input id="onenightopt" type="radio" name="mode" value="One Night" checked>
-                            <label class="medieval-text" for="onenightopt">One Night</label>
+                        <#list gameplaymodes as modes>
+                            <li>
+                                <input id="${modes}opt" type="radio" name="mode" value="${modes}" checked>
+                                <label class="medieval-text" for="${modes}opt">${modes}</label>
 
-                            <div class="check"></div>
-                        </li>
-                        <li>
-                            <input id="basicopt" type="radio" name="mode" value="Basic">
-                            <label class="medieval-text" for="basicopt">Basic</label>
-
-                            <div class="check"></div>
-                        </li>
-                        <li>
-                            <input id="advancedopt" type="radio" name="mode" value="Advanced">
-                            <label class="medieval-text" for="advancedopt">Advanced</label>
-
-                            <div class="check"></div>
-                        </li>
+                                <div class="check"></div>
+                            </li>
+                        </#list>
                     </ul>
                     <div class="mainlobbydiv medieval-text">
                         Game Settings:
