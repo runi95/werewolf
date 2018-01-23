@@ -130,7 +130,7 @@ public enum Roles implements RoleInterface {
             return "You are the town's king, you can sway any vote in your favour, making you an incredibly important asset late in the game, beware though if you ever vote during the day you'll automatically reveal yourself as the king informing any and every evildoer out there of your power"; }
 
         public String getInquestMessage() {
-            return "Your target seems to be of high importance. (King, Maurader)"; }
+            return "Your target seems to be of high importance. (King, Marauder)"; }
 
         public Alignments getAlignment() {
             return Alignments.Good; }
@@ -147,7 +147,7 @@ public enum Roles implements RoleInterface {
             return "As a knight you can decide to get up at night and kill someone, beware that killing a member of the town will get you executed the next day"; }
 
         public String getInquestMessage() {
-            return "Your target seems to be a skilled with swords. (Knight)"; }
+            return "Your target seems to be skilled with swords. (Knight)"; }
 
         public Alignments getAlignment() {
             return Alignments.Good; }
@@ -158,13 +158,13 @@ public enum Roles implements RoleInterface {
 
     Marauder {
         public String getName() {
-            return "Maurader"; }
+            return "Marauder"; }
 
         public String getDescription() {
             return "You're the boss, the leader of an evil organisation that plans to take over the town, order someone to be killed or head out to kill them yourself if all your minions are dead"; }
 
         public String getInquestMessage() {
-            return "Your target seems to be of high importance. (King, Maurader)"; }
+            return "Your target seems to be of high importance. (King, Marauder)"; }
 
         public Alignments getAlignment() {
             return Alignments.Evil; }
