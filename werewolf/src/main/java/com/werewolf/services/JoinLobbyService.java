@@ -26,18 +26,6 @@ public class JoinLobbyService {
     @Autowired
     SimpMessagingTemplate simpTemplate;
 
-    /* All game modes needs to be autowired */
-    @Autowired OneNightMode oneNightMode;@Autowired BasicMode basicMode;@Autowired AdvancedMode advancedGameMode;
-
-    public String[] getGameModesAsStrings() {
-        String[] arr = new String[3];
-        arr[0] = oneNightMode.getName();
-        arr[1] = basicMode.getName();
-        arr[2] = advancedGameMode.getName();
-
-        return arr;
-    }
-
     @Autowired
     NameDictionaryRepository nameDictionaryRepository;
 
@@ -46,6 +34,20 @@ public class JoinLobbyService {
 
     @Autowired
     UserStatisticService userStatisticService;
+
+    ArrayList<GameMode> gameModes = new ArrayList<>();
+    String[] gameModesArr;
+
+    public JoinLobbyService() {
+        gameModesArr = new String[gameModes.size()];
+
+        for(int i = 0; i < gameModes.size(); i++)
+            gameModesArr[i] = gameModes.get(i).getName();
+    }
+
+    public String[] getGameModesAsStrings() {
+        return gameModesArr;
+    }
 
     public static String convertObjectToJson(Object message) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -76,6 +78,9 @@ public class JoinLobbyService {
         if (lobbyEntity == null)
             return;
 
+        lobbyEntity.getGameMode().chat(chatSourcePlayer, message);
+
+        /*
         if (lobbyEntity.getPhase() == GamePhase.NIGHT && lobbyEntity.evilTeamContains(chatSourcePlayer.getId())) {
             lobbyEntity.getEvilTeam().forEach((lp) -> privateMessage(lp.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("nightmessage", chatSourcePlayer.getNickname() + ": " + message)})))));
 
@@ -91,6 +96,7 @@ public class JoinLobbyService {
         } else {
             privateMessage(chatSourcePlayer.getUser().getUsername(), JoinLobbyService.convertObjectToJson(new ArrayList<LobbyMessage>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("chat", "400", actionName)}))));
         }
+        */
     }
 
     public List<LobbyMessage> join(String username, CreateLobbyForm createLobbyForm) {
@@ -99,6 +105,7 @@ public class JoinLobbyService {
         final String gameid = generateNewGameid();
         LobbyEntity lobbyEntity = new LobbyEntity(gameid, readInt(createLobbyForm.getMaxplayers()));
         switch (createLobbyForm.getGamemode()) {
+            /*
             case "Advanced":
                 lobbyEntity.setGameMode(advancedGameMode);
                 break;
@@ -110,8 +117,8 @@ public class JoinLobbyService {
                 break;
             default:
                 lobbyEntity.setGameMode(advancedGameMode);
-                System.out.println("Mode: " + createLobbyForm.getGamemode());
                 break;
+            */
         }
         if (createLobbyForm.getPrivatelobby().equals("true"))
             lobbyEntity.setPrivate(true);

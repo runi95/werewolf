@@ -17,6 +17,8 @@ var phase = null;
 var alive = true;
 var error = null;
 
+var colorreg = /\|c[0-9]{9}[^\|]*\|/;
+
 if (!window.WebSocket) {
     var notSupported = document.createElement("b");
     var noweb = document.getElementById("nowebsocket");
@@ -85,6 +87,89 @@ function broadcastMessage(message) {
 function sendPrivateMessage(message) {
     stompClient.send('/app/private', {}, JSON.stringify(message));
 }
+
+function receiveMessage(obj) {
+    for (i in obj) {
+        var action = obj.action;
+
+        switch(action) {
+            case "print":
+                printToChat(obj.str);
+                break;
+            case "killed":
+
+                break;
+        }
+    }
+}
+
+function printToChat(str) {
+    var chatdiv = document.getElementById(currentchatdiv);
+
+    var msg = document.createElement("div");
+
+    var shavedstr = str;
+    var srch = 0;
+    do {
+        srch = shavedstr.search(colorreg);
+        if (srch != -1) {
+            var r = shavedstr.substring(srch + 2, srch + 5);
+            var g = shavedstr.substring(srch + 5, srch + 8);
+            var b = shavedstr.substring(srch + 8, srch + 11);
+            var pretxt = document.createTextNode(shavedstr, srch + 11);
+            shavedstr = shavedstr.substring(srch + 11);
+            var txtsrch = shavedstr.search(/\|/);
+            var clrtxt = document.createElement("span");
+            var txt = document.createTextNode(shavedstr.substring(0, txtsrch));
+            clrtxt.setAttribute("style", "color: rgb(" + r + "," + g + "," + b + ")");
+
+            shavedstr = shavedstr.substring(txtsrch + 1);
+            clrtxt.appendChild(txt);
+            msg.appendChild(pretxt);
+            msg.appendChild(clrtxt);
+        }
+    } while (srch != -1)
+
+    var posttxt = document.createTextNode(shavedstr);
+    msg.appendChild(posttxt);
+    chatdiv.appendChild(msg);
+}
+
+/*
+function addToChat(chatdivname, playerid, username, message, chatid) {
+    var chatdiv = document.getElementById(chatdivname);
+
+    var messagediv = document.createElement("div");
+    var usernamespan = document.createElement("span");
+    var messagespan = document.createElement("span");
+
+    var usernamecolor = "text-info";
+    if (playerid == owner) {
+        usernamecolor = "text-primary";
+    } else {
+        usernamecolor = "text-warning";
+    }
+
+    usernamespan.setAttribute("class", usernamecolor);
+
+    usernamespan.innerHTML = username;
+    messagespan.innerHTML = ": " + message;
+
+    messagediv.appendChild(usernamespan);
+    messagediv.appendChild(messagespan);
+    chatdiv.appendChild(messagediv);
+
+    if (chatid === 1 && ($('#chatlist').scrollTop() + 1.5 * $('#chatlist').height() >= $('#chatlist').prop('scrollHeight') || playerid == owner)) {
+        if (!$('#chatlist').is(':animated')) {
+            $('#chatlist').animate({scrollTop: $('#chatlist').prop('scrollHeight')}, 'fast');
+        }
+    } else if (chatid === 0 && ($('#lobbychatlist').scrollTop() + 1.5 * $('#lobbychatlist').height() >= $('#lobbychatlist').prop('scrollHeight') || playerid == owner)) {
+        if (!$('#lobbychatlist').is(':animated')) {
+            $('#lobbychatlist').animate({scrollTop: $('#lobbychatlist').prop('scrollHeight')}, 'fast');
+        }
+    }
+}
+*/
 
 function receiveBroadcastMessage(message) {
     for (i in message) {

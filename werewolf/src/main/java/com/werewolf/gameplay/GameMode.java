@@ -1,5 +1,6 @@
 package com.werewolf.gameplay;
 
+import com.werewolf.entities.GamePhase;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
 
@@ -18,16 +19,23 @@ import java.util.List;
  * the method's javadoc.
  */
 public interface GameMode {
-	
+
+    /**
+     * A simple listener for GamePhase
+     * @param oldGamePhase
+     * @param newGamePhase
+     */
+    void gamePhaseChanges(GamePhase oldGamePhase, GamePhase newGamePhase);
+
 	/** This is the first thing that happens when the lobby turns into a game 
 	 * 	should run lobbyEntity.setStartedState(true);
 	 * 	@param lobbyEntity
 	 */
-	public void initalizeGame(LobbyEntity lobbyEntity);
+	void initalizeGame(LobbyEntity lobbyEntity);
 	
 	/** This method is responsible for setting a role and alignment for every player in the lobby
 	 */
-	public List<RoleInterface> setRoles(LobbyEntity lobbyEntity);
+	List<RoleInterface> setRoles(LobbyEntity lobbyEntity);
 	
 	/** 
 	 * Runs whenever someone votes, this method should update voteTarget's vote counter
@@ -40,10 +48,10 @@ public interface GameMode {
 	 * @param lobbyEntity
 	 * @param voter the player voting
 	 * @param voteTarget the player voted on
-	 * @param oldVoteTarget the old player voted on (may be null)
-	 * @param status true if player put his vote and false if player undid his vote
+	 * @param oldTarget the old player voted on (may be null)
+	 * @param flag true if player put his vote and false if player undid his vote
 	 */
-	public void vote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer voteTarget, LobbyPlayer oldVoteTarget, boolean status);
+	void vote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer voteTarget, LobbyPlayer oldTarget, boolean flag);
 	
 	/**
 	 * Runs whenever a player has set his target at night, this method should update
@@ -54,16 +62,16 @@ public interface GameMode {
 	 * to unselect a target:
 	 * privateMessage("unnightaction", targetid);
 	 * @param lobbyEntity
-	 * @param acter the player performing his action
-	 * @param oldTarget the old target of acter's action (may be null)
+	 * @param actor the player performing his action
 	 * @param target the current target of acter's action
-	 * @param act true if target was selected and false if target was unselected
+     * @param oldTarget the old target of acter's action (may be null)
+	 * @param flag true if target was selected and false if target was unselected
 	 */
-	public void nightAction(LobbyEntity lobbyEntity, LobbyPlayer acter, LobbyPlayer oldTarget, LobbyPlayer target, boolean act);
+    void nightAction(LobbyEntity lobbyEntity, LobbyPlayer actor, LobbyPlayer target, LobbyPlayer oldTarget, boolean flag);
 
 	/**
 	 * This is the name that is sent to the clients when requesting the game mode.
 	 * @return name
 	 */
-	public String getName();
+	String getName();
 }

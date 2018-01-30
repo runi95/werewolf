@@ -1,3 +1,4 @@
+/*
 package com.werewolf.gameplay;
 
 import com.werewolf.Messages.LobbyMessage;
@@ -148,3 +149,4 @@ public class BasicMode extends GameModeMasterClass {
             return false;
     }
 }
+*/

@@ -4,6 +4,7 @@ import com.werewolf.Messages.LobbyMessage;
 import com.werewolf.entities.GamePhase;
 import com.werewolf.entities.LobbyEntity;
 import com.werewolf.entities.LobbyPlayer;
+import com.werewolf.gameplay.rules.*;
 import com.werewolf.services.JoinLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -11,18 +12,193 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import java.util.*;
 
 public abstract class GameModeMasterClass implements GameMode {
-	
-	@Autowired
-	protected SimpMessagingTemplate simpTemplate;
-	
-	protected void broadcastMessage(String gameid, String message) {
-		simpTemplate.convertAndSend("/action/broadcast/" + gameid, message);
-	}
-	
-	protected void privateMessage(String user, String message) {
-		simpTemplate.convertAndSendToUser(user, "/action/private", message);
-	}
 
+    @Autowired
+    protected SimpMessagingTemplate simpTemplate;
+
+    RuleModel ruleModel;
+
+    protected void broadcastMessage(String gameid, String message) {
+        simpTemplate.convertAndSend("/action/broadcast/" + gameid, message);
+    }
+
+    protected void privateMessage(String user, String message) {
+        simpTemplate.convertAndSendToUser(user, "/action/private", message);
+    }
+
+    /**
+     * Adds all the rules to the game and then
+     * runs the initialization rule(s).
+     *
+     * @param lobbyEntity
+     * @param ruleModel
+     */
+    public void initializeGame(LobbyEntity lobbyEntity, RuleModel ruleModel) {
+        if (lobbyEntity.getStartedState())
+            return;
+        else
+            for (InitializationRule r : ruleModel.getInitializationRules())
+                r.initialize(lobbyEntity);
+    }
+
+    public void gamePhaseChanges(GamePhase oldGamePhase, GamePhase newGamePhase) {
+        for (GamePhaseRule r : ruleModel.getGamePhaseRules())
+            r.gamePhaseChanged(oldGamePhase, newGamePhase);
+
+        if (newGamePhase == GamePhase.DAY)
+            for (DayRule r : ruleModel.getDayRules())
+                r.dayStarted();
+
+        if (newGamePhase == GamePhase.NIGHT)
+            for (NightRule r : ruleModel.getNightRules())
+                r.nightStarted();
+
+        for (WinConditionRule r : ruleModel.getWinConditionRules())
+            if (r.checkWinCondition())
+                r.getWinners();
+    }
+
+    public void vote(LobbyEntity lobbyEntity, LobbyPlayer voter, LobbyPlayer target, LobbyPlayer oldTarget, boolean flag) {
+        for (VoteRule r : ruleModel.getVoteRules())
+            r.vote(lobbyEntity, voter, target, oldTarget, flag);
+    }
+
+    public void nightAction(LobbyEntity lobbyEntity, LobbyPlayer actor, LobbyPlayer target, LobbyPlayer oldTarget, boolean flag) {
+        for (ActionRule r : ruleModel.getActionRules())
+            r.nightAction(lobbyEntity, actor, target, oldTarget, flag);
+    }
+
+    public void chat(LobbyPlayer chatSourcePlayer, String message) {
+        for (ChatRule r : ruleModel.getChatRules())
+            r.chat(chatSourcePlayer, message);
+    }
+
+    /*
+    protected void initializeGameWait(LobbyEntity lobbyEntity, String nextPhase) {
+        List<LobbyMessage> messageList = new ArrayList<>();
+
+        lobbyEntity.setPhase(GamePhase.WAIT);
+        lobbyEntity.setPhaseTime(15);
+
+        messageList.add(new LobbyMessage("waitphase"));
+
+        if(!messageList.isEmpty())
+            broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
+
+        if(!checkWinCondition(lobbyEntity))
+            startWaitingPhase(lobbyEntity, nextPhase);
+    }
+
+    protected boolean checkWinCondition(LobbyEntity lobbyEntity) {
+	    boolean winCondition = false;
+	    ArrayList<String> winners = new ArrayList<>();
+
+	    for(Rule r : rules) {
+	        if(r instanceof WinConditionRule) {
+                boolean rCondition = ((WinConditionRule) r).checkWinCondition();
+                if(rCondition) {
+                    winCondition = rCondition;
+                    String[] winnersStringArray = ((WinConditionRule) r).getWinners();
+                    for(String s : winnersStringArray)
+                        winners.add(s);
+                }
+            }
+        }
+    }
+
+    protected void startWaitingPhase(LobbyEntity lobbyEntity, String nextPhase) {
+        new Thread() {
+            public void run() {
+                try {
+                    if(lobbyEntity.getPhaseTime() > 0) {
+                        Thread.sleep(1000);
+                        lobbyEntity.setPhaseTime(lobbyEntity.getPhaseTime() - 1);
+                        run();
+                    } else {
+                        runNextPhase(lobbyEntity, nextPhase);
+                    }
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    protected void runNextPhase(LobbyEntity lobbyEntity, String nextPhase) {
+        switch(nextPhase) {
+            case "nightphase":
+                nightPhase(lobbyEntity);
+                break;
+            case "dayphase":
+                dayPhase(lobbyEntity);
+                break;
+        }
+    }
+
+    protected void nightPhase(LobbyEntity lobbyEntity) {
+        List<LobbyMessage> messageList = new ArrayList<>();
+        lobbyEntity.setPhase(GamePhase.NIGHT);
+
+        messageList.add(new LobbyMessage("nightphase"));
+
+        if(!messageList.isEmpty())
+            broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
+
+        startNight(lobbyEntity);
+    }
+
+    protected void dayPhase(LobbyEntity lobbyEntity) {
+        List<LobbyMessage> messageList = new ArrayList<>();
+        lobbyEntity.setPhase(GamePhase.DAY);
+
+        messageList.add(new LobbyMessage("dayphase"));
+
+        if(!messageList.isEmpty())
+            broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
+
+        startDay(lobbyEntity);
+    }
+
+    protected void startNight(LobbyEntity lobbyEntity) {
+        lobbyEntity.setPhaseTime(30);
+        new Thread() {
+            public void run() {
+                try {
+                    if(lobbyEntity.getPhaseTime() > 0) {
+                        Thread.sleep(1000);
+                        lobbyEntity.setPhaseTime(lobbyEntity.getPhaseTime() - 1);
+                        run();
+                    } else {
+                        endNight(lobbyEntity);
+                    }
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    protected void startDay(LobbyEntity lobbyEntity) {
+        lobbyEntity.setPhaseTime(60);
+        new Thread() {
+            public void run() {
+                try {
+                    if(lobbyEntity.getPhaseTime() > 0) {
+                        Thread.sleep(1000);
+                        lobbyEntity.setPhaseTime(lobbyEntity.getPhaseTime() - 1);
+                        run();
+                    } else {
+                        endDay(lobbyEntity);
+                    }
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+	/*
 	protected boolean checkWinCondition(LobbyEntity lobbyEntity) {
         LinkedList<LobbyPlayer>[] alignmentLists = splitPlayerListIntoAlignments(lobbyEntity);
 
@@ -155,21 +331,6 @@ public abstract class GameModeMasterClass implements GameMode {
             startWaitingPhase(lobbyEntity, nextPhase);
     }
 
-    protected void initializeGameWait(LobbyEntity lobbyEntity, String nextPhase) {
-        List<LobbyMessage> messageList = new ArrayList<>();
-
-        lobbyEntity.setPhase(GamePhase.WAIT);
-        lobbyEntity.setPhaseTime(15);
-
-        messageList.add(new LobbyMessage("waitphase"));
-
-        if(!messageList.isEmpty())
-            broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(messageList));
-
-        if(!checkWinCondition(lobbyEntity))
-            startWaitingPhase(lobbyEntity, nextPhase);
-    }
-
     protected void startWaitingPhase(LobbyEntity lobbyEntity, String nextPhase) {
         new Thread() {
             public void run() {
@@ -281,4 +442,6 @@ public abstract class GameModeMasterClass implements GameMode {
         // Setting all votes to 0 and telling clients about the change
         lobbyEntity.getAlivePlayers().forEach((p) -> { if(p.getVotes() != 0) p.setVotes(0); if(p.getVoted() != null) { broadcastMessage(lobbyEntity.getGameId(), JoinLobbyService.convertObjectToJson(new ArrayList<>(Arrays.asList(new LobbyMessage[]{new LobbyMessage("updatevotestatus", p.getId(), p.getVoted(), "0", "x")})))); p.setVoted(null);}});
     }
+    */
+
 }

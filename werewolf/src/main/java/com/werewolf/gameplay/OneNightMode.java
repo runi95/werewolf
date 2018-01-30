@@ -1,3 +1,4 @@
+/*
 package com.werewolf.gameplay;
 
 import com.werewolf.Messages.LobbyMessage;
@@ -188,3 +189,4 @@ public class OneNightMode extends GameModeMasterClass {
     }
 
 }
+*/
