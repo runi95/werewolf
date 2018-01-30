@@ -5,7 +5,7 @@ import com.werewolf.gameplay.rules.RuleSet;
 
 public class OneNightUltimateWerewolfRuleSet implements RuleSet {
 
-    Rule[] rules;
+    Rule[] rules = new Rule[] { new VoteRuleEndsGame() };
 
     public Rule[] getRules() {
         return rules;

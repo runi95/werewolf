@@ -251,11 +251,12 @@ public class JoinLobbyService {
         return lobbyMap.containsKey(gameid);
     }
 
-    public void vote(String username, String voteon, boolean status) {
+    public void vote(String username, String voteon, boolean flag) {
         LobbyPlayer voter = getPlayerFromUsername(username);
         if (voter == null)
             return;
 
+        /*
         LobbyPlayer voteonPlayer = voter.getLobby().getAlivePlayer(voteon);
         if (voteonPlayer == null || (voter.getVoted() != null && voter.getVoted().equals(voteon) && status)
                 || voter.getLobby().getDeadPlayer(voter.getId()) != null || voter.getId().equals(voteon) || voter.getLobby().getDeadPlayer(voteon) != null)
@@ -267,6 +268,22 @@ public class JoinLobbyService {
         }
 
         lobbyVote(voter.getLobby(), voter, voteonPlayer, oldVoteTarget, status);
+        */
+
+        LobbyEntity lobbyEntity = voter.getLobby();
+        if(lobbyEntity == null)
+            return;
+
+        LobbyPlayer target = lobbyEntity.getPlayer(voteon);
+        if(target == null)
+            return;
+
+        LobbyPlayer oldTarget = null;
+        String voted = voter.getVoted();
+        if(voted != null)
+            oldTarget = lobbyEntity.getPlayer(voted);
+
+        voter.getLobby().getGameMode().vote(lobbyEntity, voter, target, oldTarget, flag);
     }
 
     public void getPlayers(String username) {
