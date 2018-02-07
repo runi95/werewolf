@@ -94,9 +94,12 @@ function receiveMessage(obj) {
 
         switch(action) {
             case "print":
-                printToChat(obj.str);
+                printToChat(obj.args);
                 break;
             case "killed":
+                killPlayer(obj.args);
+                break;
+            case "vote":
 
                 break;
         }
@@ -135,6 +138,43 @@ function printToChat(str) {
     chatdiv.appendChild(msg);
 }
 
+function killPlayer(playerid, playername, playerrole, alignment, message) {
+    if (playerid == owner)
+        dead();
+
+    printToChat(message);
+
+    addToGraveyard(playerid, playername, playerrole, alignment);
+}
+
+function vote(playerid, votedon, votes, status) {
+    if (aliveplayers.hasOwnProperty(playerid) && aliveplayers.hasOwnProperty(votedon)) {
+        var elem = document.getElementById("ab" + votedon);
+
+        if (playerid === owner) {
+            elem.disabled = false;
+
+            if (status === "+") { // Means they voted on this player
+                voted = votedon;
+                elem.setAttribute("class", actionlists[1].active);
+                addToLog("You voted on " + playerlist[votedon] + " (" + votes + ")", 0);
+            } else if (status === "-") { // Means they removed their vote from this player
+                elem.setAttribute("class", actionlists[1].button);
+                addToLog("You removed your vote from " + playerlist[votedon] + " (" + votes + ")", 0);
+            } else if (status === "x") {
+                voted = null;
+                elem.setAttribute("class", actionlists[1].button);
+            }
+        } else {
+            if (status === "+") {
+                addToLog(playerlist[playerid] + " has voted on " + playerlist[votedon] + " (" + votes + ")", 0);
+            } else if (status === "-") {
+                addToLog(playerlist[playerid] + " has removed thier vote from " + playerlist[votedon] + " (" + votes + ")", 0);
+            }
+        }
+    }
+}
+
 /*
 function addToChat(chatdivname, playerid, username, message, chatid) {
     var chatdiv = document.getElementById(chatdivname);
@@ -171,6 +211,7 @@ function addToChat(chatdivname, playerid, username, message, chatid) {
 }
 */
 
+/*
 function receiveBroadcastMessage(message) {
     for (i in message) {
         var action = message[i].action;
@@ -297,6 +338,7 @@ function receivePrivateMessage(message) {
         }
     }
 }
+*/
 
 function setProfile(username, wins, games) {
     var profilename = document.getElementById("profilename");
@@ -480,6 +522,7 @@ function dayPhase() {
     loadSpecificAction(1);
 }
 
+/*
 function lynchPlayer(playerid, playername, playerrole, alignment, kinged) {
     if (kinged) {
         addToLog(playerlist[playerid] + " executed by the king himself!", 4);
@@ -488,6 +531,7 @@ function lynchPlayer(playerid, playername, playerrole, alignment, kinged) {
     }
     addToGraveyard(playerid, playername, playerrole, alignment);
 }
+*/
 
 function dead() {
     alive = false;
@@ -529,6 +573,7 @@ function phaseout(elem, delay) {
     }, delay * 1000);
 }
 
+/*
 function killPlayer(playerid, playername, playerrole, alignment, jester) {
     if (playerid == owner)
         dead();
@@ -540,6 +585,7 @@ function killPlayer(playerid, playername, playerrole, alignment, jester) {
     }
     addToGraveyard(playerid, playername, playerrole, alignment);
 }
+*/
 
 function addToActionList(playerid, playername, votes) {
     if (!aliveplayers.hasOwnProperty(playerid)) {
@@ -772,6 +818,7 @@ function updateNightAction(target, act) {
     }
 }
 
+/*
 function someoneVoted(playerid, votedon, votes, status) {
     if (aliveplayers.hasOwnProperty(playerid) && aliveplayers.hasOwnProperty(votedon)) {
         var elem = document.getElementById("ab" + votedon);
@@ -799,6 +846,7 @@ function someoneVoted(playerid, votedon, votes, status) {
         }
     }
 }
+*/
 
 function loadHome() {
     $('html, body').animate({scrollTop: 0}, 'fast');
@@ -856,6 +904,7 @@ function loadSpecificGameDiv(n) {
 
 var importancelist = ["text-muted", "text-info", "text-success", "text-warning", "text-danger"];
 
+/*
 function addToLog(message, importance) {
     var chatdiv = document.getElementById("chatlist");
 
@@ -872,7 +921,9 @@ function addToLog(message, importance) {
         $('#chatlist').animate({scrollTop: $('#chatlist').prop('scrollHeight')}, 'fast');
     }
 }
+*/
 
+/*
 function addToChat(chatdivname, playerid, username, message, chatid) {
     var chatdiv = document.getElementById(chatdivname);
 
@@ -906,6 +957,7 @@ function addToChat(chatdivname, playerid, username, message, chatid) {
         }
     }
 }
+*/
 
 function sendChatMessageForm() {
     var chatinputfield = document.getElementById("chat");
