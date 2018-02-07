@@ -9,6 +9,8 @@ import com.werewolf.data.JoinLobbyForm;
 import com.werewolf.data.NameDictionaryRepository;
 import com.werewolf.entities.*;
 import com.werewolf.gameplay.*;
+import com.werewolf.gameplay.rules.OneNight.OneNightUltimateWerewolfRuleSet;
+import com.werewolf.gameplay.rules.RuleSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -35,10 +37,11 @@ public class JoinLobbyService {
     @Autowired
     UserStatisticService userStatisticService;
 
-    ArrayList<GameMode> gameModes = new ArrayList<>();
+    ArrayList<RuleSet> gameModes = new ArrayList<>();
     String[] gameModesArr;
 
     public JoinLobbyService() {
+        gameModes.add(new OneNightUltimateWerewolfRuleSet());
         gameModesArr = new String[gameModes.size()];
 
         for(int i = 0; i < gameModes.size(); i++)
