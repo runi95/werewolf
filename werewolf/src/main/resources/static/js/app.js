@@ -27,8 +27,6 @@ if (!window.WebSocket) {
     noweb.appendChild(notSupported);
 }
 
-//getOpenLobbies();
-getProfile();
 initializeWebsocket();
 
 function initializeWebsocket() {
@@ -40,18 +38,19 @@ function initializeWebsocket() {
 function connectoAndSubscribeToPrivate() {
     stompClient.connect({}, function (frame) {
         stompClient.subscribe('/user/action/private', function (messageOutput) {
-            receivePrivateMessage(JSON.parse(messageOutput.body));
+            receiveMessage(JSON.parse(messageOutput.body));
         });
         stompClient.subscribe('/action/broadcast/public', function (messageOutput) {
-            receivePrivateMessage(JSON.parse(messageOutput.body));
+            receiveMessage(JSON.parse(messageOutput.body));
         });
         sendPrivateMessage({"action": "getopenlobbies"});
+        sendPrivateMessage({"action" : "getprofile"});
     });
 }
 
 function subscribeToBroadcast() {
     stompClient.subscribe('/action/broadcast/' + gamecode, function (messageOutput) {
-        receiveBroadcastMessage(JSON.parse(messageOutput.body));
+        receiveMessage(JSON.parse(messageOutput.body));
     });
     sendPrivateMessage({"action": "getplayers"});
 }
@@ -102,6 +101,10 @@ function receiveMessage(obj) {
             case "vote":
 
                 break;
+            case "profile":
+                setProfile(action.playerid, action.info, action.additionalinfo);
+                break;
+            default:
         }
     }
 }
@@ -389,7 +392,7 @@ function submitCreateLobbyForm() {
     var nicknamefield = document.getElementById("createnicknamefield");
 
     var gamemode = $('input[name="mode"]:checked').val();
-    var checkboxval = checkboxfield.checked;
+    var checkboxval = checkboxfield.checked ? "true" : "false";
     var maxplayerval = maxplayercountfield.value;
     var nicknameval = nicknamefield.value;
 
@@ -397,6 +400,8 @@ function submitCreateLobbyForm() {
 }
 
 function createLobby(gamemode, privatelobby, maxplayers, nickname) {
+    sendPrivateMessage({"action":"createlobby", "gamemode":gamemode, "privatelobby":privatelobby, "maxplayers":maxplayers, "nickname":nickname});
+    /*
     $.ajax({
         url: '/lobby/createlobbyrequest',
         type: "POST",
@@ -415,9 +420,12 @@ function createLobby(gamemode, privatelobby, maxplayers, nickname) {
             joinLobbyReply(data);
         }
     });
+    */
 }
 
 function joinLobby(nickname, gameid) {
+    sendPrivateMessage({"action":"joinlobby", "gameid":gameid, "info":nickname});
+    /*
     $.ajax({
         url: '/lobby/joinlobbyrequest',
         type: "POST",
@@ -431,21 +439,7 @@ function joinLobby(nickname, gameid) {
             joinLobbyReply(data);
         }
     });
-}
-
-function getProfile() {
-    $.ajax({
-        url: '/lobby/getprofile',
-        type: "GET",
-        datatype: 'json',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        success: function (data) {
-            receivePrivateMessage(data);
-        }
-    });
+    */
 }
 
 function joinLobbyReply(message) {
@@ -747,7 +741,7 @@ function removePlayer(playerid, nickname) {
 
 function changeReadyState() {
     ready = !ready;
-    document.getElementById("btnready").disabled = true;
+    //document.getElementById("btnready").disabled = true;
     if (ready) {
         broadcastMessage({"action": "ready"});
     } else {
@@ -758,7 +752,7 @@ function changeReadyState() {
 function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
     var elem = document.getElementById("btnready");
     if (playerid === owner) {
-        elem.disabled = false;
+        //elem.disabled = false;
         if (ready) {
             elem.setAttribute("class", "btn btn-danger btn-block");
         } else {

@@ -1,6 +1,7 @@
 package com.werewolf.entities;
 
-import com.werewolf.gameplay.GameModeMasterClass;
+import com.werewolf.gameplay.Game;
+import com.werewolf.gameplay.RuleModel;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ public class LobbyEntity {
 	// How much time is left on this phase?
 	private int phaseTime = 0;
 
-	private final int maxPlayers;
+	private final int maxPlayers, minPlayers;
 
 	private boolean privateLobby = false;
 
@@ -34,18 +35,31 @@ public class LobbyEntity {
 	// True if the lobby is in-game and false otherwise
 	private boolean gamestarted = false;
 	
-	private GameModeMasterClass game;
+	private RuleModel ruleModel;
 
-	public LobbyEntity(String gameid, int maxPlayers) {
+	private final Game game;
+
+	public LobbyEntity(String gameid, int maxPlayers, Game game, RuleModel ruleModel) {
 		this.gameid = gameid;
-		this.maxPlayers = Math.max(4, Math.min(20, maxPlayers));
+		this.game = game;
+		this.ruleModel = ruleModel;
+		this.maxPlayers = Math.max(this.ruleModel.getMinPlayerAmount(), Math.min(this.ruleModel.getMaxPlayerAmount(), maxPlayers));
+		this.minPlayers = ruleModel.getMinPlayerAmount();
 	}
 
 	public boolean getPrivate() { return privateLobby; }
 
 	public void setPrivate(boolean privateLobby) { this.privateLobby = privateLobby; }
 
-	public boolean getStartedState() {
+    public RuleModel getRuleModel() {
+        return ruleModel;
+    }
+
+    public void setRuleModel(RuleModel ruleModel) {
+	    this.ruleModel = ruleModel;
+    }
+
+    public boolean getStartedState() {
 		return gamestarted;
 	}
 
@@ -62,7 +76,7 @@ public class LobbyEntity {
 	}
 
 	public synchronized void setPhase(GamePhase gamePhase) {
-		game.gamePhaseChanges(this.gamePhase, gamePhase); // A simple way to let game listen to the gamePhase variable.
+		game.gamePhaseChanges(this.gamePhase, gamePhase, ruleModel); // A simple way to let game listen to the gamePhase variable.
 		this.gamePhase = gamePhase;
 	}
 
@@ -151,6 +165,10 @@ public class LobbyEntity {
 			lobbyplayers.remove(player.getId());
 	}
 
+	public int getMinPlayers() {
+	    return minPlayers;
+    }
+
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
@@ -182,12 +200,8 @@ public class LobbyEntity {
 	public void setReadyPlayerCount(int readyPlayerCount) {
 		this.readyPlayerCount = readyPlayerCount;
 	}
-
-	public void setGameMode(GameModeMasterClass game) {
-		this.game = game;
-	}
 	
-	public GameModeMasterClass getGameMode() {
+	public Game getGame() {
 		return game;
 	}
 }

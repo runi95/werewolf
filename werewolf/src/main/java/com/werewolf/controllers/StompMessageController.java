@@ -1,15 +1,13 @@
 package com.werewolf.controllers;
 
-import com.werewolf.Messages.JoinLobbyMessage;
 import com.werewolf.services.JoinLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Controller
 public class StompMessageController {
@@ -18,15 +16,20 @@ public class StompMessageController {
 	JoinLobbyService joinLobbyService;
 	
 	@MessageMapping("/broadcast/{gameid}")
-	public void broadcastToLobby(@DestinationVariable String gameid, JoinLobbyMessage message, Principal principal) {
+	public void broadcastToLobby(@DestinationVariable String gameid, Map<String, String> message, Principal principal) {
+	    String action = message.get("action");
+
+	    if(action == null)
+	        return;
+
 		String username = principal.getName();
 
-		switch(message.getAction()) {
+		switch(action) {
         case "lobbychat":
-            joinLobbyService.sendChatMessage("lobbychat", username, message.getInfo());
+            joinLobbyService.sendChatMessage("lobbychat", username, message.get("info"));
             break;
         case "chat":
-            joinLobbyService.sendChatMessage("chat", username, message.getInfo());
+            joinLobbyService.sendChatMessage("chat", username, message.get("info"));
             break;
 		case "leave":
 			joinLobbyService.leave(username);
@@ -38,27 +41,31 @@ public class StompMessageController {
 			joinLobbyService.setReadyStatus(username, false);
 			break;
 		case "vote":
-			joinLobbyService.vote(username, message.getPlayerid(), true);
+			joinLobbyService.vote(username, message.get("playerid"), true);
 			break;
 		case "unvote":
-			joinLobbyService.vote(username, message.getPlayerid(), false);
+			joinLobbyService.vote(username, message.get("playerid"), false);
 			break;
 		}
 	}
 
 	@MessageMapping("/private")
-	public void replyToUser(JoinLobbyMessage message, Principal principal) {
+	public void replyToUser(Map<String, String> message, Principal principal) {
+	    String action = message.get("action");
+	    if(action == null)
+	        return;
+
 		String username = principal.getName();
 
-		switch (message.getAction()) {
+		switch (action) {
 		case "gamephase":
 			joinLobbyService.getGamePhase(username);
 			break;
 		case "nightaction":
-			joinLobbyService.nightAction(username, message.getPlayerid(), true);
+			joinLobbyService.nightAction(username, message.get("playerid"), true);
 			break;
 		case "unnightaction":
-			joinLobbyService.nightAction(username, message.getPlayerid(), false);
+			joinLobbyService.nightAction(username, message.get("playerid"), false);
 			break;
 		case "getplayers":
 			joinLobbyService.getPlayers(username);
@@ -75,6 +82,15 @@ public class StompMessageController {
 		case "getopenlobbies":
 			joinLobbyService.getOpenLobbies(username);
 			break;
+        case "getprofile":
+            joinLobbyService.getProfile(username);
+            break;
+        case "joinlobby":
+            joinLobbyService.join(username, message.get("playerid"), message.get("info"));
+		    break;
+        case "createlobby":
+            joinLobbyService.join(username, message.get("gamemode"), message.get("privatelobby"), message.get("maxplayers"), message.get("nickname"));
+            break;
 		}
 	}
 }

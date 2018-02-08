@@ -13,6 +13,14 @@ public class PlayerMessage {
 
     Map<String, Object> messageMap;
 
+    public PlayerMessage() {}
+
+    public PlayerMessage(PlayerMessageType playerMessageType, String receiverId, Map<String, Object> messageMap) {
+        this.playerMessageType = playerMessageType;
+        this.receiverId = receiverId;
+        this.messageMap = messageMap;
+    }
+
     public PlayerMessageType getPlayerMessageType() {
         return playerMessageType;
     }
