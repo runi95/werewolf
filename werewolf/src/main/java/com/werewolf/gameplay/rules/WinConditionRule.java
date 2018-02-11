@@ -1,9 +1,11 @@
 package com.werewolf.gameplay.rules;
 
+import com.werewolf.entities.LobbyEntity;
+
 public interface WinConditionRule extends Rule {
 
-    boolean checkWinCondition();
+    boolean checkWinCondition(LobbyEntity lobbyEntity);
 
-    String[] getWinners();
+    String[] getWinners(LobbyEntity lobbyEntity);
 
 }

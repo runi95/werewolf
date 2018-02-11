@@ -72,10 +72,10 @@ public class StompMessageController {
 			break;
 		case "initializelobby":
 			joinLobbyService.initializeLobby(username);
-			break;	
-		case "initializegame":
-			joinLobbyService.initializeGame(username);
 			break;
+        case "initializeplayer":
+            joinLobbyService.initializePlayer(username);
+            break;
 		case "getgamephase":
 			joinLobbyService.getGamePhase(username);
 			break;
@@ -86,7 +86,7 @@ public class StompMessageController {
             joinLobbyService.getProfile(username);
             break;
         case "joinlobby":
-            joinLobbyService.join(username, message.get("playerid"), message.get("info"));
+            joinLobbyService.join(username, message.get("gameid"), message.get("info"));
 		    break;
         case "createlobby":
             joinLobbyService.join(username, message.get("gamemode"), message.get("privatelobby"), message.get("maxplayers"), message.get("nickname"));

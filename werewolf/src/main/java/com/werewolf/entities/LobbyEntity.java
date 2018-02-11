@@ -76,7 +76,7 @@ public class LobbyEntity {
 	}
 
 	public synchronized void setPhase(GamePhase gamePhase) {
-		game.gamePhaseChanges(this.gamePhase, gamePhase, ruleModel); // A simple way to let game listen to the gamePhase variable.
+		game.gamePhaseChanges(this.gamePhase, gamePhase, this); // A simple way to let game listen to the gamePhase variable.
 		this.gamePhase = gamePhase;
 	}
 

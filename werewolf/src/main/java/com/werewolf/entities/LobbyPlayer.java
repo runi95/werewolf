@@ -24,6 +24,10 @@ public class LobbyPlayer {
     private RoleInterface roleMask = null;
     
     private String alignment;
+
+    private String[] nightexpr = new String[] {};
+
+    private String nightexprtype = "whitelist";
     
     public LobbyPlayer(String id, User user, LobbyEntity lobby) {
     	this.id = id;
@@ -60,7 +64,11 @@ public class LobbyPlayer {
     public void setAlignment(String alignment) {
     	this.alignment = alignment;
     }
-    
+
+    public void setNightExpression(String[] nightexpr) { this.nightexpr = nightexpr; }
+
+    public void setNightExpressionType(String nightexprtype) { this.nightexprtype = nightexprtype; }
+
     public String getId() { return id; }
 
     public String getNickname() {
@@ -103,4 +111,8 @@ public class LobbyPlayer {
     public String getAlignment() {
     	return alignment;
     }
+
+    public String[] getNightexpression() { return nightexpr; }
+
+    public String getNightExpressionType() { return nightexprtype; }
 }

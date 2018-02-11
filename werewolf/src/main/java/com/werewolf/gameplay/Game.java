@@ -53,25 +53,34 @@ public class Game {
         if (lobbyEntity.getStartedState())
             return;
         else
-            for (InitializationRule r : ruleModel.getInitializationRules())
-                sendMessages(r.initialize(lobbyEntity));
+            for (LobbyInitializationRule r : ruleModel.getLobbyInitializationRules())
+                sendMessages(r.initializeLobby(lobbyEntity));
     }
 
-    public void gamePhaseChanges(GamePhase oldGamePhase, GamePhase newGamePhase, RuleModel ruleModel) {
+    public void initializePlayer(LobbyEntity lobbyEntity, LobbyPlayer lobbyPlayer) {
+        RuleModel ruleModel = lobbyEntity.getRuleModel();
+
+        for(PlayerInitializationRule r : ruleModel.getPlayerInitializationRules())
+            sendMessages(r.initializePlayer(lobbyEntity, lobbyPlayer));
+    }
+
+    public void gamePhaseChanges(GamePhase oldGamePhase, GamePhase newGamePhase, LobbyEntity lobbyEntity) {
+        RuleModel ruleModel = lobbyEntity.getRuleModel();
+
         for (GamePhaseRule r : ruleModel.getGamePhaseRules())
-            sendMessages(r.gamePhaseChanged(oldGamePhase, newGamePhase));
+            sendMessages(r.gamePhaseChanged(oldGamePhase, newGamePhase, lobbyEntity));
 
         if (newGamePhase == GamePhase.DAY)
             for (DayRule r : ruleModel.getDayRules())
-                sendMessages(r.dayStarted());
+                sendMessages(r.dayStarted(lobbyEntity));
 
         if (newGamePhase == GamePhase.NIGHT)
             for (NightRule r : ruleModel.getNightRules())
-                sendMessages(r.nightStarted());
+                sendMessages(r.nightStarted(lobbyEntity));
 
         for (WinConditionRule r : ruleModel.getWinConditionRules())
-            if (r.checkWinCondition())
-                r.getWinners();
+            if (r.checkWinCondition(lobbyEntity))
+                r.getWinners(lobbyEntity);
                 // TODO: This has to be changed!
     }
 
@@ -87,8 +96,8 @@ public class Game {
             sendMessages(r.nightAction(lobbyEntity, actor, target, oldTarget, flag));
     }
 
-    public void chat(LobbyPlayer chatSourcePlayer, String message, RuleModel ruleModel) {
+    public void chat(LobbyEntity lobbyEntity, LobbyPlayer chatSourcePlayer, String message, RuleModel ruleModel) {
         for (ChatRule r : ruleModel.getChatRules())
-            sendMessages(r.chat(chatSourcePlayer, message));
+            sendMessages(r.chat(lobbyEntity, chatSourcePlayer, message));
     }
 }

@@ -6,8 +6,8 @@ import com.werewolf.entities.LobbyPlayer;
 
 import java.util.List;
 
-public interface ChatRule extends Rule {
+public interface PlayerInitializationRule extends Rule {
 
-    List<PlayerMessage> chat(LobbyEntity lobbyEntity, LobbyPlayer chatSourcePlayer, String message);
+    List<PlayerMessage> initializePlayer(LobbyEntity lobbyEntity, LobbyPlayer lobbyPlayer);
 
 }

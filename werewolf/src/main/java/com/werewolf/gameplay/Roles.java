@@ -1,6 +1,26 @@
 package com.werewolf.gameplay;
 
 public enum Roles implements RoleInterface {
+    Werewolf_OneNight{
+        public String getName() {
+            return "Werewolf";
+        }
+
+        public String getDescription() {
+            return "Do whatever you can not to get lynched by the town, deceive, lie and manipulate if you have to, but don't give yourself too much unnecessary attention as they may catch onto your lies.";
+        }
+
+        public Alignments getAlignment() {
+            return Alignments.Evil;
+        }
+
+    };
+
+    public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
+
+    }
+
+    /*
     Amnesiac{
         public String getName() {
             return "Amnesiac"; }
@@ -189,4 +209,5 @@ public enum Roles implements RoleInterface {
         public void doAction(GameEmulator game, EmulationCharacter self, EmulationCharacter target) {
             game.heal(self, target); }
     };
+    */
 }

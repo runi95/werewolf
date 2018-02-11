@@ -192,8 +192,10 @@ public class GameEmulator {
 	private void emulateInquisitors() {
 		for (EmulationCharacter inquisitor : inquisitors.keySet()) {
 			EmulationCharacter inquest = inquisitors.get(inquisitor);
+			/*
 			if (inquest != null)
 				inquisitor.addNightMessage(inquest.getInquestMessage());
+			*/
 		}
 	}
 

@@ -48,10 +48,6 @@ public class EmulationCharacter {
 	public void addMessage(LobbyMessage message) {
 		messageList.add(message);
 	}
-	
-	public String getInquestMessage() {
-		return role.getInquestMessage();
-	}
 
 	@Override
 	public int hashCode() {

@@ -7,8 +7,8 @@ public enum Alignments implements AlignmentInterface {
         public static final String alignment = "Good";
         public static final String goal = "Survive and kill all evildoers";
 
-        public final Roles[] alignmentUnique = new Roles[] { Roles.King };
-        public final Roles[] alignmentNonUnique = new Roles[] { Roles.Inquisitor, Roles.Bard, Roles.Priest, Roles.Guard };
+        public final Roles[] alignmentUnique = new Roles[] { /*Roles.King*/ };
+        public final Roles[] alignmentNonUnique = new Roles[] { /*Roles.Inquisitor, Roles.Bard, Roles.Priest, Roles.Guard*/ };
 
         public String getAlignmentName() {
             return "Good"; }
@@ -38,7 +38,7 @@ public enum Alignments implements AlignmentInterface {
 
     ChaoticGood {
         public final Roles[] alignmentUnique = new Roles[] {};
-        public final Roles[] alignmentNonUnique = new Roles[] { Roles.Amnesiac };
+        public final Roles[] alignmentNonUnique = new Roles[] { /*Roles.Amnesiac*/ };
 
         public String getAlignmentName() {
             return "Chaotic Good"; }
@@ -68,7 +68,7 @@ public enum Alignments implements AlignmentInterface {
 
     Neutral {
         public final Roles[] alignmentUnique = new Roles[] {};
-        public final Roles[] alignmentNonUnique = new Roles[] { Roles.Jester };
+        public final Roles[] alignmentNonUnique = new Roles[] { /*Roles.Jester*/ };
 
         public String getAlignmentName() {
             return "Neutral"; }
@@ -158,8 +158,8 @@ public enum Alignments implements AlignmentInterface {
     },
 
     Evil {
-        public final Roles[] alignmentUnique = new Roles[] { Roles.Marauder };
-        public final Roles[] alignmentNonUnique = new Roles[] { Roles.Bandit };
+        public final Roles[] alignmentUnique = new Roles[] { /*Roles.Marauder*/ };
+        public final Roles[] alignmentNonUnique = new Roles[] { /*Roles.Bandit*/ };
 
         public String getAlignmentName() {
             return "Evil"; }

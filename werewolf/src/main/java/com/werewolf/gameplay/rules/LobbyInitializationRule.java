@@ -5,8 +5,8 @@ import com.werewolf.entities.LobbyEntity;
 
 import java.util.List;
 
-public interface InitializationRule extends Rule {
+public interface LobbyInitializationRule extends Rule {
 
-    List<PlayerMessage> initialize(LobbyEntity lobbyEntity);
+    List<PlayerMessage> initializeLobby(LobbyEntity lobbyEntity);
 
 }

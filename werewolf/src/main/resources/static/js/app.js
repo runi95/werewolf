@@ -16,6 +16,7 @@ var owner = null; // ID of the user
 var phase = null;
 var alive = true;
 var error = null;
+var currentchatdiv = "lobbychatlist";
 
 var colorreg = /\|c[0-9]{9}[^\|]*\|/;
 
@@ -32,7 +33,7 @@ initializeWebsocket();
 function initializeWebsocket() {
     var socket = new SockJS('/werewolf-websocket');
     stompClient = Stomp.over(socket);
-    connectoAndSubscribeToPrivate()
+    connectoAndSubscribeToPrivate();
 }
 
 function connectoAndSubscribeToPrivate() {
@@ -44,7 +45,7 @@ function connectoAndSubscribeToPrivate() {
             receiveMessage(JSON.parse(messageOutput.body));
         });
         sendPrivateMessage({"action": "getopenlobbies"});
-        sendPrivateMessage({"action" : "getprofile"});
+        sendPrivateMessage({"action": "getprofile"});
     });
 }
 
@@ -88,25 +89,182 @@ function sendPrivateMessage(message) {
 }
 
 function receiveMessage(obj) {
-    for (i in obj) {
-        var action = obj.action;
+    var action = obj.action;
 
-        switch(action) {
-            case "print":
-                printToChat(obj.args);
-                break;
-            case "killed":
-                killPlayer(obj.args);
-                break;
-            case "vote":
+    switch (action) {
+        case "print":
+            printToChat(obj.message);
+            break;
+        case "openlobby":
+            addToOpenLobby(obj.gameid, obj.name, obj.players);
+            break;
+        case "addalive":
+            addAlivePlayers(obj.players);
+            break;
+        case "adddead":
+            //addDeadPlayers(obj.players);
+            break;
+        case "killed":
+            killPlayer(obj.args);
+            break;
+        case "vote":
 
-                break;
-            case "profile":
-                setProfile(action.playerid, action.info, action.additionalinfo);
-                break;
-            default:
+            break;
+        case "phasechange":
+            setPhase(obj.phase, obj.type, obj.exp);
+            break;
+        case "profile":
+            setProfile(obj.playerid, obj.info, obj.additionalinfo);
+            break;
+        case "lobbyinfo":
+            joinLobbyReply(obj.gameid, obj.gamemode, obj.ispublic, obj.playerreadycount, obj.players, obj.maxplayers);
+            break;
+        case "join":
+            addPlayer(obj.playerid, obj.nickname, obj.isowner);
+            break;
+        case "updatereadystatus":
+            updateReadyState(obj.playerid, obj.votecounter, obj.players);
+            break;
+        case "role":
+            setRole(obj.name, obj.align, obj.goal, obj.desc);
+            break;
+        case "loadgame":
+            loadGame();
+            break;
+        default:
+    }
+}
+
+function setPhase(phase, type, exp) {
+    switch (phase) {
+        case "day":
+            startDay(type, exp);
+            break;
+        case "night":
+            startNight(type, exp);
+            break;
+    }
+}
+
+function startDay(type, exp) {
+    var allowedTargetsList = parseExpression(type, exp);
+
+    for(target in allowedTargetsList) {
+        var btn = document.getElementById("ab" + target);
+        if(allowedTargetsList[target]) {
+            btn.setAttribute("class", "show btn btn-default btn-act btn-block");
+        } else {
+            btn.setAttribute("class", "hide");
         }
     }
+
+    if ("vibrate" in navigator && alive) {
+        navigator.vibrate(500);
+    }
+
+    var elem = document.getElementById("dayphase");
+    elem.setAttribute("class", "phase phase-in");
+    phaseout(elem, 2);
+}
+
+function startNight(type, exp) {
+    var allowedTargetsList = parseExpression(type, exp);
+
+    for(target in allowedTargetsList) {
+        var btn = document.getElementById("ab" + target);
+        if(allowedTargetsList[target]) {
+            btn.setAttribute("class", "show btn btn-default btn-act btn-block");
+        } else {
+            btn.setAttribute("class", "hide");
+        }
+    }
+
+    if ("vibrate" in navigator && alive) {
+        navigator.vibrate(500);
+    }
+
+    var elem = document.getElementById("nightphase");
+    elem.setAttribute("class", "phase phase-in");
+    phaseout(elem, 2);
+}
+
+function parseExpression(type, exp) {
+    switch (type) {
+        case "whitelist":
+            return parseWhitelist(exp);
+        case "blacklist":
+            return parseBlacklist(exp);
+    }
+}
+
+function parseWhitelist(exp) {
+    var allowedTargetsList = {};
+
+    for (var i = 0; i < exp.length; i++) {
+        switch (exp[i]) {
+            case "all":
+                for (var playerid in aliveplayers)
+                    allowedTargetsList[playerid] = true;
+            case "dead":
+                for (var playerid in deadplayers)
+                    allowedTargetsList[playerid] = true;
+                break;
+            case "alive":
+                for (var playerid in aliveplayers)
+                    allowedTargetsList[playerid] = true;
+                break;
+            case "self":
+                allowedTargetsList[playerid] = true;
+                break;
+            case "nonself":
+                for (var playerid in aliveplayers)
+                    if (playerid != owner)
+                        allowedTargetsList[playerid] = true;
+                for (var playerid in deadplayers)
+                    if (playerid != owner)
+                        allowedTargetsList[playerid] = true;
+                break;
+        }
+    }
+    return allowedTargetsList;
+}
+
+function parseBlacklist(exp) {
+    var allowedTargetsList = {}
+
+    for (var playerid in aliveplayers)
+        allowedTargetsList[playerid] = true;
+    for (var playerid in deadplayers)
+        allowedTargetsList[playerid] = true;
+
+    for (var i = 0; i < exp.length; i++) {
+        switch (exp[i]) {
+            case "all":
+                for (var playerid in aliveplayers)
+                    allowedTargetsList[playerid] = false;
+            case "dead":
+                for (var playerid in deadplayers)
+                    allowedTargetsList[playerid] = false;
+                break;
+            case "alive":
+                for (var playerid in aliveplayers)
+                    allowedTargetsList[playerid] = false;
+                break;
+            case "self":
+                allowedTargetsList[playerid] = false;
+                break;
+            case "nonself":
+                for (var playerid in aliveplayers)
+                    if (playerid != owner)
+                        allowedTargetsList[playerid] = false;
+                for (var playerid in deadplayers)
+                    if (playerid != owner)
+                        allowedTargetsList[playerid] = false;
+                break;
+        }
+    }
+
+    return allowedTargetsList;
 }
 
 function printToChat(str) {
@@ -115,30 +273,35 @@ function printToChat(str) {
     var msg = document.createElement("div");
 
     var shavedstr = str;
-    var srch = 0;
-    do {
-        srch = shavedstr.search(colorreg);
-        if (srch != -1) {
-            var r = shavedstr.substring(srch + 2, srch + 5);
-            var g = shavedstr.substring(srch + 5, srch + 8);
-            var b = shavedstr.substring(srch + 8, srch + 11);
-            var pretxt = document.createTextNode(shavedstr, srch + 11);
-            shavedstr = shavedstr.substring(srch + 11);
-            var txtsrch = shavedstr.search(/\|/);
-            var clrtxt = document.createElement("span");
-            var txt = document.createTextNode(shavedstr.substring(0, txtsrch));
-            clrtxt.setAttribute("style", "color: rgb(" + r + "," + g + "," + b + ")");
+    var srch = shavedstr.search(colorreg);
+    while (srch != -1) {
+        var r = shavedstr.substring(srch + 2, srch + 5);
+        var g = shavedstr.substring(srch + 5, srch + 8);
+        var b = shavedstr.substring(srch + 8, srch + 11);
+        var pretxt = document.createTextNode(shavedstr.substring(0, srch));
+        shavedstr = shavedstr.substring(srch + 11);
+        var txtsrch = shavedstr.search(/\|/);
+        var clrtxt = document.createElement("span");
+        var txt = document.createTextNode(shavedstr.substring(0, txtsrch));
+        clrtxt.setAttribute("style", "color: rgb(" + r + "," + g + "," + b + ")");
 
-            shavedstr = shavedstr.substring(txtsrch + 1);
-            clrtxt.appendChild(txt);
-            msg.appendChild(pretxt);
-            msg.appendChild(clrtxt);
-        }
-    } while (srch != -1)
+        shavedstr = shavedstr.substring(txtsrch + 1);
+        clrtxt.appendChild(txt);
+        msg.appendChild(pretxt);
+        msg.appendChild(clrtxt);
+
+        srch = shavedstr.search(colorreg);
+    }
 
     var posttxt = document.createTextNode(shavedstr);
     msg.appendChild(posttxt);
     chatdiv.appendChild(msg);
+
+    if (($('#' + currentchatdiv)).scrollTop() + 1.5 * ($('#' + currentchatdiv)).height() >= ($('#' + currentchatdiv)).prop('scrollHeight')) {
+        if (!($('#' + currentchatdiv)).is(':animated')) {
+            ($('#' + currentchatdiv)).animate({scrollTop: ($('#' + currentchatdiv)).prop('scrollHeight')}, 'fast');
+        }
+    }
 }
 
 function killPlayer(playerid, playername, playerrole, alignment, message) {
@@ -400,49 +563,25 @@ function submitCreateLobbyForm() {
 }
 
 function createLobby(gamemode, privatelobby, maxplayers, nickname) {
-    sendPrivateMessage({"action":"createlobby", "gamemode":gamemode, "privatelobby":privatelobby, "maxplayers":maxplayers, "nickname":nickname});
-    /*
-    $.ajax({
-        url: '/lobby/createlobbyrequest',
-        type: "POST",
-        datatype: 'json',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify({
-            "gamemode": gamemode,
-            "privatelobby": privatelobby,
-            "maxplayers": maxplayers,
-            "nickname": nickname
-        }),
-        success: function (data) {
-            joinLobbyReply(data);
-        }
+    sendPrivateMessage({
+        "action": "createlobby",
+        "gamemode": gamemode,
+        "privatelobby": privatelobby,
+        "maxplayers": maxplayers,
+        "nickname": nickname
     });
-    */
 }
 
 function joinLobby(nickname, gameid) {
-    sendPrivateMessage({"action":"joinlobby", "gameid":gameid, "info":nickname});
-    /*
-    $.ajax({
-        url: '/lobby/joinlobbyrequest',
-        type: "POST",
-        datatype: 'json',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify({"nickname": nickname, "gameid": gameid}),
-        success: function (data) {
-            joinLobbyReply(data);
-        }
-    });
-    */
+    sendPrivateMessage({"action": "joinlobby", "gameid": gameid, "info": nickname});
 }
 
-function joinLobbyReply(message) {
+function joinLobbyReply(gameid, gamemode, ispublic, playerreadycount, players, maxplayers) {
+    /*
+    gameiddiv.setAttribute("class", "form-group has-error has-feedback");
+    gameidglyph.setAttribute("class", "glyphicon glyphicon-remove form-control-feedback");
+     */
+    gamecode = gameid;
     var gameiddiv = document.getElementById("gameiddiv");
     var gameidfield = document.getElementById("gameidfield");
     var gameidglyph = document.getElementById("gameidglyph");
@@ -455,36 +594,19 @@ function joinLobbyReply(message) {
     gameidglyph.setAttribute("class", "");
     nicknamediv.setAttribute("class", "form-group");
     nicknameglyph.setAttribute("class", "");
-    for (i in message) {
-        switch (message[i].action) {
-            case "error":
-                if (message[i].info === "404") {
-                    gameiddiv.setAttribute("class", "form-group has-error has-feedback");
-                    gameidglyph.setAttribute("class", "glyphicon glyphicon-remove form-control-feedback");
-                }
-                else if (message[i].info === "100") {
-                    nicknamediv.setAttribute("class", "form-group has-error has-feedback");
-                    nicknameglyph.setAttribute("class", "glyphicon glyphicon-remove form-control-feedback");
-                }
-                break;
-            case "lobbyinfo":
-                gamecode = message[i].playerid;
-                subscribeToBroadcast();
-                document.getElementById("gamecodenode").innerHTML = gamecode;
-                document.getElementById("menu").setAttribute("class", "hide");
-                document.getElementById("lobby").setAttribute("class", "show");
+    subscribeToBroadcast();
+    document.getElementById("gamecodenode").innerHTML = gameid;
+    document.getElementById("menu").setAttribute("class", "hide");
+    document.getElementById("lobby").setAttribute("class", "show");
+    document.getElementById("lobbystatsmode").innerHTML = gamemode;
+    document.getElementById("lobbystatsprivacy").innerHTML = ispublic;
+    document.getElementById("lobbystatsplayers").innerHTML = maxplayers;
 
-                document.getElementById("lobbystatsmode").innerHTML = message[i].info;
-                document.getElementById("lobbystatsprivacy").innerHTML = message[i].additionalinfo;
-                document.getElementById("lobbystatsplayers").innerHTML = message[i].variable;
-                break;
-            case "playerreadycount":
-                someoneClickedReady(null, message[i].info, message[i].additionalinfo);
-                break;
-            default:
-                break;
-        }
-    }
+    /*
+    case "playerreadycount":
+    someoneClickedReady(null, message[i].info, message[i].additionalinfo);
+    break;
+    */
 }
 
 function prepareLobby() {
@@ -499,13 +621,27 @@ function addToInvalidTargets(playerid, rolename, alignment) {
     }
 }
 
+/*
+function setPhase(newphase) {
+    phase = newphase;
+    switch (phase) {
+        case "night":
+            loadSpecificAction(0);
+            break;
+        case "day":
+            dayPhase();
+            break;
+        case "wait":
+            loadSpecificAction(2);
+            break;
+    }
+}
+
 function waitPhase() {
-    phase = "wait";
     loadSpecificAction(2);
 }
 
 function dayPhase() {
-    phase = "day";
     if ("vibrate" in navigator && alive) {
         navigator.vibrate(500);
     }
@@ -515,6 +651,7 @@ function dayPhase() {
     phaseout(elem, 2);
     loadSpecificAction(1);
 }
+*/
 
 /*
 function lynchPlayer(playerid, playername, playerrole, alignment, kinged) {
@@ -549,8 +686,8 @@ function lost() {
     elem.setAttribute("class", "phase phase-in");
 }
 
+/*
 function nightPhase() {
-    phase = "night";
     if ("vibrate" in navigator && alive) {
         navigator.vibrate(500);
     }
@@ -560,6 +697,7 @@ function nightPhase() {
     phaseout(elem, 2);
     loadSpecificAction(0);
 }
+*/
 
 function phaseout(elem, delay) {
     setTimeout(function () {
@@ -581,6 +719,41 @@ function killPlayer(playerid, playername, playerrole, alignment, jester) {
 }
 */
 
+function addAlivePlayers(players) {
+    for (var i = 0; i < players.length; i++) {
+        var player = players[i];
+        if (deadplayers.hasOwnProperty(player.playerid)) {
+            removeFromGraveyard(player.playerid);
+        }
+
+        aliveplayers[player.playerid] = {"name": player.name, "votes": player.votes};
+
+        var actionlist = document.getElementById("actionlist");
+        var actionrow = document.createElement("tr");
+        var actionname = document.createElement("th");
+        var action = document.createElement("th");
+        var btn;
+        actionname.innerHTML = player.name;
+        if (player.playerid == owner) {
+            actionname.setAttribute("class", "text-center text-info");
+        } else {
+            actionname.setAttribute("class", "text-center");
+        }
+        actionrow.setAttribute("id", "ar" + player.playerid);
+
+        btn = document.createElement("button");
+        btn.setAttribute("id", "ab" + player.playerid);
+        btn.setAttribute("class", "hide");
+        btn.setAttribute("onclick", "performaction(" + player.playerid + ")");
+        action.appendChild(btn);
+
+        actionrow.appendChild(actionname);
+        actionrow.appendChild(action);
+        actionlist.appendChild(actionrow);
+    }
+}
+
+/*
 function addToActionList(playerid, playername, votes) {
     if (!aliveplayers.hasOwnProperty(playerid)) {
         if (deadplayers.hasOwnProperty(playerid)) {
@@ -613,6 +786,7 @@ function addToActionList(playerid, playername, votes) {
         actionlist.appendChild(actionrow);
     }
 }
+*/
 
 function removeFromActionList(playerid) {
     if (aliveplayers.hasOwnProperty(playerid)) {
@@ -720,14 +894,20 @@ function removeFromGraveyard(playerid) {
     }
 }
 
-function addPlayer(playerid, nickname) {
+function addPlayer(playerid, nickname, isowner) {
     if (!playerlist.hasOwnProperty(playerid)) {
         playerlist[playerid] = nickname;
         var player = document.createElement("li");
         var text = document.createTextNode(nickname);
         player.appendChild(text);
         player.setAttribute("id", playerid);
-        player.setAttribute("class", "list-group-item list-group-item-default");
+
+        if (isowner == "true") {
+            owner = playerid;
+            player.setAttribute("class", "list-group-item list-group-item-success");
+        } else
+            player.setAttribute("class", "list-group-item list-group-item-default");
+
         document.getElementById("plist").appendChild(player);
     }
 }
@@ -746,6 +926,21 @@ function changeReadyState() {
         broadcastMessage({"action": "ready"});
     } else {
         broadcastMessage({"action": "unready"});
+    }
+}
+
+function updateReadyState(playerid, readyplayercount, lobbyplayercount) {
+    var elem = document.getElementById("btnready");
+    if (ready) {
+        elem.innerHTML = "Unready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 4) + ")";
+        if (playerid == owner) {
+            elem.setAttribute("class", "btn btn-danger btn-block");
+        }
+    } else {
+        elem.innerHTML = "Ready (" + readyplayercount + "/" + Math.max(lobbyplayercount, 4) + ")";
+        if (playerid == owner) {
+            elem.setAttribute("class", "btn btn-success btn-block");
+        }
     }
 }
 
@@ -769,9 +964,11 @@ function someoneClickedReady(playerid, readyplayercount, lobbyplayercount) {
 function loadGame() {
     var lobby = document.getElementById("lobby");
     var game = document.getElementById("game");
+    currentchatdiv = "chatlist";
+    setPhase("wait");
     lobby.setAttribute("class", "hide");
     game.setAttribute("class", "show");
-    sendPrivateMessage({"action": "initializegame"});
+    sendPrivateMessage({"action": "initializeplayer"});
 }
 
 function performaction(playerid) {
@@ -956,6 +1153,7 @@ function addToChat(chatdivname, playerid, username, message, chatid) {
 function sendChatMessageForm() {
     var chatinputfield = document.getElementById("chat");
     var chatinputfieldval = chatinputfield.value;
+    chatinputfield.value = "";
 
     broadcastMessage({"action": "chat", "info": chatinputfieldval});
 }
@@ -969,6 +1167,7 @@ function chatResponse(response, fieldid) {
 function sendLobbyChatMessageForm() {
     var chatinputfield = document.getElementById("lobbychat");
     var chatinputfieldval = chatinputfield.value;
+    chatinputfield.value = "";
 
     broadcastMessage({"action": "lobbychat", "info": chatinputfieldval});
 }

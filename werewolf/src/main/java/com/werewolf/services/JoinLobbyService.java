@@ -85,7 +85,7 @@ public class JoinLobbyService {
         if (lobbyEntity == null)
             return;
 
-        lobbyEntity.getGame().chat(chatSourcePlayer, message, lobbyEntity.getRuleModel());
+        lobbyEntity.getGame().chat(lobbyEntity, chatSourcePlayer, message, lobbyEntity.getRuleModel());
     }
 
     public void join(String username, String gamemode, String privatelobby, String maxplayers, String nickname) {
@@ -194,7 +194,7 @@ public class JoinLobbyService {
         Map<String, Object> lobbyInfoMap = new HashMap<>();
         lobbyInfoMap.put("action", "lobbyinfo");
         lobbyInfoMap.put("gameid", gameid);
-        lobbyInfoMap.put("name", lobbyEntity.getRuleModel().getName());
+        lobbyInfoMap.put("gamemode", lobbyEntity.getRuleModel().getName());
         lobbyInfoMap.put("ispublic", (lobbyEntity.getPrivate() ? "false" : "true"));
         lobbyInfoMap.put("palyerreadycount", Integer.toString(lobbyEntity.getReadyPlayerCount()));
         lobbyInfoMap.put("players", Integer.toString(lobbyEntity.getPlayerSize()));
@@ -227,13 +227,14 @@ public class JoinLobbyService {
     }
 
     public void setReadyStatus(String username, boolean ready) {
-        List<LobbyMessage> messageList = new ArrayList<LobbyMessage>();
-
         LobbyPlayer lobbyPlayer = getPlayerFromUsername(username);
         if (lobbyPlayer == null)
             return;
 
         LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
+        if(lobbyEntity.getStartedState())
+            return;
+
         if (ready != lobbyPlayer.ready()) {
             lobbyPlayer.setReady(ready);
 
@@ -243,20 +244,17 @@ public class JoinLobbyService {
                 lobbyEntity.setReadyPlayerCount(lobbyEntity.getReadyPlayerCount() - 1);
         }
 
-        messageList.add(new LobbyMessage("updatereadystatus", lobbyPlayer.getId(),
-                Integer.toString(lobbyEntity.getReadyPlayerCount()), Integer.toString(lobbyEntity.getPlayerSize())));
-
-        //System.out.println("getReadyPlayerCount(" + lobbyEntity.getReadyPlayerCount() + ")" + ", getPlayerSize(" + lobbyEntity.getPlayerSize() + ")" + ", getMaxPlayers(" + lobbyEntity.getMaxPlayers() + ")" + ", getMinPlayers(" + lobbyEntity.getMinPlayers() + ")");
-        if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() <= lobbyEntity.getMaxPlayers() && lobbyEntity.getPlayerSize() >= lobbyEntity.getMinPlayers())
+        if (lobbyEntity.getReadyPlayerCount() == lobbyEntity.getPlayerSize() && lobbyEntity.getPlayerSize() <= lobbyEntity.getMaxPlayers() && lobbyEntity.getPlayerSize() >= lobbyEntity.getMinPlayers()) {
             loadGame(lobbyEntity);
+        } else {
+            Map<String, Object> messageMap = new HashMap<>();
+            messageMap.put("action", "updatereadystatus");
+            messageMap.put("playerid", lobbyPlayer.getId());
+            messageMap.put("votecounter", Integer.toString(lobbyEntity.getReadyPlayerCount()));
+            messageMap.put("players", Integer.toString(lobbyEntity.getPlayerSize()));
 
-        Map<String, Object> messageMap = new HashMap<>();
-        messageMap.put("action", "updatereadystatus");
-        messageMap.put("playerid", lobbyPlayer.getId());
-        messageMap.put("votecounter", Integer.toString(lobbyEntity.getReadyPlayerCount()));
-        messageMap.put("players", Integer.toString(lobbyEntity.getPlayerSize()));
-
-        sendMessages(Arrays.asList(new PlayerMessage(PlayerMessageType.BROADCAST, lobbyPlayer.getLobby().getGameId(), messageMap)));
+            sendMessages(Arrays.asList(new PlayerMessage(PlayerMessageType.BROADCAST, lobbyPlayer.getLobby().getGameId(), messageMap)));
+        }
     }
 
     public LobbyEntity findByGameId(String gameId) {
@@ -309,7 +307,7 @@ public class JoinLobbyService {
     }
 
     public void getPlayers(String username) {
-        Map<String, Object> messageMap = new HashMap<>();
+        List<PlayerMessage> messages = new ArrayList<>();
 
         LobbyPlayer lobbyPlayer = getPlayerFromUsername(username);
         if (lobbyPlayer == null)
@@ -319,28 +317,29 @@ public class JoinLobbyService {
 
         if (lobbyEntity != null) {
             for (LobbyPlayer lp : lobbyEntity.getPlayers()) {
-                if (lp.getId() == lobbyPlayer.getId()) {
-                    messageMap.put("action", "owner");
-                    messageMap.put("playerid", lp.getId());
-                    messageMap.put("nickname", lp.getNickname());
-                } else {
-                    messageMap.put("action", "join");
-                    messageMap.put("playerid", lp.getId());
-                    messageMap.put("nickname", lp.getNickname());
-                }
+                Map<String, Object> messageMap = new HashMap<>();
+                messageMap.put("action", "join");
+                messageMap.put("playerid", lp.getId());
+                messageMap.put("nickname", lp.getNickname());
+                messageMap.put("isowner", lp.getId() == lobbyPlayer.getId() ? "true" : "false");
+                messages.add(new PlayerMessage(PlayerMessageType.PRIVATE, username, messageMap));
             }
+            /*
             if (lobbyEntity.getStartedState())
                 messageMap.put("action", "lobbyready");
+            */
         }
 
         // TODO: FIX
 
+        /*
         messageMap.put("action", "updatereadystatus");
         messageMap.put("playerid", lobbyPlayer.getId());
         messageMap.put("votecounter", Integer.toString(lobbyEntity.getReadyPlayerCount()));
         messageMap.put("players", Integer.toString(lobbyEntity.getPlayerSize()));
+        */
 
-        sendMessages(Arrays.asList(new PlayerMessage(PlayerMessageType.PRIVATE, username, messageMap)));
+        sendMessages(messages);
     }
 
     public void initializeLobby(String username) {
@@ -362,6 +361,19 @@ public class JoinLobbyService {
         sendMessages(Arrays.asList(new PlayerMessage(PlayerMessageType.PRIVATE, username, messageMap)));
     }
 
+    public void initializePlayer(String username) {
+        LobbyPlayer lobbyPlayer = getPlayerFromUsername(username);
+        if (lobbyPlayer == null)
+            return;
+
+        LobbyEntity lobbyEntity = lobbyPlayer.getLobby();
+        if (lobbyEntity == null)
+            return;
+
+        lobbyEntity.getGame().initializePlayer(lobbyEntity, lobbyPlayer);
+    }
+
+    /*
     public void initializeGame(String username) {
         List<PlayerMessage> messageList = new ArrayList<>();
 
@@ -381,13 +393,13 @@ public class JoinLobbyService {
                     messageMap.put("align", p.getRole().getAlignment().getAlignmentName());
                     messageList.add(new PlayerMessage(PlayerMessageType.PRIVATE, username, messageMap));
                 }
-
             }
+
             Map<String, Object> messageMap = new HashMap<>();
             messageMap.put("action", "addinvalidtarget");
             messageMap.put("playerid", lobbyPlayer.getId());
-            messageMap.put("rolename", lobbyPlayer.getRole().getName());
-            messageMap.put("align", lobbyPlayer.getRole().getAlignment().getAlignmentName());
+            //messageMap.put("rolename", lobbyPlayer.getRole().getName());
+            //messageMap.put("align", lobbyPlayer.getRole().getAlignment().getAlignmentName());
             messageList.add(new PlayerMessage(PlayerMessageType.PRIVATE, username, messageMap));
 
             for(LobbyPlayer p : lobbyEntity.getAlivePlayers()) {
@@ -398,6 +410,7 @@ public class JoinLobbyService {
                 messageMap.put("votes", Integer.toString(p.getVotes()));
                 messageList.add(new PlayerMessage(PlayerMessageType.PRIVATE, username, aliveMap));
             }
+
             for(LobbyPlayer p : lobbyEntity.getDeadPlayers()) {
                 Map<String, Object> deadMap = new HashMap<>();
                 messageMap.put("action", "joindead");
@@ -419,6 +432,7 @@ public class JoinLobbyService {
             sendMessages(messageList);
         }
     }
+    */
 
     public void nightAction(String username, String target, boolean act) {
         LobbyPlayer lobbyPlayer = getPlayerFromUsername(username);
@@ -443,7 +457,7 @@ public class JoinLobbyService {
             if(!lobby.getStartedState() && !lobby.getPrivate()) {
                 Map<String, Object> messageMap = new HashMap<>();
                 messageMap.put("action", "openlobby");
-                messageMap.put("id", lobby.getGameId());
+                messageMap.put("gameid", lobby.getGameId());
                 messageMap.put("name", lobby.getRuleModel().getName());
                 messageMap.put("players", Integer.toString(lobby.getPlayerSize()));
                 messageList.add(new PlayerMessage(PlayerMessageType.PRIVATE, username, messageMap));
@@ -608,22 +622,23 @@ public class JoinLobbyService {
         if (lobbyEntity == null)
             return;
 
-        System.out.println("Game is starting!");
-
-        List<LobbyMessage> messageList = new ArrayList<>();
-
         if (lobbyEntity.getReadyPlayerCount() != lobbyEntity.getReadyPlayerCount())
             return;
+
+        Map<String, Object> messageMap = new HashMap<>();
+        messageMap.put("action", "removeopenlobby");
+        messageMap.put("gameid", lobbyEntity.getGameId());
+        sendMessages(Arrays.asList(new PlayerMessage(PlayerMessageType.BROADCAST, "public", messageMap)));
 
         lobbyEntity.getPlayers().forEach((p) -> lobbyEntity.addAlivePlayer(p));
 
         //createPlayers(lobbyEntity);
         lobbyEntity.getGame().initializeGame(lobbyEntity);
 
-        Map<String, Object> messageMap = new HashMap<>();
-        messageMap.put("action", "removeopenlobby");
-        messageMap.put("gameid", lobbyEntity.getGameId());
-        sendMessages(Arrays.asList(new PlayerMessage(PlayerMessageType.BROADCAST, "public", messageMap)));
+        /*
+        for(LobbyPlayer p : lobbyEntity.getPlayers())
+            initializeGame(p.getUser().getUsername());
+        */
     }
 
     private void lobbyNightAction(LobbyEntity lobbyEntity, LobbyPlayer acter, LobbyPlayer oldTarget, LobbyPlayer target,
