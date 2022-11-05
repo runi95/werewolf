@@ -9,20 +9,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-	
-	@Autowired
-	AccountRepository accountRepository;
-	
-	@Autowired
+
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
     UserRightRepository userRightRepository;
 
-	@Autowired
+    @Autowired
     UserStatisticsRepository userStatisticsRepository;
-	
-	@Override
+
+    @Override
     public void create(AccountRegisterForm accountRegisterForm) {
         User user = new User();
         user.setUsername(accountRegisterForm.getUsername());
@@ -37,33 +38,33 @@ public class AccountServiceImpl implements AccountService {
         userStatisticsRepository.save(userStatistics);
         accountRepository.save(user);
     }
-	
-	@Override
-	public User findByUsername(String username) {
-		return accountRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("A user with that username does not exist"));
-	}
-	
-	@Override
+
+    @Override
+    public User findByUsername(String username) {
+        return accountRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("A user with that username does not exist"));
+    }
+
+    @Override
     @Transactional
     public User findById(long id) {
-        User user = accountRepository.findOne(id);
-        if(user != null)
-            return user;
-        else {
+        Optional<User> user = accountRepository.findById(id);
+        if (user.isEmpty())
             throw new IllegalArgumentException("A user with that id does not exist");
-        }
+
+        return user.get();
     }
-	
-	@Override
-	public void update(User user, UserEditForm userEditForm) {
-		user.setUsername(userEditForm.getUsername());
-		accountRepository.save(user);
-	}
-	
-	@Override
-	public UserEditForm getEditForm(User user) {
-		UserEditForm userEditForm = new UserEditForm();
-		userEditForm.setUsername(user.getUsername());
-		return userEditForm;
-	}
+
+    @Override
+    public void update(User user, UserEditForm userEditForm) {
+        user.setUsername(userEditForm.getUsername());
+        accountRepository.save(user);
+    }
+
+    @Override
+    public UserEditForm getEditForm(User user) {
+        UserEditForm userEditForm = new UserEditForm();
+        userEditForm.setUsername(user.getUsername());
+        return userEditForm;
+    }
 }

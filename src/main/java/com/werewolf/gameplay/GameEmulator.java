@@ -9,20 +9,20 @@ public class GameEmulator {
 	private HashMap<EmulationCharacter, EmulationCharacter> blockers = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> killers = new HashMap<>();
-	
+
 	private HashMap<EmulationCharacter, EmulationCharacter> knights = new HashMap<>();
 
-    private HashMap<EmulationCharacter, EmulationCharacter> sirens = new HashMap<>();
+	private HashMap<EmulationCharacter, EmulationCharacter> sirens = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> healers = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> guards = new HashMap<>();
 
 	private HashMap<EmulationCharacter, EmulationCharacter> inquisitors = new HashMap<>();
-	
+
 	private EmulationCharacter marauder = null;
 	private EmulationCharacter marauderTarget = null;
-	
+
 	private HashMap<EmulationCharacter, EmulationCharacter> evilKillVotes = new HashMap<>();
 
 	private LinkedList<EmulationCharacter> amnesiacs = new LinkedList<>();
@@ -46,24 +46,24 @@ public class GameEmulator {
 	public void voteEvilKill(EmulationCharacter killer, EmulationCharacter target) {
 		evilKillVotes.put(killer, target);
 	}
-	
+
 	public void forceEvilKill(EmulationCharacter killer, EmulationCharacter target) {
 		marauderTarget = target;
 		marauder = killer;
 	}
-	
+
 	public void kill(EmulationCharacter killer, EmulationCharacter target) {
 		killers.put(killer, target);
 	}
-	
+
 	public void knightKill(EmulationCharacter knight, EmulationCharacter target) {
 		knights.put(knight, target);
 	}
 
 	public void sirenKill(EmulationCharacter siren, EmulationCharacter target) {
-        sirens.put(siren, target);
-        killers.put(siren, target);
-    }
+		sirens.put(siren, target);
+		killers.put(siren, target);
+	}
 
 	public void heal(EmulationCharacter healer, EmulationCharacter target) {
 		healers.put(healer, target);
@@ -90,17 +90,17 @@ public class GameEmulator {
 		emulateAmnesiacs();
 		emulateInquisitors();
 	}
-	
+
 	private void prepareEvilTargets() {
-		if(marauderTarget == null) {
+		if (marauderTarget == null) {
 			HashMap<EmulationCharacter, Integer> votes = new HashMap<>();
-			for(EmulationCharacter voter : evilKillVotes.keySet()) {
+			for (EmulationCharacter voter : evilKillVotes.keySet()) {
 				EmulationCharacter vote = evilKillVotes.get(voter);
-				if(votes.containsKey(vote)) {
-					if(votes.get(vote) > Math.floor(evilKillVotes.size()/2.0)) {
+				if (votes.containsKey(vote)) {
+					if (votes.get(vote) > Math.floor(evilKillVotes.size() / 2.0)) {
 						kill(voter, vote);
 						return;
-					} else 
+					} else
 						votes.put(vote, votes.get(vote) + 1);
 				} else
 					votes.put(vote, 1);
@@ -143,8 +143,8 @@ public class GameEmulator {
 
 			if (killed != null) {
 				boolean guarded = false;
-				for(EmulationCharacter guard : guards.keySet()) {
-					if(guard.getTargetid().equals(killed.getLobbyPlayer().getId()) && !guarded) {
+				for (EmulationCharacter guard : guards.keySet()) {
+					if (guard.getTargetid().equals(killed.getLobbyPlayer().getId()) && !guarded) {
 						killed.addNightMessage("Someone attacked you during the night, but a guard saved you.");
 						killer.addNightMessage("Someone was guarding your target.");
 						guard.addNightMessage("You died while fighting off an attacker.");
@@ -152,17 +152,17 @@ public class GameEmulator {
 						deadPlayers.add(guard);
 					}
 				}
-				if(!guarded) {
+				if (!guarded) {
 					boolean healed = false;
-					for(EmulationCharacter healer : healers.keySet()) {
-						if(healer.getTargetid().equals(killed.getLobbyPlayer().getId())) {
+					for (EmulationCharacter healer : healers.keySet()) {
+						if (healer.getTargetid().equals(killed.getLobbyPlayer().getId())) {
 							healed = true;
 							killed.addNightMessage("Someone attacked you during the night, but a priest healed you.");
 							healer.addNightMessage("Your target was attacked, but you saved them.");
 							killer.addNightMessage("Your target was saved from the attack.");
 						}
 					}
-					if(!healed) {
+					if (!healed) {
 						killed.addNightMessage("Someone attacked you.");
 						deadPlayers.add(killed);
 					}
@@ -172,18 +172,19 @@ public class GameEmulator {
 	}
 
 	private void emulateSirens() {
-	    for(EmulationCharacter siren : sirens.keySet()) {
-	        if(deadPlayers.contains(sirens.get(siren)))
-	            sirens.get(siren).getLobbyPlayer().setRoleMask(RoleMasks.Drowned);
-        }
-    }
-	
+		for (EmulationCharacter siren : sirens.keySet()) {
+			if (deadPlayers.contains(sirens.get(siren)))
+				sirens.get(siren).getLobbyPlayer().setRoleMask(RoleMasks.Drowned);
+		}
+	}
+
 	private void emulateKnights() {
-		for(EmulationCharacter knight : knights.keySet()) {
+		for (EmulationCharacter knight : knights.keySet()) {
 			EmulationCharacter knightExecution = knights.get(knight);
-			if(knightExecution != null) {
+			if (knightExecution != null) {
 				deadPlayers.add(knightExecution);
-				if(knightExecution.getRole() == Alignments.Good || knightExecution.getRole().getAlignment() == Alignments.ChaoticGood)
+				if (knightExecution.getRole().getAlignment() == Alignments.Good
+						|| knightExecution.getRole().getAlignment() == Alignments.ChaoticGood)
 					deadPlayers.add(knight);
 			}
 		}
@@ -193,9 +194,9 @@ public class GameEmulator {
 		for (EmulationCharacter inquisitor : inquisitors.keySet()) {
 			EmulationCharacter inquest = inquisitors.get(inquisitor);
 			/*
-			if (inquest != null)
-				inquisitor.addNightMessage(inquest.getInquestMessage());
-			*/
+			 * if (inquest != null)
+			 * inquisitor.addNightMessage(inquest.getInquestMessage());
+			 */
 		}
 	}
 
@@ -205,7 +206,10 @@ public class GameEmulator {
 				RoleInterface newRole = Alignments.Good.getRandomRoleFromThisAlignment();
 				amnesiac.setRole(newRole);
 				amnesiac.getLobbyPlayer().setRole(newRole);
-				amnesiac.addMessage(new LobbyMessage("role", amnesiac.getLobbyPlayer().getRole().getName(), amnesiac.getLobbyPlayer().getRole().getAlignment().getAlignmentName(), (String)amnesiac.getLobbyPlayer().getRole().getAlignment().getGoal(), amnesiac.getLobbyPlayer().getRole().getDescription()));
+				amnesiac.addMessage(new LobbyMessage("role", amnesiac.getLobbyPlayer().getRole().getName(),
+						amnesiac.getLobbyPlayer().getRole().getAlignment().getAlignmentName(),
+						(String) amnesiac.getLobbyPlayer().getRole().getAlignment().getGoal(),
+						amnesiac.getLobbyPlayer().getRole().getDescription()));
 				amnesiac.addNightMessage("You just remembered that you're a " + amnesiac.getRole().getName() + ".");
 			} else {
 				amnesiac.addNightMessage("You struggle to remember who you are.");

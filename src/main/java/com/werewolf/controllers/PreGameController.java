@@ -28,7 +28,8 @@ public class PreGameController {
     @GetMapping(value = "/")
     public String getMainPage(Device device, Model model) {
         model.addAttribute("gameplaytext", gameplaytext);
-        model.addAttribute("gameplaymodes", joinLobbyService.getGameModesAsStrings());
+        model.addAttribute("gameplaymodes",
+                joinLobbyService.getGameModesAsStrings());
 
         if (device.isMobile())
             return "main-mobile";

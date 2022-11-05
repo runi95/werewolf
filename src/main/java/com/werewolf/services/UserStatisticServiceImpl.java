@@ -18,7 +18,7 @@ public class UserStatisticServiceImpl implements UserStatisticService {
 
     @Override
     public UserStatistics getUserStatistics(String username) {
-        if(!userStatisticsRepository.exists(username) && accountRepository.findByUsername(username).isPresent()) {
+        if (!userStatisticsRepository.existsById(username) && accountRepository.findByUsername(username).isPresent()) {
             User user = accountRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException());
 
             UserStatistics userStatistics = new UserStatistics();
@@ -29,7 +29,7 @@ public class UserStatisticServiceImpl implements UserStatisticService {
             userStatisticsRepository.save(userStatistics);
         }
 
-        return userStatisticsRepository.findOne(username);
+        return userStatisticsRepository.findById(username).get();
     }
 
     @Override
